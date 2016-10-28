@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="description" content="Website with a REST API to manage the PowerShell DSC web pull server." />
+    <meta name="author" content="Claudio Spizzi" />
+
+    <title>DSC Pull Server Web - @ViewBag.Title</title>
+
+    <!-- Bootstrap Styles -->
+    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <!-- Custom Styles -->
+    <link href="/Content/site.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("DSC Pull Server Web", "Home", "Web", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Nodes", "Nodes", "Web", new { area = "" }, new { @class = "nodes-nav" })</li>
+                        <li>@Html.ActionLink("Reports", "Reports", "Web", new { area = "" }, new { @class = "reports-nav" })</li>
+                        <li>@Html.ActionLink("Configurations", "Configurations", "Web", new { area = "" }, new { @class = "configurations-nav" })</li>
+                        <li>@Html.ActionLink("Modules", "Modules", "Web", new { area = "" }, new { @class = "modules-nav" })</li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>@Html.ActionLink("Cmdlets", "Cmdlets", "Web", new { area = "" }, new { @class = "cmdlets-nav" })</li>
+                        <li>@Html.ActionLink("REST API", "RestApi", "Web", new { area = "" }, new { @class = "restapi-nav" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Body -->
+        @RenderBody()
+
+        <!-- Footer -->
+        <hr />
+        <footer class="footer">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><small>Open-source on <a href="https://github.com/claudiospizzi/DSCPullServerWeb">GitHub</a> by <a href="https://github.com/claudiospizzi">Claudio Spizzi</a>. Licensed under <a href="https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/LICENSE">MIT license</a>.</small></p>
+                </div>
+                <div class="col-md-6" style="text-align: right;">
+                    <p><small>Pull Server Uri: http://localhost:8080</small></p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="/Scripts/site.js"></script>
+    <script>
+        update();
+    </script>
+</body>
+</html>

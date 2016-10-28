@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSCPullServerWebAPI", "DSCPullServerWebAPI\DSCPullServerWebAPI.csproj", "{5F5CB0FD-2556-45F4-9481-E241E44E0410}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSCPullServerWebUI", "DSCPullServerWebUI\DSCPullServerWebUI.csproj", "{A8EC792A-B428-4AE3-AC06-F37D12DAFBBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSCPullServerWeb", "DSCPullServerWeb\DSCPullServerWeb.csproj", "{94BF7633-0F81-47E3-BCF3-50FFE2D89474}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5F5CB0FD-2556-45F4-9481-E241E44E0410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F5CB0FD-2556-45F4-9481-E241E44E0410}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F5CB0FD-2556-45F4-9481-E241E44E0410}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F5CB0FD-2556-45F4-9481-E241E44E0410}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8EC792A-B428-4AE3-AC06-F37D12DAFBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8EC792A-B428-4AE3-AC06-F37D12DAFBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8EC792A-B428-4AE3-AC06-F37D12DAFBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8EC792A-B428-4AE3-AC06-F37D12DAFBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94BF7633-0F81-47E3-BCF3-50FFE2D89474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94BF7633-0F81-47E3-BCF3-50FFE2D89474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94BF7633-0F81-47E3-BCF3-50FFE2D89474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94BF7633-0F81-47E3-BCF3-50FFE2D89474}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
