@@ -23,10 +23,6 @@ namespace DSCPullServerWeb.Services
             {
                 throw new Exception("ConfigurationPath app setting not found!");
             }
-            if (!Directory.Exists(ConfigurationPath))
-            {
-                throw new Exception("ConfigurationPath not found on file system!");
-            }
         }
 
         public String ConfigurationPath

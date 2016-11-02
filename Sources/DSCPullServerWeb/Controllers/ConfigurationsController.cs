@@ -18,34 +18,35 @@ namespace DSCPullServerWeb.Controllers
             _repository = repository;
         }
 
-        public IEnumerable<Configuration> Get()
+        // GET api/configurations
+        public IHttpActionResult Get()
         {
-            return _repository.GetAllConfigurations();
+            try
+            {
+                return Ok(_repository.GetConfigurations());
+            }
+            catch
+            {
+                return InternalServerError();
+            }
         }
 
+        // GET api/configurations/MyConfig
         public IHttpActionResult Get(string id)
         {
-            var configuration = _repository.GetConfigurationByName(id);
-            if (configuration == null)
+            try
             {
-                return NotFound();
+                var configuration = _repository.GetConfigurationByName(id);
+                if (configuration == null)
+                {
+                    return NotFound();
+                }
+                return Ok(configuration);
             }
-            return Ok(configuration);
+            catch
+            {
+                return InternalServerError();
+            }
         }
-
-        //public IEnumerable<Configuration> GetAllConfigurations()
-        //{
-        //    return _repository.GetAllConfigurations();
-        //}
-
-        //public IHttpActionResult GetConfiguration(string name)
-        //{
-        //    var configuration = _repository.GetConfigurationByName(name);
-        //    if (configuration == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(configuration);
-        //}
     }
 }

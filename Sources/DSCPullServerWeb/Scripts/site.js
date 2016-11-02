@@ -150,17 +150,23 @@ function updateConfigurations() {
     clearConfigurations();
     $.getJSON('/api/configurations')
         .done(function (data) {
-            // On success, 'data' contains a list of configurations.
             $.each(data, function (key, item) {
-                $('#configurations-table').append(formatConfigurationTableRow(item))
+                $('#configurations-table > div > table > tbody').append(formatConfigurationTableRow(item));
             });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            $('#configurations-table').append(formatConfigurationTableRowException(jqxhr.status + ' / ' + jqxhr.responseText + ' / ' + textStatus + ' / ' + error));
         });
 }
 
 function clearConfigurations() {
-    $('#configurations-table').empty()
+    $('#configurations-table > div > table > tbody').empty()
 }
 
 function formatConfigurationTableRow(item) {
-    return '<tr><td>' + item.Name + '</td></tr>';
+    return '<tr><td>' + item.Name + '</td><td>' + item.Checksum + '</td><td><span class="label label-danger">' + item.ChecksumStatus + '</span></td><td><button type="button" class="btn btn-default btn-xs">Delete</button></td></tr>';
+}
+
+function formatConfigurationTableRowException(message) {
+    return '<tr class="danger"><td rowspan="1" style="text-align: center;">' + message + '<td></tr>'
 }

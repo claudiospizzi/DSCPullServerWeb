@@ -18,6 +18,9 @@ namespace DSCPullServerWeb
             container.RegisterType<IFileSystemRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
             config.DependencyResolver = new UnityResolver(container);
 
+            // Preload Web API settings from web.config
+            container.Resolve<IOptions>();
+
             // Web API routes
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(

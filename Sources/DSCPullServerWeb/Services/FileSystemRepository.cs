@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DSCPullServerWeb.Helpers;
 using DSCPullServerWeb.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DSCPullServerWeb.Services
 {
@@ -14,30 +14,60 @@ namespace DSCPullServerWeb.Services
         public FileSystemRepository(IOptions options)
         {
             _options = options;
-
-            System.Diagnostics.Debug.Write("FileSystemRepository object created");
         }
 
-        public IEnumerable<Configuration> GetAllConfigurations()
+        public IEnumerable<Configuration> GetConfigurations()
         {
-            DirectoryInfo directory  = new DirectoryInfo(_options.ConfigurationPath);
-
-            FileInfo[] files = directory.GetFiles("*.mof");
-
-            foreach (FileInfo file in files)
-            {
-                Configuration configuration = new Configuration()
-                {
-                    Name = Path.GetFileNameWithoutExtension(file.Name)
-                };
-
-                yield return configuration;
-            }
+            return LoadConfigurations();
         }
 
         public Configuration GetConfigurationByName(String name)
         {
-            return GetAllConfigurations().FirstOrDefault((c) => c.Name == name);
+            return LoadConfigurations(name).FirstOrDefault((c) => c.Name == name);
+        }
+
+        private IEnumerable<Configuration> LoadConfigurations(string filter = null)
+        {
+            if (string.IsNullOrEmpty(filter))
+            {
+                filter = "*.mof";
+            }
+            else
+            {
+                filter = filter + ".mof";
+            }
+
+            DirectoryInfo directory = new DirectoryInfo(_options.ConfigurationPath);
+            FileInfo[] mofFiles        = directory.GetFiles(filter);
+
+            IList<Configuration> configurations = new List<Configuration>();
+
+            foreach (FileInfo mofFile in mofFiles)
+            {
+                FileInfo sumFile = new FileInfo(mofFile.FullName + ".checksum");
+
+                Configuration configuration = new Configuration()
+                {
+                    Name           = Path.GetFileNameWithoutExtension(mofFile.Name),
+                    Checksum       = "",
+                    ChecksumStatus = "Missing"
+                };
+
+                if (sumFile.Exists)
+                {
+                    configuration.Checksum       = File.ReadAllText(sumFile.FullName);
+                    configuration.ChecksumStatus = "Invalid";
+
+                    if (ChecksumCalculator.Validate(mofFile.FullName, configuration.Checksum))
+                    {
+                        configuration.ChecksumStatus = "Valid";
+                    }
+                }
+
+                configurations.Add(configuration);
+            }
+
+            return configurations;
         }
     }
 }

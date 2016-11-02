@@ -8,5 +8,9 @@ namespace DSCPullServerWeb.Models
     public class Configuration
     {
         public string Name { get; set; }
+
+        public string Checksum { get; set; }
+
+        public string ChecksumStatus { get; set; }
     }
 }
