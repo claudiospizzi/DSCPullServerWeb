@@ -8,16 +8,26 @@
     PowerShellVersion    = '4.0'
     RequiredModules      = @()
     ScriptsToProcess     = @()
-    TypesToProcess       = @()
-    FormatsToProcess     = @()
+    TypesToProcess       = @(
+        'Resources\DSCPullServerWeb.Types.ps1xml'
+    )
+    FormatsToProcess     = @(
+        'Resources\DSCPullServerWeb.Formats.ps1xml'
+    )
     FunctionsToExport    = @(
+        'Get-DSCPullServerConfiguration'
         'Get-DSCPullServerModule'
+        'Publish-DSCPullServerConfiguration'
+        'Publish-DSCPullServerModule'
+        'Unpublish-DSCPullServerConfiguration'
+        'Unpublish-DSCPullServerModule'
+        'Save-DSCPullServerConfiguration'
+        'Save-DSCPullServerModule'
     )
     CmdletsToExport      = @()
     VariablesToExport    = @()
     AliasesToExport      = @()
     DscResourcesToExport = @(
-        
     )
     PrivateData          = @{
         PSData               = @{

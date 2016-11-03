@@ -9,7 +9,7 @@ namespace DSCPullServerWeb.Helpers
 {
     public class ChecksumCalculator
     {
-        public static bool Validate(string path, string value)
+        public static string Create(string path)
         {
             SHA256 sha256 = SHA256.Create();
 
@@ -24,7 +24,12 @@ namespace DSCPullServerWeb.Helpers
                 hashValue = BitConverter.ToString(hashRaw).Replace("-", "");
             }
 
-            return hashValue == value;
+            return hashValue;
+        }
+
+        public static bool Validate(string path, string value)
+        {
+            return Create(path) == value;
         }
     }
 }

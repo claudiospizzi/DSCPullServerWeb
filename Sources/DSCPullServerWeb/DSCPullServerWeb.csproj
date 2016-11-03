@@ -122,21 +122,22 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ConfigurationsController.cs" />
+    <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\WebController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ChecksumCalculator.cs" />
+    <Compile Include="Helpers\FileActionResult.cs" />
     <Compile Include="Helpers\UnityResolver.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FileSystemRepository.cs" />
     <Compile Include="Services\IFileSystemRepository.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Services\Options.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Demo\RegistrationKeys.txt" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -168,6 +170,16 @@
     <Content Include="Fonts\fontawesome-webfont.woff" />
     <Content Include="Fonts\fontawesome-webfont.ttf" />
     <Content Include="Fonts\fontawesome-webfont.eot" />
+    <Content Include="App_Data\Demo\Configuration\FeatureDemo.mof" />
+    <Content Include="App_Data\Demo\Configuration\FeatureDemo.mof.checksum" />
+    <Content Include="App_Data\Demo\Configuration\FileDemo.mof" />
+    <Content Include="App_Data\Demo\Configuration\FileDemo.mof.checksum" />
+    <Content Include="App_Data\Demo\Configuration\RegistryDemo.mof" />
+    <Content Include="App_Data\Demo\Modules\SharePointDsc_1.3.0.0.zip" />
+    <Content Include="App_Data\Demo\Modules\SharePointDsc_1.4.0.0.zip" />
+    <Content Include="App_Data\Demo\Modules\SystemLocaleDsc_1.1.0.0.zip" />
+    <Content Include="App_Data\Demo\Modules\SharePointDsc_1.3.0.0.zip.checksum" />
+    <Content Include="App_Data\Demo\Modules\SharePointDsc_1.4.0.0.zip.checksum" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -219,6 +231,11 @@
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
+  <!-- Custom extension to transform the web.config for debugging -->
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="TransformWebConfig">
+    <TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
@@ -226,7 +243,7 @@
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>45011</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <DevelopmentServerVPath>C:\Temp\</DevelopmentServerVPath>
           <IISUrl>http://localhost:34361/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
@@ -241,6 +258,8 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
+  -->
   <Target Name="AfterBuild">
-  </Target> -->
+    <CallTarget Targets="TransformWebConfig" />
+  </Target>
 </Project>
