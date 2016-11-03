@@ -20,11 +20,7 @@ namespace DSCPullServerWeb.Helpers
         {
             HttpResponseMessage response = new HttpResponseMessage();
             response.Content = new StreamContent(File.OpenRead(_file.FullName));
-            //response.Content = new StreamContent(File.OpenRead(_file.FullName + ".checksum"));
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-
-            // NOTE: Here I am just setting the result on the Task and not really doing any async stuff. 
-            // But let's say you do stuff like contacting a File hosting service to get the file, then you would do 'async' stuff here.
 
             return Task.FromResult(response);
         }
