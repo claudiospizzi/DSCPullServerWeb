@@ -1,7 +1,6 @@
 ﻿using DSCPullServerWeb.Helpers;
 using DSCPullServerWeb.Models;
 using DSCPullServerWeb.Services;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,6 +18,7 @@ namespace DSCPullServerWeb.Controllers
             _repository = repository;
         }
 
+        // GET /api/modules
         [HttpGet]
         [Route("modules")]
         public IHttpActionResult Get()
@@ -33,6 +33,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // GET /api/modules/MyModule
         [HttpGet]
         [Route("modules/{name}")]
         public IHttpActionResult Get(string name)
@@ -54,6 +55,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // GET /api/modules/MyModule/1.0.0.0
         [HttpGet]
         [Route("modules/{name}/{version}")]
         public IHttpActionResult Get(string name, string version)
@@ -75,6 +77,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // GET /api/modules/MyModule/1.0.0.0/asset
         [HttpGet]
         [Route("modules/{name}/{version}/asset")]
         public IHttpActionResult Download(string name, string version)
@@ -96,6 +99,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // PUT /api/modules/MyModule/1.0.0.0
         [HttpPut]
         [Route("modules/{name}/{version}")]
         public async Task<IHttpActionResult> Upload(string name, string version)
@@ -116,6 +120,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // DELETE /api/modules/MyModule/1.0.0.0
         [HttpDelete]
         [Route("modules/{name}/{version}")]
         public IHttpActionResult Delete(string name, string version)

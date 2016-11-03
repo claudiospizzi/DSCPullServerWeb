@@ -17,6 +17,7 @@ namespace DSCPullServerWeb.Controllers
             _repository = repository;
         }
 
+        // GET /api/configurations
         [HttpGet]
         [Route("configurations")]
         public IHttpActionResult Get()
@@ -31,6 +32,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // GET /api/configurations/MyConfig
         [HttpGet]
         [Route("configurations/{name}")]
         public IHttpActionResult Get(string name)
@@ -52,6 +54,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // GET /api/configurations/MyConfig/asset
         [HttpGet]
         [Route("configurations/{name}/asset")]
         public IHttpActionResult Download(string name)
@@ -73,6 +76,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // PUT /api/configurations/MyConfig
         [HttpPut]
         [Route("configurations/{name}")]
         public async Task<IHttpActionResult> Upload(string name)
@@ -93,6 +97,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
+        // DELETE /api/configurations/MyConfig
         [HttpDelete]
         [Route("configurations/{name}")]
         public IHttpActionResult Delete(string name)
