@@ -20,6 +20,7 @@ namespace DSCPullServerWeb.Helpers
         {
             HttpResponseMessage response = new HttpResponseMessage();
             response.Content = new StreamContent(File.OpenRead(_file.FullName));
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
 
             return Task.FromResult(response);
