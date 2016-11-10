@@ -68,7 +68,7 @@ function Save-DSCPullServerModule
     # Use splatting to prepare the parameters.
     $RestMethodParam = @{
         Method  = 'Get'
-        Uri     = "$Uri/modules/$Name/$Version/asset"
+        Uri     = "$Uri/modules/$Name/$Version/download"
         OutFile = $Path
     }
 
