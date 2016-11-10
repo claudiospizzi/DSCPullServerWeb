@@ -133,6 +133,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BootstrapExtension.cs" />
     <Compile Include="Helpers\ChecksumCalculator.cs" />
     <Compile Include="Helpers\FileActionResult.cs" />
     <Compile Include="Helpers\UnityResolver.cs" />
@@ -163,6 +164,10 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Images\Configurations.png" />
+    <Content Include="Images\Modules.png" />
+    <Content Include="Images\Nodes.png" />
+    <Content Include="Images\Reports.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Fonts\FontAwesome.otf" />
@@ -185,6 +190,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-dateFormat-1.0.2.js" />
+    <Content Include="Scripts\jquery-dateFormat-1.0.2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
