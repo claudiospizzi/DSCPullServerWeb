@@ -1,4 +1,6 @@
-﻿namespace DSCPullServerWeb.Models
+﻿using System;
+
+namespace DSCPullServerWeb.Models
 {
     /// <summary>
     /// DTO for PowerShell modules available on the DSC pull server.
@@ -8,6 +10,8 @@
         public string Name { get; set; }
 
         public string Version { get; set; }
+
+        public DateTime Created { get; set; }
 
         public string Checksum { get; set; }
 

@@ -15,6 +15,8 @@ namespace DSCPullServerWeb.Services
 
         void CreateConfiguration(string name, Stream stream);
 
+        void UpdateConfigurationChecksum(Configuration configuration);
+
         void DeleteConfiguration(Configuration configuration);
 
         IList<Module> GetModules();
@@ -26,6 +28,8 @@ namespace DSCPullServerWeb.Services
         FileInfo GetModuleFile(Module module);
 
         void CreateModule(string name, string version, Stream stream);
+
+        void UpdateModuleChecksum(Module module);
 
         void DeleteModule(Module module);
     }

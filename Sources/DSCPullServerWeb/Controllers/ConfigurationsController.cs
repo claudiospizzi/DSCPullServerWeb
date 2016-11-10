@@ -1,6 +1,7 @@
 ﻿using DSCPullServerWeb.Helpers;
 using DSCPullServerWeb.Models;
 using DSCPullServerWeb.Services;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -54,10 +55,36 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/configurations/MyConfig/asset
+        // GET /api/configurations/MyConfig/checksum
         [HttpGet]
-        [Route("configurations/{name}/asset")]
-        public IHttpActionResult Download(string name)
+        [Route("configurations/{name}/checksum")]
+        public IHttpActionResult Checksum(string name)
+        {
+            try
+            {
+                var configuration = _repository.GetConfiguration(name);
+
+                if (configuration == null)
+                {
+                    return NotFound();
+                }
+
+                _repository.UpdateConfigurationChecksum(configuration);
+
+                return Ok(configuration);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
+        // GET /api/configurations/MyConfig/download
+        // GET /api/configurations/MyConfig/download/MyConfig.mof
+        [HttpGet]
+        [Route("configurations/{name}/download")]
+        [Route("configurations/{name}/download/{file}")]
+        public IHttpActionResult Download(string name, string file = "")
         {
             try
             {

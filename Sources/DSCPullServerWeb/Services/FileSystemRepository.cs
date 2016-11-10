@@ -43,9 +43,15 @@ namespace DSCPullServerWeb.Services
                 stream.CopyTo(mofFileWriter);
             }
 
-            string sumFileContent = ChecksumCalculator.Create(mofFile.FullName);
+            UpdateChecksum(mofFile, sumFile);
+        }
 
-            File.WriteAllText(sumFile.FullName, sumFileContent);
+        public void UpdateConfigurationChecksum(Configuration configuration)
+        {
+            FileInfo mofFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof");
+            FileInfo sumFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof.checksum");
+
+            UpdateChecksum(mofFile, sumFile);
         }
 
         public void DeleteConfiguration(Configuration configuration)
@@ -96,9 +102,15 @@ namespace DSCPullServerWeb.Services
                 stream.CopyTo(zipFileWriter);
             }
 
-            string sumFileContent = ChecksumCalculator.Create(zipFile.FullName);
+            UpdateChecksum(zipFile, sumFile);
+        }
 
-            File.WriteAllText(sumFile.FullName, sumFileContent);
+        public void UpdateModuleChecksum(Module module)
+        {
+            FileInfo zipFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip");
+            FileInfo sumFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip.checksum");
+
+            UpdateChecksum(zipFile, sumFile);
         }
 
         public void DeleteModule(Module module)
@@ -139,8 +151,9 @@ namespace DSCPullServerWeb.Services
 
                 Configuration configuration = new Configuration()
                 {
-                    Name = Path.GetFileNameWithoutExtension(mofFile.Name),
-                    Checksum = "",
+                    Name           = Path.GetFileNameWithoutExtension(mofFile.Name),
+                    Created        = mofFile.CreationTime,
+                    Checksum       = "",
                     ChecksumStatus = "Missing"
                 };
 
@@ -177,6 +190,7 @@ namespace DSCPullServerWeb.Services
                 {
                     Name           = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[0],
                     Version        = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[1],
+                    Created        = zipFile.CreationTime,
                     Checksum       = "",
                     ChecksumStatus = "Missing"
                 };
@@ -203,6 +217,13 @@ namespace DSCPullServerWeb.Services
             DirectoryInfo directory = new DirectoryInfo(path);
 
             return directory.GetFiles(filter);
+        }
+
+        private void UpdateChecksum(FileInfo targetFile, FileInfo checksumFile)
+        {
+            string sumFileContent = ChecksumCalculator.Create(targetFile.FullName);
+
+            File.WriteAllText(checksumFile.FullName, sumFileContent);
         }
     }
 }

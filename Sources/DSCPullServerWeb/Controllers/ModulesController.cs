@@ -77,10 +77,36 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule/1.0.0.0/asset
+        // GET /api/modules/MyModule/1.0.0.0/checksum
         [HttpGet]
-        [Route("modules/{name}/{version}/asset")]
-        public IHttpActionResult Download(string name, string version)
+        [Route("modules/{name}/{version}/checksum")]
+        public IHttpActionResult Checksum(string name, string version)
+        {
+            try
+            {
+                Module module = _repository.GetModule(name, version);
+
+                if (module == null)
+                {
+                    return NotFound();
+                }
+
+                _repository.UpdateModuleChecksum(module);
+
+                return Ok(module);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
+        // GET /api/modules/MyModule/1.0.0.0/download
+        // GET /api/modules/MyModule/1.0.0.0/download/MyModule_1.0.0.0.zip
+        [HttpGet]
+        [Route("modules/{name}/{version}/download")]
+        [Route("modules/{name}/{version}/download/{file}")]
+        public IHttpActionResult Download(string name, string version, string file = "")
         {
             try
             {
