@@ -103,16 +103,6 @@ function clearReports() {
 // MODULES PAGE
 // ============
 
-function updateModules() {
-    //clearModules();
-    //$.getJSON('/api/modules')
-    //    .done(function (data) {
-    //        // On success, 'data' contains a list of modules.
-    //        $.each(data, function (key, item) {
-    //            $('#modules-table').append(formatModuleTableRow(item))
-    //        });
-    //    });
-}
 
 function clearModules() {
     //$('#modules-table').empty()
@@ -126,47 +116,201 @@ function formatModuleTableRow(item) {
 //************************************************************************************
 // NEW
 
-function update() {
 
-    var path = window.location.pathname.toString()
-
-    var pages = ['Nodes', 'Reports', 'Configurations', 'Modules', 'Cmdlets', 'RestApi']
-    
-    pages.forEach(function (value, index, array) {
-
-        if (path.indexOf("/Web/" + value) == 0) {
-
-            $('.' + value.toLowerCase() + '-nav').parent().addClass("active");
+$('#configurationsUploadButton').on('change', function (e) {
+    var files = e.target.files;
+    if (files.length > 0) {
+        if (this.value.lastIndexOf('.mof') === -1) {
+            alert('Only mof files are allowed!');
+            this.value = '';
+            return;
         }
-    })
+        if (window.FormData !== undefined) {
+            var data = new FormData();
+            for (var x = 0; x < files.length; x++) {
+                data.append("file" + x, files[x]);
+            }
 
-    if (path.indexOf("/Web/Configurations") == 0) {
-
-        updateConfigurations();
+            $.ajax({
+                type: "PUT",
+                url: '/api/Configurations/MyConfTest',
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    if (xhr.responseText && xhr.responseText[0] == "{")
+                        err = JSON.parse(xhr.responseText).Message;
+                    console.log(err);
+                }
+            });
+        } else {
+            alert("This browser doesn't support HTML5 file uploads!");
+        }
     }
+});
+
+$('#configurationsRefreshButton').on("click", function (e) {
+    updateConfigurations();
+});
+
+$('#modulesRefreshButton').on("click", function (e) {
+    updateModules();
+});
+
+function update() {
+    var path = window.location.pathname.toString()
+    if (path.indexOf("/Web/Configurations") == 0) { updateConfigurations(); }
+    if (path.indexOf("/Web/Modules") == 0) { updateModules(); }
+}
+
+function clearTableContent(page) {
+    $('#table-' + page + '-content > div > table > tbody').empty()
+}
+
+function showTableContent(page) {
+    $('#table-' + page + '-content').show()
+    $('#table-' + page + '-loader').hide()
+    $('#table-' + page + '-exception').hide()
+}
+
+function showTableLoader(page) {
+    $('#table-' + page + '-content').hide()
+    $('#table-' + page + '-loader').show()
+    $('#table-' + page + '-exception').hide()
+}
+
+function showTableException(page) {
+    $('#table-' + page + '-content').hide()
+    $('#table-' + page + '-loader').hide()
+    $('#table-' + page + '-exception').show()
 }
 
 function updateConfigurations() {
-    clearConfigurations();
+    showTableLoader('configurations');
+    clearTableContent('configurations');
     $.getJSON('/api/configurations')
         .done(function (data) {
             $.each(data, function (key, item) {
-                $('#configurations-table > div > table > tbody').append(formatConfigurationTableRow(item));
+                $('#table-configurations-content > div > table > tbody').append(formatConfigurationTableRow(item));
             });
+            showTableContent('configurations');
         })
         .fail(function (jqxhr, textStatus, error) {
-            $('#configurations-table').append(formatConfigurationTableRowException(jqxhr.status + ' / ' + jqxhr.responseText + ' / ' + textStatus + ' / ' + error));
+            $('#table-configurations-exception > p').empty();
+            $('#table-configurations-exception > p').append(formatConfigurationTableRowException(jqxhr.status + '. ' + error));
+            showTableException('configurations');
         });
 }
 
-function clearConfigurations() {
-    $('#configurations-table > div > table > tbody').empty()
+function updateModules() {
+    showTableLoader('modules');
+    clearTableContent('modules');
+    $.getJSON('/api/modules')
+        .done(function (data) {
+            $.each(data, function (key, item) {
+                $('#table-modules-content > div > table > tbody').append(formatModulesTableRow(item));
+            });
+            showTableContent('modules');
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            $('#table-modules-exception > p').empty();
+            $('#table-modules-exception > p').append(formatConfigurationTableRowException(jqxhr.status + '. ' + error));
+            showTableException('modules');
+        });
+}
+
+function formatModulesTableRow(item) {
+    buttonDownload = createTableLink('Download', 'default', 'download-alt', '/api/modules/' + item.Name + '/' + item.Version + '/download/' + item.Name + '_' + item.Version + '.zip');
+
+
+
+    name = convertStringToCell(item.Name)
+    version  = convertStringToCell(item.Version)
+    date     = convertStringToCell(convertDateTimeToString(item.Created));
+    checksum = convertStringToCell(convertChecksumToCode(item.Checksum));
+    status = convertStringToCell(convertStatusToLabel(item.ChecksumStatus));
+    button = convertStringToCell(buttonDownload);
+
+
+    return '<tr>' + name + version + date + checksum + status + button + '</tr>';
+    //return '<tr>' + name + version + date + checksum + status + '<td><button type="button" class="btn btn-default btn-xs">Delete</button></td></tr>';
 }
 
 function formatConfigurationTableRow(item) {
-    return '<tr><td>' + item.Name + '</td><td>' + item.Checksum + '</td><td><span class="label label-danger">' + item.ChecksumStatus + '</span></td><td><button type="button" class="btn btn-default btn-xs">Delete</button></td></tr>';
+    name     = convertStringToCell(item.Name)
+    date     = convertStringToCell(convertDateTimeToString(item.Created));
+    checksum = convertStringToCell(convertChecksumToCode(item.Checksum));
+    status   = convertStringToCell(convertStatusToLabel(item.ChecksumStatus));
+    button   = convertStringToCell(createTableLink('Download', 'default', 'download-alt', '/api/configurations/' + item.Name + '/download.zip') + ' ' + convertLinkToRepeatButton('') + ' ' + convertLinkToRemoveButton(''));
+
+    return '<tr>' + name + date + checksum + status + button + '</tr>';
+    //return '<tr><td>' + item.Name + '</td><td>' + $.format.date(new Date(item.Created), 'yyyy-MM-dd HH:mm:ss') + '</td><td><code>' + item.Checksum.substring(0, 10).toLowerCase() + '</code></td><td><span class="label label-danger" data-toggle="tooltip" title="foo">' + item.ChecksumStatus + '</span></td><td><button type="button" class="btn btn-default btn-xs">Delete</button></td></tr>';
 }
 
 function formatConfigurationTableRowException(message) {
-    return '<tr class="danger"><td rowspan="1" style="text-align: center;">' + message + '<td></tr>'
+    //return '<tr class="danger"><td rowspan="1" style="text-align: center;">' + message + '<td></tr>'
+    return message;
 }
+
+function convertStringToCell(string) {
+    return '<td>' + string + '</td>'
+}
+
+function convertDateTimeToString(date) {
+    return $.format.date(new Date(date), 'yyyy-MM-dd HH:mm:ss');
+}
+
+function convertChecksumToCode(checksum) {
+    return '<code>' + checksum.substring(0, 12).toLowerCase() + '</code>';
+}
+
+function convertStatusToLabel(status) {
+    switch(status) {
+        case 'Valid':
+            style = 'success';
+            break;
+        case 'Invalid':
+            style = 'danger';
+            break;
+        case 'Missing':
+            style = 'warning';
+            break;
+        default:
+            style = 'default';
+    }
+    return '<span class="label label-' + style + '">' + status + '</span>';
+}
+
+function convertLinkToDownloadButton(link) {
+
+    return '<button type="button" class="btn btn-default btn-xs" title="Download"><span class="glyphicon glyphicon-download-alt"></span></button>';
+}
+
+function convertLinkToRepeatButton(link) {
+
+    return '<button type="button" class="btn btn-default btn-xs" title="Calculate Checksum"><span class="glyphicon glyphicon-repeat"></span></button>';
+}
+
+function convertLinkToRemoveButton(link) {
+
+    return '<button type="button" class="btn btn-danger btn-xs" title="Remove"><span class="glyphicon glyphicon-remove"></span></button>';
+}
+
+function createTableButton(title, type, icon, action) {
+    return '<button type="button" onclick="' + action + '(this)" class="btn btn-' + type + ' btn-xs" title="' + title + '"><span class="glyphicon glyphicon-' + icon + '"></span></button>';
+}
+
+function createTableLink(title, type, icon, href) {
+    return '<a type="button" target="_blank" href="' + href + '" class="btn btn-' + type + ' btn-xs" title="' + title + '"><span class="glyphicon glyphicon-' + icon + '"></span></a>';
+}
+
+function DoDownload(source) {
+    result = confirm('Test');
+    alert(tmp);
+
+}
+

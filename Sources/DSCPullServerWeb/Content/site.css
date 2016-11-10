@@ -1,4 +1,112 @@
-﻿body {
+﻿
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+}
+
+.row > div {
+    margin-bottom: 10px;
+}
+
+
+/* Page Header (H1) Icon*/
+
+.page-header-icon {
+    padding-left: 48px;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+
+.page-header-icon-nodes {
+    background-image: url("../Images/Nodes.png");
+}
+
+.page-header-icon-reports {
+    background-image: url("../Images/Reports.png");
+}
+
+.page-header-icon-configurations {
+    background-image: url("../Images/Configurations.png");
+}
+
+.page-header-icon-modules {
+    background-image: url("../Images/Modules.png");
+}
+
+
+/* Page Subheader (H2) Icon*/
+
+.page-subheader-icon {
+    padding-left: 44px;
+    background-size: 36px;
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+
+.page-subheader-icon-nodes {
+    background-image: url("../Images/Nodes.png");
+}
+
+.page-subheader-icon-reports {
+    background-image: url("../Images/Reports.png");
+}
+
+.page-subheader-icon-configurations {
+    background-image: url("../Images/Configurations.png");
+}
+
+.page-subheader-icon-modules {
+    background-image: url("../Images/Modules.png");
+}
+
+
+/* File Upload and Refresh Buttons */
+
+.table-buttons {
+    text-align: right;
+}
+
+.table-fileupload {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.table-fileupload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.table-refresh {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+
+/**/
+
+.dsc-table div table tbody tr td:last-of-type {
+    text-align: right;
+}
+
+#table-configurations-exception > p,
+#table-modules-exception > p {
+    padding: 15px 15px;
+    text-align: center;
+}
+
+#table-configurations-loader > p,
+#table-modules-loader > p {
+    padding: 15px 15px;
+    text-align: center;
+    color: #808080;
 }

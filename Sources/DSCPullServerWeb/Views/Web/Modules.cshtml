@@ -1,5 +1,51 @@
 ﻿<div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">@ViewBag.Title</h1>
+        <h1 class="page-header page-header-icon page-header-icon-modules">@ViewBag.Title</h1>
+    </div>
+
+    <div class="col-md-12">
+        <p>Available PowerShell moduels on the pull server. To upload a new module, use the <em>Upload</em> button and select a file that match the naming convention <strong>&lt;ModuleName&gt;_&lt;ModuleVersion&gt;.zip</strong>. The module needs to be formatted properly. Check the <a href="https://msdn.microsoft.com/en-us/powershell/dsc/pullserver#dsc-resource-module-package-format">help page</a> for more information.</p>
+    </div>
+
+    <div class="col-md-12 table-buttons">
+        <div class="btn btn-default table-fileupload">
+            <span>Upload</span>
+            <input id="modulesUploadButton" type="file" class="upload" />
+        </div>
+        <button id="modulesRefreshButton" class="btn btn-default table-refresh">Refresh</button>
+    </div>
+
+    <div class="col-md-12" id="table-modules-loader">
+        <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
+    </div>
+
+    <div class="col-md-12 dsc-table" id="table-modules-content" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <colgroup>
+                    <col style="width: 40%;" />
+                    <col style="width: 15%;" />
+                    <col style="width: 16%;" />
+                    <col style="width: 13%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Version</th>
+                        <th>Created</th>
+                        <th>Checksum</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="table-modules-exception" style="display: none;">
+        <p class="text-danger bg-danger">500 (Internal Server Error)</p>
     </div>
 </div>

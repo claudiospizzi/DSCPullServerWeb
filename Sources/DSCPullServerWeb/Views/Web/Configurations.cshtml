@@ -1,18 +1,40 @@
 ﻿<div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">@ViewBag.Title</h1>
+        <h1 class="page-header page-header-icon page-header-icon-configurations">@ViewBag.Title</h1>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12" id="configurations-table">
+    <div class="col-md-12">
+        <p>Available DSC configurations (MOFs) on the pull server. To upload a new configuration, use the <em>Upload</em> button and select a file that match the naming convention <strong>&lt;ConfigurationName&gt;.mof</strong>. The new uploaded configuration will be named the same as the uploaded file.</p>
+    </div>
+
+    <div class="col-md-12 table-buttons">
+        <div class="btn btn-default table-fileupload">
+            <span>Upload</span>
+            <input id="configurationsUploadButton" type="file" class="upload" />
+        </div>
+        <button type="button" id="configurationsRefreshButton" class="btn btn-default table-refresh">Refresh</button>
+    </div>
+
+    <div class="col-md-12" id="table-configurations-loader">
+        <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
+    </div>
+
+    <div class="col-md-12 dsc-table" id="table-configurations-content" style="display: none;">
         <div class="table-responsive">
             <table class="table table-hover">
+                <colgroup>
+                    <col style="width: 55%;" />
+                    <col style="width: 16%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 9%;" />
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Created</th>
                         <th>Checksum</th>
-                        <th>Checksum Status</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -20,20 +42,8 @@
             </table>
         </div>
     </div>
-    <div class="col-md-12" id="configurations-exception">
+
+    <div class="col-md-12" id="table-configurations-exception" style="display: none;">
         <p class="text-danger bg-danger">500 (Internal Server Error)</p>
-    </div>
-    <div class="col-md-12" id="configurations-loader">
-        <p>
-            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-
-            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-
-            <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
-
-            <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
-
-            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-        </p>
     </div>
 </div>
