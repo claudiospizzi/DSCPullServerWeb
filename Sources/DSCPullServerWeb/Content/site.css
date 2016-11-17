@@ -61,19 +61,14 @@ body {
 }
 
 
-/* File Upload and Refresh Buttons */
+/* Bootstrap Extension: Upload Button */
 
-.table-buttons {
-    text-align: right;
-}
-
-.table-fileupload {
+.btn-upload-extension {
     position: relative;
     overflow: hidden;
-    margin-bottom: 10px;
 }
 
-.table-fileupload input.upload {
+.btn-upload-extension input.upload {
     position: absolute;
     top: 0;
     right: 0;
@@ -85,14 +80,8 @@ body {
     filter: alpha(opacity=0);
 }
 
-.table-refresh {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
 
-
-/**/
+/* DSC Table View */
 
 .dsc-table div table tbody tr td:last-of-type {
     text-align: right;

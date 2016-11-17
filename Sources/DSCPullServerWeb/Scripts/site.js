@@ -49,7 +49,7 @@ function navigate(section) {
 $('#home-section').on('show', function () { updateHome() });
 $('#nodes-section').on('show', function () { updateNodes() });
 $('#reports-section').on('show', function () { updateReports() });
-$('#configurations-section').on('show', function () { updateConfigurations() });
+$('#configurations-section').on('show', function () { uiUpdateConfigurations() });
 $('#modules-section').on('show', function () { updateModules() });
 
 // Events for the content hide (navigate from)
@@ -117,44 +117,44 @@ function formatModuleTableRow(item) {
 // NEW
 
 
-$('#configurationsUploadButton').on('change', function (e) {
-    var files = e.target.files;
-    if (files.length > 0) {
-        if (this.value.lastIndexOf('.mof') === -1) {
-            alert('Only mof files are allowed!');
-            this.value = '';
-            return;
-        }
-        if (window.FormData !== undefined) {
-            var data = new FormData();
-            for (var x = 0; x < files.length; x++) {
-                data.append("file" + x, files[x]);
-            }
+//$('#configurationsUploadButton').on('change', function (e) {
+//    var files = e.target.files;
+//    if (files.length > 0) {
+//        if (this.value.lastIndexOf('.mof') === -1) {
+//            alert('Only mof files are allowed!');
+//            this.value = '';
+//            return;
+//        }
+//        if (window.FormData !== undefined) {
+//            var data = new FormData();
+//            for (var x = 0; x < files.length; x++) {
+//                data.append("file" + x, files[x]);
+//            }
 
-            $.ajax({
-                type: "PUT",
-                url: '/api/Configurations/MyConfTest',
-                contentType: false,
-                processData: false,
-                data: data,
-                success: function (result) {
-                    console.log(result);
-                },
-                error: function (xhr, status, p3, p4) {
-                    var err = "Error " + " " + status + " " + p3 + " " + p4;
-                    if (xhr.responseText && xhr.responseText[0] == "{")
-                        err = JSON.parse(xhr.responseText).Message;
-                    console.log(err);
-                }
-            });
-        } else {
-            alert("This browser doesn't support HTML5 file uploads!");
-        }
-    }
-});
+//            $.ajax({
+//                type: "PUT",
+//                url: '/api/Configurations/MyConfTest',
+//                contentType: false,
+//                processData: false,
+//                data: data,
+//                success: function (result) {
+//                    console.log(result);
+//                },
+//                error: function (xhr, status, p3, p4) {
+//                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+//                    if (xhr.responseText && xhr.responseText[0] == "{")
+//                        err = JSON.parse(xhr.responseText).Message;
+//                    console.log(err);
+//                }
+//            });
+//        } else {
+//            alert("This browser doesn't support HTML5 file uploads!");
+//        }
+//    }
+//});
 
 $('#configurationsRefreshButton').on("click", function (e) {
-    updateConfigurations();
+    uiUpdateConfigurations();
 });
 
 $('#modulesRefreshButton').on("click", function (e) {
@@ -163,8 +163,8 @@ $('#modulesRefreshButton').on("click", function (e) {
 
 function update() {
     var path = window.location.pathname.toString()
-    if (path.indexOf("/Web/Configurations") == 0) { updateConfigurations(); }
-    if (path.indexOf("/Web/Modules") == 0) { updateModules(); }
+    if (path.indexOf("/Web/Configurations") == 0) { uiUpdateConfigurations(); }
+    if (path.indexOf("/Web/Modules") == 0)        { updateModules(); }
 }
 
 function clearTableContent(page) {
@@ -189,22 +189,6 @@ function showTableException(page) {
     $('#table-' + page + '-exception').show()
 }
 
-function updateConfigurations() {
-    showTableLoader('configurations');
-    clearTableContent('configurations');
-    $.getJSON('/api/configurations')
-        .done(function (data) {
-            $.each(data, function (key, item) {
-                $('#table-configurations-content > div > table > tbody').append(formatConfigurationTableRow(item));
-            });
-            showTableContent('configurations');
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            $('#table-configurations-exception > p').empty();
-            $('#table-configurations-exception > p').append(formatConfigurationTableRowException(jqxhr.status + '. ' + error));
-            showTableException('configurations');
-        });
-}
 
 function updateModules() {
     showTableLoader('modules');
@@ -225,7 +209,8 @@ function updateModules() {
 
 function formatModulesTableRow(item) {
     buttonDownload = createTableLink('Download', 'default', 'download-alt', '/api/modules/' + item.Name + '/' + item.Version + '/download/' + item.Name + '_' + item.Version + '.zip');
-
+    buttonRepeat = convertLinkToRepeatButton('repeatModule', '')
+    buttonRemove = convertLinkToRemoveButton('deleteModule', '')
 
 
     name = convertStringToCell(item.Name)
@@ -233,7 +218,7 @@ function formatModulesTableRow(item) {
     date     = convertStringToCell(convertDateTimeToString(item.Created));
     checksum = convertStringToCell(convertChecksumToCode(item.Checksum));
     status = convertStringToCell(convertStatusToLabel(item.ChecksumStatus));
-    button = convertStringToCell(buttonDownload);
+    button = convertStringToCell(buttonDownload + ' ' + buttonRepeat + ' ' + buttonRemove);
 
 
     return '<tr>' + name + version + date + checksum + status + button + '</tr>';
@@ -241,11 +226,15 @@ function formatModulesTableRow(item) {
 }
 
 function formatConfigurationTableRow(item) {
+    buttonDownload = createTableLink('Download', 'default', 'download-alt', '/api/configurations/' + item.Name + '/download/' + item.Name + '.mof')
+    buttonRepeat   = convertLinkToRepeatButton('apiHashConfiguration', "'" + item.Name + "'")
+    buttonRemove   = convertLinkToRemoveButton('apiDeleteConfiguration', "'" + item.Name + "'")
+
     name     = convertStringToCell(item.Name)
     date     = convertStringToCell(convertDateTimeToString(item.Created));
     checksum = convertStringToCell(convertChecksumToCode(item.Checksum));
     status   = convertStringToCell(convertStatusToLabel(item.ChecksumStatus));
-    button   = convertStringToCell(createTableLink('Download', 'default', 'download-alt', '/api/configurations/' + item.Name + '/download.zip') + ' ' + convertLinkToRepeatButton('') + ' ' + convertLinkToRemoveButton(''));
+    button   = convertStringToCell(buttonDownload + ' ' + buttonRepeat + ' ' + buttonRemove);
 
     return '<tr>' + name + date + checksum + status + button + '</tr>';
     //return '<tr><td>' + item.Name + '</td><td>' + $.format.date(new Date(item.Created), 'yyyy-MM-dd HH:mm:ss') + '</td><td><code>' + item.Checksum.substring(0, 10).toLowerCase() + '</code></td><td><span class="label label-danger" data-toggle="tooltip" title="foo">' + item.ChecksumStatus + '</span></td><td><button type="button" class="btn btn-default btn-xs">Delete</button></td></tr>';
@@ -290,14 +279,14 @@ function convertLinkToDownloadButton(link) {
     return '<button type="button" class="btn btn-default btn-xs" title="Download"><span class="glyphicon glyphicon-download-alt"></span></button>';
 }
 
-function convertLinkToRepeatButton(link) {
+function convertLinkToRepeatButton(func, param) {
 
-    return '<button type="button" class="btn btn-default btn-xs" title="Calculate Checksum"><span class="glyphicon glyphicon-repeat"></span></button>';
+    return '<button type="button" class="btn btn-default btn-xs" title="Calculate Checksum" onclick="' + func + '(' + param + ')"><span class="glyphicon glyphicon-repeat"></span></button>';
 }
 
-function convertLinkToRemoveButton(link) {
+function convertLinkToRemoveButton(func, param) {
 
-    return '<button type="button" class="btn btn-danger btn-xs" title="Remove"><span class="glyphicon glyphicon-remove"></span></button>';
+    return '<button type="button" class="btn btn-danger btn-xs" title="Remove" onclick="' + func + '(' + param + ')"><span class="glyphicon glyphicon-remove"></span></button>';
 }
 
 function createTableButton(title, type, icon, action) {
@@ -313,4 +302,111 @@ function DoDownload(source) {
     alert(tmp);
 
 }
+
+
+
+// USER INTERFACE
+// ==============
+
+function uiShowModal(title, text) {
+    $('#modal-title').html(title)
+    $('#modal-text').html(text)
+    $('#modal').modal()
+}
+
+function uiUpdateConfigurations() {
+
+    showTableLoader('configurations');
+    clearTableContent('configurations');
+    $.getJSON('/api/configurations')
+        .done(function (data) {
+            $.each(data, function (key, item) {
+                $('#table-configurations-content > div > table > tbody').append(formatConfigurationTableRow(item));
+            });
+            showTableContent('configurations');
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            $('#table-configurations-exception > p').empty();
+            $('#table-configurations-exception > p').append(formatConfigurationTableRowException(jqxhr.status + '. ' + error));
+            showTableException('configurations');
+        });
+}
+
+
+
+// WEB API CALLS: CONFIGURATIONS
+// =============================
+
+$('#configurationsUploadButton').on('change', function (e) {
+    if (e.target.files.length != 1) {
+        uiShowModal('Configuration Upload Failed', 'Please select exactly one file to upload.')
+        return;
+    }
+    if (this.value.lastIndexOf('.mof') === -1) {
+        uiShowModal('Configuration Upload Failed', 'Please select a valid MOF-file with the extension .mof.')
+        return;
+    }
+    if (window.FormData === undefined) {
+        uiShowModal('Configuration Upload Failed', 'This browser doesn\'t support HTML5 file uploads.')
+        return;
+    }
+    apiUploadConfiguration(e.target.files[0]);
+});
+
+function apiUploadConfiguration(file) {
+    var name = file.name.substring(0, file.name.length - 4)
+    $.ajax({
+        type: "PUT",
+        url: '/api/Configurations/' + name,
+        contentType: false,
+        processData: false,
+        data: file,
+        success: function (result) {
+            uiUpdateConfigurations();
+        },
+        error: function (xhr) {
+            uiShowModal(xhr.status + ' ' + xhr.statusText, 'Failed to upload the configuration ' + name + '.<br /><br />' + xhr.responseText);
+            uiUpdateConfigurations();
+        }
+    });
+}
+
+function apiHashConfiguration(name) {
+    $.ajax({
+        url: '/api/configurations/' + name + '/hash',
+        type: 'GET',
+        success: function (result) {
+            uiUpdateConfigurations();
+        },
+        error: function (xhr) {
+            uiShowModal(xhr.status + ' ' + xhr.statusText, 'Failed to hash the configuration ' + name + '.<br /><br />' + xhr.responseText);
+            uiUpdateConfigurations();
+        }
+    });
+}
+
+function apiDeleteConfiguration(name) {
+    $.ajax({
+        url: '/api/configurations/' + name,
+        type: 'DELETE',
+        success: function (result) {
+            uiUpdateConfigurations();
+        },
+        error: function (xhr) {
+            uiShowModal(xhr.status + ' ' + xhr.statusText, 'Failed to delete the configuration ' + name + '.<br /><br />' + xhr.responseText);
+            uiUpdateConfigurations();
+        }
+    });
+}
+
+
+// WEB API CALLS: MODULES
+// ======================
+
+
+
+
+
+
+
 

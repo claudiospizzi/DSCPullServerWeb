@@ -4,15 +4,19 @@
     </div>
 
     <div class="col-md-12">
-        <p>Available DSC configurations (MOFs) on the pull server. To upload a new configuration, use the <em>Upload</em> button and select a file that match the naming convention <strong>&lt;ConfigurationName&gt;.mof</strong>. The new uploaded configuration will be named the same as the uploaded file.</p>
+        <p>Available DSC configurations (MOFs) on the pull server. To upload a new configuration, use the <strong>Upload</strong> button and select a file that match the naming convention <strong>&lt;ConfigurationName&gt;.mof</strong>. The new uploaded configuration will be named the same as the uploaded file.</p>
     </div>
 
-    <div class="col-md-12 table-buttons">
-        <div class="btn btn-default table-fileupload">
-            <span>Upload</span>
-            <input id="configurationsUploadButton" type="file" class="upload" />
+    <div class="col-md-12">
+        <div class="text-right">
+            <div class="btn btn-default btn-upload-extension">
+                <span class="glyphicon glyphicon-plus"></span> Upload
+                <input id="configurationsUploadButton" type="file" class="upload" />
+            </div>
+            <button id="configurationsRefreshButton" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
         </div>
-        <button type="button" id="configurationsRefreshButton" class="btn btn-default table-refresh">Refresh</button>
     </div>
 
     <div class="col-md-12" id="table-configurations-loader">
@@ -23,7 +27,7 @@
         <div class="table-responsive">
             <table class="table table-hover">
                 <colgroup>
-                    <col style="width: 55%;" />
+                    <col style="width: 54%;" />
                     <col style="width: 16%;" />
                     <col style="width: 12%;" />
                     <col style="width: 8%;" />
@@ -35,7 +39,7 @@
                         <th>Created</th>
                         <th>Checksum</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

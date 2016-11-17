@@ -77,10 +77,10 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule/1.0.0.0/checksum
+        // GET /api/modules/MyModule/1.0.0.0/hash
         [HttpGet]
-        [Route("modules/{name}/{version}/checksum")]
-        public IHttpActionResult Checksum(string name, string version)
+        [Route("modules/{name}/{version}/hash")]
+        public IHttpActionResult Hash(string name, string version)
         {
             try
             {

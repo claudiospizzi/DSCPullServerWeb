@@ -4,15 +4,19 @@
     </div>
 
     <div class="col-md-12">
-        <p>Available PowerShell moduels on the pull server. To upload a new module, use the <em>Upload</em> button and select a file that match the naming convention <strong>&lt;ModuleName&gt;_&lt;ModuleVersion&gt;.zip</strong>. The module needs to be formatted properly. Check the <a href="https://msdn.microsoft.com/en-us/powershell/dsc/pullserver#dsc-resource-module-package-format">help page</a> for more information.</p>
+        <p>Available PowerShell moduels on the pull server. To upload a new module, use the <strong>Upload</strong> button and select a file that match the naming convention <strong>&lt;ModuleName&gt;_&lt;ModuleVersion&gt;.zip</strong>. The module needs to be formatted properly. Check the offical <a href="https://msdn.microsoft.com/en-us/powershell/dsc/pullserver#dsc-resource-module-package-format">MSDN help page</a> for more information.</p>
     </div>
 
-    <div class="col-md-12 table-buttons">
-        <div class="btn btn-default table-fileupload">
-            <span>Upload</span>
-            <input id="modulesUploadButton" type="file" class="upload" />
+    <div class="col-md-12">
+        <div class="text-right">
+            <div class="btn btn-default btn-upload-extension">
+                <span class="glyphicon glyphicon-plus"></span> Upload
+                <input id="modulesUploadButton" type="file" class="upload" />
+            </div>
+            <button id="modulesRefreshButton" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
         </div>
-        <button id="modulesRefreshButton" class="btn btn-default table-refresh">Refresh</button>
     </div>
 
     <div class="col-md-12" id="table-modules-loader">
@@ -26,9 +30,9 @@
                     <col style="width: 40%;" />
                     <col style="width: 15%;" />
                     <col style="width: 16%;" />
-                    <col style="width: 13%;" />
+                    <col style="width: 12%;" />
                     <col style="width: 8%;" />
-                    <col style="width: 8%;" />
+                    <col style="width: 9%;" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -37,7 +41,7 @@
                         <th>Created</th>
                         <th>Checksum</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

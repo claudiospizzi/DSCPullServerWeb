@@ -55,10 +55,10 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/configurations/MyConfig/checksum
+        // GET /api/configurations/MyConfig/hash
         [HttpGet]
-        [Route("configurations/{name}/checksum")]
-        public IHttpActionResult Checksum(string name)
+        [Route("configurations/{name}/hash")]
+        public IHttpActionResult Hash(string name)
         {
             try
             {
