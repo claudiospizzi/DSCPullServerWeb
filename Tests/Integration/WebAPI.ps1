@@ -65,16 +65,16 @@ Describe 'WebAPI' {
 
             # Arrange
             $inputName       = 'FeatureDemo'
-            $expcetedPath    = "TestDrive:\$inputName.mof"
+            $expectedPath    = "TestDrive:\$inputName.mof"
             $expectedContent = Get-Content -Path "$PSScriptRoot\TestData\$inputName.mof"
 
             # Act
-            Save-DSCPullServerConfiguration -Uri $api -Name $inputName -Path $expcetedPath
-            $actualContent    = Get-Content -Path $expcetedPath
+            Save-DSCPullServerConfiguration -Uri $api -Name $inputName -Path $expectedPath
+            $actualContent    = Get-Content -Path $expectedPath
             $actualDifference = @(Compare-Object -ReferenceObject $expectedContent -DifferenceObject $actualContent)
 
             # Assert
-            Test-Path -Path $expcetedPath | Should Be $true
+            Test-Path -Path $expectedPath | Should Be $true
             $actualDifference.Count -eq 0 | Should Be $true
         }
 
@@ -93,6 +93,21 @@ Describe 'WebAPI' {
             $actualConfiguration.Name           | Should Be $expectedName
             $actualConfiguration.Checksum       | Should Be $expectedChecksum
             $actualConfiguration.ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should create a binary valid configuration' {
+
+            # Arrange
+            $inputName    = 'UserDemo'
+            $expectedPath = "TestDrive:\$inputName.mof"
+            $expectedHash = (Get-FileHash -Path "$PSScriptRoot\TestData\$inputName.mof" -Algorithm SHA256).Hash
+
+            # Act
+            Save-DSCPullServerConfiguration -Uri $api -Name $inputName -Path $expectedPath
+            $actualHash = (Get-FileHash -Path $expectedPath -Algorithm SHA256).Hash
+
+            # Assert
+            $actualHash | Should Be $expectedHash
         }
 
         It 'should delete an existing configuration' {
@@ -185,16 +200,16 @@ Describe 'WebAPI' {
             # Arrange
             $inputName       = 'SharePointDsc'
             $inputVersion    = '1.3.0.0'
-            $expcetedPath    = "TestDrive:\$inputName`_$inputVersion.zip"
+            $expectedPath    = "TestDrive:\$inputName`_$inputVersion.zip"
             $expectedContent = Get-Content -Path "$PSScriptRoot\TestData\$inputName`_$inputVersion.zip"
 
             # Act
-            Save-DSCPullServerModule -Uri $api -Name $inputName -Version $inputVersion -Path $expcetedPath
-            $actualContent    = Get-Content -Path $expcetedPath
+            Save-DSCPullServerModule -Uri $api -Name $inputName -Version $inputVersion -Path $expectedPath
+            $actualContent    = Get-Content -Path $expectedPath
             $actualDifference = @(Compare-Object -ReferenceObject $expectedContent -DifferenceObject $actualContent)
 
             # Assert
-            Test-Path -Path $expcetedPath | Should Be $true
+            Test-Path -Path $expectedPath | Should Be $true
             $actualDifference.Count -eq 0 | Should Be $true
         }
 
@@ -215,6 +230,22 @@ Describe 'WebAPI' {
             $actualModule.Version        | Should Be $expectedVersion
             $actualModule.Checksum       | Should Be $expectedChecksum
             $actualModule.ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should create a binary valid module' {
+
+            # Arrange
+            $inputName    = 'PSDscResources'
+            $inputVersion = '2.1.0.0'
+            $expectedPath = "TestDrive:\$inputName`_$inputVersion.zip"
+            $expectedHash = (Get-FileHash -Path "$PSScriptRoot\TestData\$inputName`_$inputVersion.zip" -Algorithm SHA256).Hash
+
+            # Act
+            Save-DSCPullServerModule -Uri $api -Name $inputName -Version $inputVersion -Path $expectedPath
+            $actualHash = (Get-FileHash -Path $expectedPath -Algorithm SHA256).Hash
+
+            # Assert
+            $actualHash | Should Be $expectedHash
         }
 
         It 'should delete an existing module' {
