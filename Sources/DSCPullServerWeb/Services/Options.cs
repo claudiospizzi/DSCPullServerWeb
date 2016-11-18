@@ -17,7 +17,8 @@ namespace DSCPullServerWeb.Services
 
         private void LoadConfig()
         {
-            Name              = WebConfigurationManager.AppSettings["Name"];
+            Title             = WebConfigurationManager.AppSettings["Title"];
+            Description       = WebConfigurationManager.AppSettings["Description"];
             ConfigurationPath = WebConfigurationManager.AppSettings["ConfigurationPath"];
             ModulePath        = WebConfigurationManager.AppSettings["ModulePath"];
 
@@ -39,7 +40,13 @@ namespace DSCPullServerWeb.Services
             }
         }
 
-        public String Name
+        public String Title
+        {
+            get;
+            private set;
+        }
+
+        public String Description
         {
             get;
             private set;

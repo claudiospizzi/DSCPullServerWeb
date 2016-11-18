@@ -61,6 +61,34 @@ body {
 }
 
 
+/* Tooltip */
+
+.page-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.page-tooltip .page-tooltip-text {
+    visibility: hidden;
+    width: 480px;
+    /*background-color: #E0DBDD;*/
+    background-color: #F2F2F2;
+    border: 1px solid #DDDDDD;
+    color: #B22148;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%; 
+    margin-left: -240px;
+}
+.page-tooltip:hover .page-tooltip-text {
+    visibility: visible;
+}
+
+
 /* Bootstrap Extension: Upload Button */
 
 .btn-upload-extension {
@@ -83,9 +111,9 @@ body {
 
 /* DSC Table View */
 
-.dsc-table div table tbody tr td:last-of-type {
+/*dsc-table div table tbody tr td:last-of-type {
     text-align: right;
-}
+}*/
 
 #table-configurations-exception > p,
 #table-modules-exception > p {

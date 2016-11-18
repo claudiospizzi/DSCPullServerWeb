@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DSCPullServerWeb.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,51 +9,61 @@ namespace DSCPullServerWeb.Controllers
 {
     public class WebController : Controller
     {
+        private IOptions _options;
+
+        public WebController(IOptions options)
+        {
+            _options = options;
+
+            ViewBag.Title       = _options.Title;
+            ViewBag.Description = _options.Description;
+        }
+
         public ActionResult Home()
         {
-            ViewBag.Title = "Home";
+            ViewBag.Name = "Home";
 
             return View();
         }
 
         public ActionResult Nodes()
         {
-            ViewBag.Title = "Nodes";
+            ViewBag.Name = "Nodes";
 
             return View();
         }
 
         public ActionResult Reports()
         {
-            ViewBag.Title = "Reports";
+            ViewBag.Name = "Reports";
 
             return View();
         }
 
         public ActionResult Configurations()
         {
-            ViewBag.Title = "Configurations";
+            ViewBag.Name = "Configurations";
 
             return View();
         }
 
         public ActionResult Modules()
         {
-            ViewBag.Title = "Modules";
+            ViewBag.Name = "Modules";
 
             return View();
         }
 
         public ActionResult Cmdlets()
         {
-            ViewBag.Title = "Cmdlets";
+            ViewBag.Name = "Cmdlets";
 
             return View();
         }
 
         public ActionResult RestApi()
         {
-            ViewBag.Title = "REST API";
+            ViewBag.Name = "REST API";
 
             return View();
         }

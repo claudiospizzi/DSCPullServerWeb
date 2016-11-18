@@ -7,7 +7,9 @@ namespace DSCPullServerWeb.Services
 {
     public interface IOptions
     {
-        string Name { get; }
+        string Title { get; }
+
+        string Description { get; }
 
         string ConfigurationPath { get; }
 
