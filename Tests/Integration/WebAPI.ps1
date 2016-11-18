@@ -57,8 +57,8 @@ Describe 'WebAPI' {
             $actualConfigurations = @(Get-DSCPullServerConfiguration -Uri $api -Name $expectedName)
 
             # Assert
-            $actualConfigurations.Count | Should Be $expectedCount
-            $actualConfigurations.Name  | Should Be $expectedName
+            $actualConfigurations.Count   | Should Be $expectedCount
+            $actualConfigurations[0].Name | Should Be $expectedName
         }
 
         It 'should save an existing configuration' {
@@ -95,7 +95,7 @@ Describe 'WebAPI' {
             $actualConfiguration.ChecksumStatus | Should Be $expectedChecksumStatus
         }
 
-        It 'should create a binary valid configuration' {
+        It 'should create a valid configuration' {
 
             # Arrange
             $inputName    = 'UserDemo'
@@ -108,6 +108,60 @@ Describe 'WebAPI' {
 
             # Assert
             $actualHash | Should Be $expectedHash
+        }
+
+        It 'should update a configuration checksum (valid)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'FeatureDemo'
+            $expectedChecksum       = '1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualConfigurations = @(Update-DSCPullServerConfigurationChecksum -Uri $api -Name $expectedName)
+
+            # Assert
+            $actualConfigurations.Count             | Should Be $expectedCount
+            $actualConfigurations[0].Name           | Should Be $expectedName
+            $actualConfigurations[0].Checksum       | Should Be $expectedChecksum
+            $actualConfigurations[0].ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should update a configuration checksum (invalid)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'FileDemo'
+            $expectedChecksum       = '2DD456B2366BA165902CEFF53644ADA4D3D39E5D2B2B825FBCEBBE8C84F43CD0'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualConfigurations = @(Update-DSCPullServerConfigurationChecksum -Uri $api -Name $expectedName)
+
+            # Assert
+            $actualConfigurations.Count             | Should Be $expectedCount
+            $actualConfigurations[0].Name           | Should Be $expectedName
+            $actualConfigurations[0].Checksum       | Should Be $expectedChecksum
+            $actualConfigurations[0].ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should update a configuration checksum (missing)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'RegistryDemo'
+            $expectedChecksum       = '3AE71B4DE6583BBF0D53A8663F515E9DF1957536C0E85613722781A605370D48'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualConfigurations = @(Update-DSCPullServerConfigurationChecksum -Uri $api -Name $expectedName)
+
+            # Assert
+            $actualConfigurations.Count             | Should Be $expectedCount
+            $actualConfigurations[0].Name           | Should Be $expectedName
+            $actualConfigurations[0].Checksum       | Should Be $expectedChecksum
+            $actualConfigurations[0].ChecksumStatus | Should Be $expectedChecksumStatus
         }
 
         It 'should delete an existing configuration' {
@@ -190,9 +244,9 @@ Describe 'WebAPI' {
             $actualModules = @(Get-DSCPullServerModule -Uri $api -Name $expectedName -Version $expectedVersion)
 
             # Assert
-            $actualModules.Count   | Should Be $expectedCount
-            $actualModules.Name    | Should Be $expectedName
-            $actualModules.Version | Should Be $expectedVersion
+            $actualModules.Count      | Should Be $expectedCount
+            $actualModules[0].Name    | Should Be $expectedName
+            $actualModules[0].Version | Should Be $expectedVersion
         }
 
         It 'should save an existing module' {
@@ -232,7 +286,7 @@ Describe 'WebAPI' {
             $actualModule.ChecksumStatus | Should Be $expectedChecksumStatus
         }
 
-        It 'should create a binary valid module' {
+        It 'should create a valid module' {
 
             # Arrange
             $inputName    = 'PSDscResources'
@@ -246,6 +300,66 @@ Describe 'WebAPI' {
 
             # Assert
             $actualHash | Should Be $expectedHash
+        }
+
+        It 'should update a module checksum (valid)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'SharePointDsc'
+            $expectedVersion        = '1.3.0.0'
+            $expectedChecksum       = 'EBBE30927695ADAE86A989C2627653861563E81C98B855303EC92138A0212F47'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualModules = @(Update-DSCPullServerModuleChecksum -Uri $api -Name $expectedName -Version $expectedVersion)
+
+            # Assert
+            $actualModules.Count             | Should Be $expectedCount
+            $actualModules[0].Name           | Should Be $expectedName
+            $actualModules[0].Version        | Should Be $expectedVersion
+            $actualModules[0].Checksum       | Should Be $expectedChecksum
+            $actualModules[0].ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should update a module checksum (invalid)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'SharePointDsc'
+            $expectedVersion        = '1.4.0.0'
+            $expectedChecksum       = '3012DFF7FCD64115AD8CCD4918C1F9F19029762F96EB2DCF48A46D2B2E1BD6BA'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualModules = @(Update-DSCPullServerModuleChecksum -Uri $api -Name $expectedName -Version $expectedVersion)
+
+            # Assert
+            $actualModules.Count             | Should Be $expectedCount
+            $actualModules[0].Name           | Should Be $expectedName
+            $actualModules[0].Version        | Should Be $expectedVersion
+            $actualModules[0].Checksum       | Should Be $expectedChecksum
+            $actualModules[0].ChecksumStatus | Should Be $expectedChecksumStatus
+        }
+
+        It 'should update a module checksum (missing)' {
+
+            # Arrange
+            $expectedCount          = 1
+            $expectedName           = 'SystemLocaleDsc'
+            $expectedVersion        = '1.1.0.0'
+            $expectedChecksum       = '35B1622E1890BAA2D529EDFB07285BEEFCFE8F8D3A4640FF785E1E30E64181A9'
+            $expectedChecksumStatus = 'Valid'
+
+            # Act
+            $actualModules = @(Update-DSCPullServerModuleChecksum -Uri $api -Name $expectedName -Version $expectedVersion)
+
+            # Assert
+            $actualModules.Count             | Should Be $expectedCount
+            $actualModules[0].Name           | Should Be $expectedName
+            $actualModules[0].Version        | Should Be $expectedVersion
+            $actualModules[0].Checksum       | Should Be $expectedChecksum
+            $actualModules[0].ChecksumStatus | Should Be $expectedChecksumStatus
         }
 
         It 'should delete an existing module' {
