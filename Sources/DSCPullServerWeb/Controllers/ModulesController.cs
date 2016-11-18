@@ -93,6 +93,8 @@ namespace DSCPullServerWeb.Controllers
 
                 _repository.UpdateModuleChecksum(module);
 
+                module = _repository.GetModule(name, version);
+
                 return Ok(module);
             }
             catch

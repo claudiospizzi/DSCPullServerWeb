@@ -71,6 +71,8 @@ namespace DSCPullServerWeb.Controllers
 
                 _repository.UpdateConfigurationChecksum(configuration);
 
+                configuration = _repository.GetConfiguration(name);
+
                 return Ok(configuration);
             }
             catch
