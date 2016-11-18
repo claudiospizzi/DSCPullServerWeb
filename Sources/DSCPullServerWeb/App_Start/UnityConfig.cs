@@ -13,7 +13,8 @@ namespace DSCPullServerWeb
             IUnityContainer container = new UnityContainer();
 
             container.RegisterType<IOptions, Options>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IFileSystemRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IModuleRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IConfigurationRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
 
             container.Resolve<IOptions>();
 

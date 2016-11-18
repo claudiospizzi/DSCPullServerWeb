@@ -11,9 +11,9 @@ namespace DSCPullServerWeb.Controllers
     [RoutePrefix("api")]
     public class ModulesController : ApiController
     {
-        private IFileSystemRepository _repository;
+        private IModuleRepository _repository;
 
-        public ModulesController(IFileSystemRepository repository)
+        public ModulesController(IModuleRepository repository)
         {
             _repository = repository;
         }

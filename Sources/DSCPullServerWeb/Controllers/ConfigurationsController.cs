@@ -10,9 +10,9 @@ namespace DSCPullServerWeb.Controllers
     [RoutePrefix("api")]
     public class ConfigurationsController : ApiController
     {
-        private IFileSystemRepository _repository;
+        private IConfigurationRepository _repository;
 
-        public ConfigurationsController(IFileSystemRepository repository)
+        public ConfigurationsController(IConfigurationRepository repository)
         {
             _repository = repository;
         }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace DSCPullServerWeb.Services
 {
-    public class FileSystemRepository : IFileSystemRepository
+    public class FileSystemRepository : IConfigurationRepository, IModuleRepository
     {
         private IOptions _options;
 
@@ -70,7 +70,7 @@ namespace DSCPullServerWeb.Services
             }
         }
 
-        IList<Module> IFileSystemRepository.GetModules()
+        public IList<Module> GetModules()
         {
             return LoadModules();
         }
