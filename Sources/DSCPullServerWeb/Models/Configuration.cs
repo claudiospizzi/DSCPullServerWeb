@@ -1,20 +1,27 @@
-﻿using System;
+﻿using System.IO;
 
 namespace DSCPullServerWeb.Models
 {
     /// <summary>
-    /// DTO for MOF configurations available on the DSC pull server.
+    /// MOF configurations available on the DSC pull server.
     /// </summary>
-    public class Configuration
+    public class Configuration : FileBase
     {
-        public string Name { get; set; }
+        public Configuration(FileInfo mofFile)
+            : base(mofFile)
+        {
+            Refresh();
+        }
 
-        public Int64 Size { get; set; }
+        protected override void LoadChildProperties()
+        {
+            Name = Path.GetFileNameWithoutExtension(_dscFile.Name);
+        }
 
-        public DateTime Created { get; set; }
-
-        public string Checksum { get; set; }
-
-        public string ChecksumStatus { get; set; }
+        public string Name
+        {
+            get;
+            private set;
+        }
     }
 }

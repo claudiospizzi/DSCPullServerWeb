@@ -1,22 +1,34 @@
-﻿using System;
+﻿using System.IO;
 
 namespace DSCPullServerWeb.Models
 {
     /// <summary>
-    /// DTO for PowerShell modules available on the DSC pull server.
+    /// PowerShell modules available on the DSC pull server.
     /// </summary>
-    public class Module
+    public class Module : FileBase
     {
-        public string Name { get; set; }
+        public Module(FileInfo zipFile)
+            : base(zipFile)
+        {
+            Refresh();
+        }
 
-        public string Version { get; set; }
+        protected override void LoadChildProperties()
+        {
+            Name    = Path.GetFileNameWithoutExtension(_dscFile.Name).Split(new char[] { '_' }, 2)[0];
+            Version = Path.GetFileNameWithoutExtension(_dscFile.Name).Split(new char[] { '_' }, 2)[1];
+        }
 
-        public Int64 Size { get; set; }
-
-        public DateTime Created { get; set; }
-
-        public string Checksum { get; set; }
-
-        public string ChecksumStatus { get; set; }
+        public string Name
+        {
+            get;
+            private set;
+        }
+        
+        public string Version
+        {
+            get;
+            private set;
+        }
     }
 }

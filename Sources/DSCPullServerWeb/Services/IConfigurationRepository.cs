@@ -16,8 +16,6 @@ namespace DSCPullServerWeb.Services
 
         void CreateConfiguration(string name, Stream stream);
 
-        FileInfo GetConfigurationFile(Configuration configuration);
-
         void UpdateConfigurationChecksum(Configuration configuration);
 
         void DeleteConfiguration(Configuration configuration);

@@ -119,7 +119,7 @@ namespace DSCPullServerWeb.Controllers
                     return NotFound();
                 }
 
-                return new FileActionResult(_repository.GetModuleFile(module));
+                return new FileActionResult(module.GetFileInfo());
             }
             catch
             {

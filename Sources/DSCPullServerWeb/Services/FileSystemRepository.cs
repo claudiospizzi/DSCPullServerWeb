@@ -16,112 +16,117 @@ namespace DSCPullServerWeb.Services
             _options = options;
         }
 
+        #region Implement IConfigurationRepository inferface
+
         public IList<Configuration> GetConfigurations()
         {
-            return LoadConfigurations();
+            return LoadConfigurations("*.mof");
         }
 
         public Configuration GetConfiguration(String name)
         {
-            //return LoadConfigurations(name).FirstOrDefault((c) => c.Name == name);
-            return LoadConfigurations(name).FirstOrDefault();
-        }
-
-        public FileInfo GetConfigurationFile(Configuration configuration)
-        {
-            return new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof");
+            return LoadConfigurations(name + ".mof").FirstOrDefault();
         }
 
         public void CreateConfiguration(string name, Stream stream)
         {
             FileInfo mofFile = new FileInfo(_options.ConfigurationPath + "\\" + name + ".mof");
-            FileInfo sumFile = new FileInfo(_options.ConfigurationPath + "\\" + name + ".mof.checksum");
 
-            using (FileStream mofFileWriter = mofFile.Create())
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.CopyTo(mofFileWriter);
-            }
-
-            UpdateChecksum(mofFile, sumFile);
+            CreateDscFile(mofFile, stream);
+            CreateSumFile(mofFile);
         }
 
         public void UpdateConfigurationChecksum(Configuration configuration)
         {
-            FileInfo mofFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof");
-            FileInfo sumFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof.checksum");
-
-            UpdateChecksum(mofFile, sumFile);
+            CreateSumFile(configuration.GetFileInfo());
         }
 
         public void DeleteConfiguration(Configuration configuration)
         {
-            FileInfo mofFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof");
-            FileInfo sumFile = new FileInfo(_options.ConfigurationPath + "\\" + configuration.Name + ".mof.checksum");
-
-            if (mofFile.Exists)
-            {
-                mofFile.Delete();
-            }
-
-            if (sumFile.Exists)
-            {
-                sumFile.Delete();
-            }
+            DeleteDscFile(configuration.GetFileInfo());
+            DeleteSumFile(configuration.GetFileInfo());
         }
+
+        #endregion
+
+        #region Implement IModuleRepository inferface
 
         public IList<Module> GetModules()
         {
-            return LoadModules();
+            return LoadModules("*_*.zip");
         }
 
         public IList<Module> GetModules(String name)
         {
-            return LoadModules(name);
+            return LoadModules(name + "_*.zip");
         }
 
         public Module GetModule(String name, String version)
         {
-            //return LoadModules(name, version).FirstOrDefault((m) => m.Name == name && m.Version == version);
-            return LoadModules(name, version).FirstOrDefault();
+            return LoadModules(name + "_" + version + ".zip").FirstOrDefault();
         }
 
-        public FileInfo GetModuleFile(Module module)
-        {
-            return new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip");
-        }
-
-        public void CreateModule(String name, String version, Stream stream)
+        public void CreateModule(string name, string version, Stream stream)
         {
             FileInfo zipFile = new FileInfo(_options.ModulePath + "\\" + name + "_" + version + ".zip");
-            FileInfo sumFile = new FileInfo(_options.ModulePath + "\\" + name + "_" + version + ".zip.checksum");
 
-            using (FileStream zipFileWriter = zipFile.Create())
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.CopyTo(zipFileWriter);
-            }
-
-            UpdateChecksum(zipFile, sumFile);
+            CreateDscFile(zipFile, stream);
+            CreateSumFile(zipFile);
         }
 
         public void UpdateModuleChecksum(Module module)
         {
-            FileInfo zipFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip");
-            FileInfo sumFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip.checksum");
-
-            UpdateChecksum(zipFile, sumFile);
+            CreateSumFile(module.GetFileInfo());
         }
 
         public void DeleteModule(Module module)
         {
-            FileInfo zipFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip");
-            FileInfo sumFile = new FileInfo(_options.ModulePath + "\\" + module.Name + "_" + module.Version + ".zip.checksum");
+            DeleteDscFile(module.GetFileInfo());
+            DeleteSumFile(module.GetFileInfo());
+        }
 
-            if (zipFile.Exists)
+        #endregion
+
+        #region Internal functions
+
+        private IList<FileInfo> LoadFiles(string path, string filter)
+        {
+            DirectoryInfo mofDirectory = new DirectoryInfo(path);
+
+            FileInfo[] mofFiles = mofDirectory.GetFiles(filter);
+
+            return new List<FileInfo>(mofFiles);
+        }
+
+        private void CreateDscFile(FileInfo dscFile, Stream stream)
+        {
+            using (FileStream writer = dscFile.Create())
             {
-                zipFile.Delete();
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.CopyTo(writer);
             }
+        }
+
+        private void CreateSumFile(FileInfo dscFile)
+        {
+            FileInfo sumFile = new FileInfo(dscFile.FullName + ".checksum");
+
+            string sumFileContent = ChecksumCalculator.Create(dscFile.FullName);
+
+            File.WriteAllText(sumFile.FullName, sumFileContent);
+        }
+
+        private void DeleteDscFile(FileInfo dscFile)
+        {
+            if (dscFile.Exists)
+            {
+                dscFile.Delete();
+            }
+        }
+
+        private void DeleteSumFile(FileInfo dscFile)
+        {
+            FileInfo sumFile = new FileInfo(dscFile.FullName + ".checksum");
 
             if (sumFile.Exists)
             {
@@ -129,103 +134,30 @@ namespace DSCPullServerWeb.Services
             }
         }
 
-        private IList<Configuration> LoadConfigurations(string filter = null)
+        private IList<Configuration> LoadConfigurations(string filter)
         {
-            if (string.IsNullOrEmpty(filter))
-            {
-                filter = "*.mof";
-            }
-            else
-            {
-                filter = filter + ".mof";
-            }
-
-            DirectoryInfo directory = new DirectoryInfo(_options.ConfigurationPath);
-            FileInfo[] mofFiles = directory.GetFiles(filter);
-
             IList<Configuration> configurations = new List<Configuration>();
 
-            foreach (FileInfo mofFile in mofFiles)
+            foreach (FileInfo mofFile in LoadFiles(_options.ConfigurationPath, filter))
             {
-                FileInfo sumFile = new FileInfo(mofFile.FullName + ".checksum");
-
-                Configuration configuration = new Configuration()
-                {
-                    Name           = Path.GetFileNameWithoutExtension(mofFile.Name),
-                    Size           = mofFile.Length,
-                    Created        = mofFile.CreationTime,
-                    Checksum       = "",
-                    ChecksumStatus = "Missing"
-                };
-
-                if (sumFile.Exists)
-                {
-                    configuration.Checksum = File.ReadAllText(sumFile.FullName);
-                    configuration.ChecksumStatus = "Invalid";
-
-                    if (ChecksumCalculator.Validate(mofFile.FullName, configuration.Checksum))
-                    {
-                        configuration.ChecksumStatus = "Valid";
-                    }
-                }
-
-                configurations.Add(configuration);
+                configurations.Add(new Configuration(mofFile));
             }
 
             return configurations;
         }
 
-        private IList<Module> LoadModules(string name = "*", string version = "*")
+        private IList<Module> LoadModules(string filter)
         {
-            string filter = name + "_" + version + ".zip";
-
-            IEnumerable<FileInfo> zipFiles = GetFiles(_options.ModulePath, filter);
-
             IList<Module> modules = new List<Module>();
 
-            foreach (FileInfo zipFile in zipFiles)
+            foreach (FileInfo zipFile in LoadFiles(_options.ModulePath, filter))
             {
-                FileInfo sumFile = new FileInfo(zipFile.FullName + ".checksum");
-
-                Module module = new Module()
-                {
-                    Name           = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[0],
-                    Version        = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[1],
-                    Size           = zipFile.Length,
-                    Created        = zipFile.CreationTime,
-                    Checksum       = "",
-                    ChecksumStatus = "Missing"
-                };
-
-                if (sumFile.Exists)
-                {
-                    module.Checksum       = File.ReadAllText(sumFile.FullName);
-                    module.ChecksumStatus = "Invalid";
-
-                    if (ChecksumCalculator.Validate(zipFile.FullName, module.Checksum))
-                    {
-                        module.ChecksumStatus = "Valid";
-                    }
-                }
-
-                modules.Add(module);
+                modules.Add(new Module(zipFile));
             }
 
             return modules;
         }
 
-        private IList<FileInfo> GetFiles(string path, string filter)
-        {
-            DirectoryInfo directory = new DirectoryInfo(path);
-
-            return directory.GetFiles(filter);
-        }
-
-        private void UpdateChecksum(FileInfo targetFile, FileInfo checksumFile)
-        {
-            string sumFileContent = ChecksumCalculator.Create(targetFile.FullName);
-
-            File.WriteAllText(checksumFile.FullName, sumFileContent);
-        }
+        #endregion
     }
 }

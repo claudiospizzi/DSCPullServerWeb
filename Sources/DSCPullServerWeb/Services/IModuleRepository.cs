@@ -18,8 +18,6 @@ namespace DSCPullServerWeb.Services
 
         void CreateModule(string name, string version, Stream stream);
 
-        FileInfo GetModuleFile(Module module);
-
         void UpdateModuleChecksum(Module module);
 
         void DeleteModule(Module module);

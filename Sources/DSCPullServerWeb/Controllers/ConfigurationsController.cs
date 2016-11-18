@@ -96,7 +96,7 @@ namespace DSCPullServerWeb.Controllers
                     return NotFound();
                 }
 
-                return new FileActionResult(_repository.GetConfigurationFile(configuration));
+                return new FileActionResult(configuration.GetFileInfo());
             }
             catch
             {

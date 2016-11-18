@@ -142,6 +142,7 @@
     <Compile Include="Helpers\UnityResolverMvc.cs" />
     <Compile Include="Helpers\UnityResolverWebApi.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\FileBase.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FileSystemRepository.cs" />
