@@ -5,11 +5,11 @@ using System.Web.Http.Dependencies;
 
 namespace DSCPullServerWeb.Helpers
 {
-    public class UnityResolver : IDependencyResolver
+    public class UnityResolverWebApi : IDependencyResolver
     {
         protected IUnityContainer _container;
 
-        public UnityResolver(IUnityContainer container)
+        public UnityResolverWebApi(IUnityContainer container)
         {
             if (container == null)
             {
@@ -45,7 +45,7 @@ namespace DSCPullServerWeb.Helpers
         public IDependencyScope BeginScope()
         {
             var child = _container.CreateChildContainer();
-            return new UnityResolver(child);
+            return new UnityResolverWebApi(child);
         }
 
         public void Dispose()

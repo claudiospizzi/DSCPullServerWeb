@@ -126,6 +126,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ConfigurationsController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
@@ -136,7 +137,8 @@
     <Compile Include="Helpers\BootstrapExtension.cs" />
     <Compile Include="Helpers\ChecksumCalculator.cs" />
     <Compile Include="Helpers\FileActionResult.cs" />
-    <Compile Include="Helpers\UnityResolver.cs" />
+    <Compile Include="Helpers\UnityResolverMvc.cs" />
+    <Compile Include="Helpers\UnityResolverWebApi.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,11 +172,6 @@
     <Content Include="Images\Reports.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Fonts\FontAwesome.otf" />
-    <Content Include="Fonts\fontawesome-webfont.woff2" />
-    <Content Include="Fonts\fontawesome-webfont.woff" />
-    <Content Include="Fonts\fontawesome-webfont.ttf" />
-    <Content Include="Fonts\fontawesome-webfont.eot" />
     <Content Include="App_Data\Demo\Configuration\FeatureDemo.mof" />
     <Content Include="App_Data\Demo\Configuration\FeatureDemo.mof.checksum" />
     <Content Include="App_Data\Demo\Configuration\FileDemo.mof" />
@@ -185,6 +182,11 @@
     <Content Include="App_Data\Demo\Modules\SystemLocaleDsc_1.1.0.0.zip" />
     <Content Include="App_Data\Demo\Modules\SharePointDsc_1.3.0.0.zip.checksum" />
     <Content Include="App_Data\Demo\Modules\SharePointDsc_1.4.0.0.zip.checksum" />
+    <Content Include="Fonts\FontAwesome.otf" />
+    <Content Include="Fonts\fontawesome-webfont.woff2" />
+    <Content Include="Fonts\fontawesome-webfont.woff" />
+    <Content Include="Fonts\fontawesome-webfont.ttf" />
+    <Content Include="Fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
