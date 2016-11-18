@@ -9,6 +9,8 @@ namespace DSCPullServerWeb.Models
     {
         public string Name { get; set; }
 
+        public Int64 Size { get; set; }
+
         public DateTime Created { get; set; }
 
         public string Checksum { get; set; }

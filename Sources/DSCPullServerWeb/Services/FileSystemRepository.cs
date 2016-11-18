@@ -152,6 +152,7 @@ namespace DSCPullServerWeb.Services
                 Configuration configuration = new Configuration()
                 {
                     Name           = Path.GetFileNameWithoutExtension(mofFile.Name),
+                    Size           = mofFile.Length,
                     Created        = mofFile.CreationTime,
                     Checksum       = "",
                     ChecksumStatus = "Missing"
@@ -190,6 +191,7 @@ namespace DSCPullServerWeb.Services
                 {
                     Name           = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[0],
                     Version        = Path.GetFileNameWithoutExtension(zipFile.Name).Split(new char[] { '_' }, 2)[1],
+                    Size           = zipFile.Length,
                     Created        = zipFile.CreationTime,
                     Checksum       = "",
                     ChecksumStatus = "Missing"

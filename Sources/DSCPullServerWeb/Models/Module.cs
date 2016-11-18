@@ -11,6 +11,8 @@ namespace DSCPullServerWeb.Models
 
         public string Version { get; set; }
 
+        public Int64 Size { get; set; }
+
         public DateTime Created { get; set; }
 
         public string Checksum { get; set; }
