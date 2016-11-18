@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 
@@ -10,6 +6,10 @@ namespace DSCPullServerWeb.Services
 {
     public class Options : IOptions
     {
+        private const string TITLE = "DSC Pull Server Web";
+
+        private const string DESCRIPTION = "Website with a REST API to manage the PowerShell DSC web pull server.";
+
         public Options()
         {
             LoadConfig();
@@ -23,6 +23,8 @@ namespace DSCPullServerWeb.Services
             ModulePath        = WebConfigurationManager.AppSettings["ModulePath"];
 
 #if DEBUG
+            // For debugging, change the path to the App_Data folder, where the
+            // test files and databases are stored.
             ConfigurationPath = HttpContext.Current.Server.MapPath(ConfigurationPath);
             ModulePath        = HttpContext.Current.Server.MapPath(ModulePath);
 #endif
@@ -30,6 +32,18 @@ namespace DSCPullServerWeb.Services
             ConfigurationPath = ConfigurationPath.TrimEnd(new char[] { '\\', '/' });
             ModulePath        = ModulePath.TrimEnd(new char[] { '\\', '/' });
 
+        }
+
+        private void VerifyConfig()
+        {
+            if (String.IsNullOrEmpty(Title))
+            {
+                Title = TITLE;
+            }
+            if (String.IsNullOrEmpty(Description))
+            {
+                Description = DESCRIPTION;
+            }
             if (String.IsNullOrEmpty(ConfigurationPath))
             {
                 throw new Exception("ConfigurationPath app setting not found!");

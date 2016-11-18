@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DSCPullServerWeb.Services
+﻿namespace DSCPullServerWeb.Services
 {
+    /// <summary>
+    /// Interface to access all options and settings for the DSC Pull Server
+    /// website and API.
+    /// </summary>
     public interface IOptions
     {
         string Title { get; }
