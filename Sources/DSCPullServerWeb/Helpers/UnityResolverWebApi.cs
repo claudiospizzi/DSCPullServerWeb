@@ -7,6 +7,8 @@ namespace DSCPullServerWeb.Helpers
 {
     public class UnityResolverWebApi : IDependencyResolver
     {
+        bool disposed = false;
+
         protected IUnityContainer _container;
 
         public UnityResolverWebApi(IUnityContainer container)
@@ -50,7 +52,31 @@ namespace DSCPullServerWeb.Helpers
 
         public void Dispose()
         {
-            _container.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            // Free all other managed objects.
+            if (disposing)
+            {
+                _container.Dispose();
+            }
+
+            // No unmanaged objects to free up here.
+
+            disposed = true;
+        }
+
+        ~UnityResolverWebApi()
+        {
+            Dispose(false);
         }
     }
 }
