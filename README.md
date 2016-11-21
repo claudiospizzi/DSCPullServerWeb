@@ -44,7 +44,34 @@ manually on your local system:
 ## Features
 
 * **Get-DSCPullServerConfiguration**  
-  Return the available configurations on a DSC Pull Server instance.
+  Returns MOF configurations from a DSC Pull Server.
+
+* **Get-DSCPullServerModule**  
+  Returns PowerShell modules from a DSC Pull Server.
+
+* **Publish-DSCPullServerConfiguration**  
+  Publish a MOF configuration to a DSC Pull Server.
+
+* **Publish-DSCPullServerModule**  
+  Publish a PowerShell module to a DSC Pull Server.
+
+* **Save-DSCPullServerConfiguration**  
+  Save a MOF configuration from the DSC Pull Server to the local system.
+
+* **Save-DSCPullServerModule**  
+  Save a PowerShell module from the DSC Pull Server to the local system.
+
+* **Unpublish-DSCPullServerConfiguration**  
+  Unpublish an existing MOF configuration from a DSC Pull Server.
+
+* **Unpublish-DSCPullServerModule**  
+  Unpublish an existing PowerShell module from a DSC Pull Server.
+
+* **Update-DSCPullServerConfigurationChecksum**  
+  Update a MOF configuration checksum on a DSC Pull Server.
+
+* **Update-DSCPullServerModuleChecksum**  
+  Update a PowerShell module checksum on a DSC Pull Server.
 
 
 ## Versions
