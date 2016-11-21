@@ -14,7 +14,6 @@ Describe 'Get-DSCPullServerConfiguration' {
 
         It 'should call the valid REST endpoint' {
 
-            
         }
     }
 }
