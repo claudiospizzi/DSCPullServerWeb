@@ -66,7 +66,7 @@ function Save-DSCPullServerModule
     )
 
     # Use splatting to prepare the parameters.
-    $RestMethodParam = @{
+    $restMethodParam = @{
         Method  = 'Get'
         Uri     = "$Uri/modules/$Name/$Version/download"
         OutFile = $Path
@@ -75,12 +75,21 @@ function Save-DSCPullServerModule
     # Depending on the credential input, add the default or specfic credentials.
     if ($null -eq $Credential)
     {
-        $RestMethodParam.UseDefaultCredentials = $true
+        $restMethodParam.UseDefaultCredentials = $true
     }
     else
     {
-        $RestMethodParam.Credential = $Credential
+        $restMethodParam.Credential = $Credential
     }
 
-    Invoke-RestMethod @RestMethodParam
+    try
+    {
+        Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+    }
+    catch
+    {
+        $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
+
+        Write-Error -Message 'Unable to save the module.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
+    }
 }

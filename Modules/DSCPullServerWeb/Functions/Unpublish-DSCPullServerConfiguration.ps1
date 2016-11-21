@@ -55,7 +55,7 @@ function Unpublish-DSCPullServerConfiguration
     )
 
     # Use splatting to prepare the parameters.
-    $RestMethodParam = @{
+    $restMethodParam = @{
         Method = 'Delete'
         Uri    = "$Uri/configurations/$Name"
     }
@@ -63,12 +63,21 @@ function Unpublish-DSCPullServerConfiguration
     # Depending on the credential input, add the default or specfic credentials.
     if ($null -eq $Credential)
     {
-        $RestMethodParam.UseDefaultCredentials = $true
+        $restMethodParam.UseDefaultCredentials = $true
     }
     else
     {
-        $RestMethodParam.Credential = $Credential
+        $restMethodParam.Credential = $Credential
     }
 
-    Invoke-RestMethod @RestMethodParam
+    try
+    {
+        Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+    }
+    catch
+    {
+        $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
+
+        Write-Error -Message 'Unable to unpublish get the configuration.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
+    }
 }

@@ -56,7 +56,7 @@ function Update-DSCPullServerConfigurationChecksum
     )
 
     # Use splatting to prepare the parameters.
-    $RestMethodParam = @{
+    $restMethodParam = @{
         Method = 'Get'
         Uri    = "$Uri/configurations/$Name/hash"
     }
@@ -64,19 +64,28 @@ function Update-DSCPullServerConfigurationChecksum
     # Depending on the credential input, add the default or specfic credentials.
     if ($null -eq $Credential)
     {
-        $RestMethodParam.UseDefaultCredentials = $true
+        $restMethodParam.UseDefaultCredentials = $true
     }
     else
     {
-        $RestMethodParam.Credential = $Credential
+        $restMethodParam.Credential = $Credential
     }
 
-    $configurations = Invoke-RestMethod @RestMethodParam
-
-    foreach ($configuration in $configurations)
+    try
     {
-        $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+        $configurations = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-        Write-Output $configuration
+        foreach ($configuration in $configurations)
+        {
+            $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+
+            Write-Output $configuration
+        }
+    }
+    catch
+    {
+        $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
+
+        Write-Error -Message 'Unable to update the configuration checksum.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
     }
 }

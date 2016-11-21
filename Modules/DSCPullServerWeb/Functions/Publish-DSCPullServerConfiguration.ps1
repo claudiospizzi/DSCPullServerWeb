@@ -61,7 +61,7 @@ function Publish-DSCPullServerConfiguration
     )
 
     # Use splatting to prepare the parameters.
-    $RestMethodParam = @{
+    $restMethodParam = @{
         Method = 'Put'
         Uri    = "$Uri/configurations/$Name"
         InFile = $Path
@@ -70,16 +70,25 @@ function Publish-DSCPullServerConfiguration
     # Depending on the credential input, add the default or specfic credentials.
     if ($null -eq $Credential)
     {
-        $RestMethodParam.UseDefaultCredentials = $true
+        $restMethodParam.UseDefaultCredentials = $true
     }
     else
     {
-        $RestMethodParam.Credential = $Credential
+        $restMethodParam.Credential = $Credential
     }
 
-    $configuration = Invoke-RestMethod @RestMethodParam
+    try
+    {
+        $configuration = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-    $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+        $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
 
-    Write-Output $configuration
+        Write-Output $configuration
+    }
+    catch
+    {
+        $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
+
+        Write-Error -Message 'Unable to publish the configuration.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
+    }
 }

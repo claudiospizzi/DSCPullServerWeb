@@ -60,7 +60,7 @@ function Update-DSCPullServerModuleChecksum
     )
 
     # Use splatting to prepare the parameters.
-    $RestMethodParam = @{
+    $restMethodParam = @{
         Method = 'Get'
         Uri    = "$Uri/modules/$Name/$Version/hash"
     }
@@ -68,19 +68,28 @@ function Update-DSCPullServerModuleChecksum
     # Depending on the credential input, add the default or specfic credentials.
     if ($null -eq $Credential)
     {
-        $RestMethodParam.UseDefaultCredentials = $true
+        $restMethodParam.UseDefaultCredentials = $true
     }
     else
     {
-        $RestMethodParam.Credential = $Credential
+        $restMethodParam.Credential = $Credential
     }
 
-    $modules = Invoke-RestMethod @RestMethodParam
-
-    foreach ($module in $modules)
+    try
     {
-        $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
+        $modules = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-        Write-Output $module
+        foreach ($module in $modules)
+        {
+            $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
+
+            Write-Output $module
+        }
+    }
+    catch
+    {
+        $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
+
+        Write-Error -Message 'Unable to update the module checksum.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
     }
 }
