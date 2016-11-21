@@ -1,0 +1,14 @@
+[ClassVersion("1.0.0"), FriendlyName("DscPullServerWeb")] 
+class DscPullServerWeb : OMI_BaseResource
+{
+  [Key] string EndpointName;
+  [Write,ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] string Ensure;
+  [Write] uint32 Port;
+  [Write] string Title;
+  [Write] string Description;
+  [Write] string PhysicalPath;
+  [Write] string ModulePath;
+  [Write] string ConfigurationPath;
+  [Write] string DatabasePath;
+  [Write] string RegistrationKeyPath;
+};
