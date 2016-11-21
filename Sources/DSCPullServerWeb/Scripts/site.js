@@ -76,8 +76,21 @@ function uiShowModal(title, text) {
 }
 
 function uiShowModalHttpRequestError(xhr, message) {
+    var verbose = "<br /><br />";
+    try {
+        var responseObject = JSON.parse(xhr.responseText);
+        verbose += "Message: " + responseObject.Message + "<br />";
+        verbose += "Exception: " + responseObject.ExceptionMessage + "<br />";
+        verbose += "Type: " + responseObject.ExceptionType + "<br /><br />";
+        verbose += "Stack Trace: " + responseObject.StackTrace + "<br />";
+    }
+    catch (error) {
+        // No verbose message available
+    }
+
     title = xhr.status + ' ' + xhr.statusText;
-    text  = message + '<br /><br />' + xhr.responseText;
+    text = message + '<br />' + verbose;
+
     uiShowModal(title, text);
 }
 

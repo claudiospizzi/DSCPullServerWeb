@@ -1,6 +1,7 @@
 ﻿using DSCPullServerWeb.Helpers;
 using DSCPullServerWeb.Models;
 using DSCPullServerWeb.Services;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -10,11 +11,25 @@ namespace DSCPullServerWeb.Controllers
     [RoutePrefix("api")]
     public class ConfigurationsController : ApiController
     {
+        private ILogger _logger;
+
         private IConfigurationRepository _repository;
 
-        public ConfigurationsController(IConfigurationRepository repository)
+        public ConfigurationsController(ILogger logger, IConfigurationRepository repository)
         {
+            _logger     = logger;
             _repository = repository;
+        }
+
+        private IHttpActionResult HandleUnexpectedException(int id, Exception exception)
+        {
+            _logger.LogHttpRequestException(id, exception, Request, User);
+
+#if DEBUG
+            return InternalServerError(exception);
+#else
+            return InternalServerError();
+#endif
         }
 
         // GET /api/configurations
@@ -26,9 +41,9 @@ namespace DSCPullServerWeb.Controllers
             {
                 return Ok(_repository.GetConfigurations());
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10001, e);
             }
         }
 
@@ -48,9 +63,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(configuration);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10002, e);
             }
         }
 
@@ -74,9 +89,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(configuration);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10004, e);
             }
         }
 
@@ -98,9 +113,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return new FileActionResult(configuration.GetFileInfo());
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10005, e);
             }
         }
 
@@ -119,9 +134,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(configuration);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10006, e);
             }
         }
 
@@ -143,9 +158,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10007, e);
             }
         }
     }

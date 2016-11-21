@@ -12,10 +12,12 @@ namespace DSCPullServerWeb
         {
             IUnityContainer container = new UnityContainer();
 
+            container.RegisterType<ILogger, Logger>(new ContainerControlledLifetimeManager());
             container.RegisterType<IOptions, Options>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModuleRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IConfigurationRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
 
+            container.Resolve<ILogger>();
             container.Resolve<IOptions>();
 
             // Set the Unity container for the MVC part

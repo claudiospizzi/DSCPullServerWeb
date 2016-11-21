@@ -1,6 +1,7 @@
 ﻿using DSCPullServerWeb.Helpers;
 using DSCPullServerWeb.Models;
 using DSCPullServerWeb.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,11 +12,25 @@ namespace DSCPullServerWeb.Controllers
     [RoutePrefix("api")]
     public class ModulesController : ApiController
     {
+        private ILogger _logger;
+
         private IModuleRepository _repository;
 
-        public ModulesController(IModuleRepository repository)
+        public ModulesController(ILogger logger, IModuleRepository repository)
         {
+            _logger     = logger;
             _repository = repository;
+        }
+
+        private IHttpActionResult HandleUnexpectedException(int id, Exception exception)
+        {
+            _logger.LogHttpRequestException(id, exception, Request, User);
+
+#if DEBUG
+            return InternalServerError(exception);
+#else
+            return InternalServerError();
+#endif
         }
 
         // GET /api/modules
@@ -27,9 +42,9 @@ namespace DSCPullServerWeb.Controllers
             {
                 return Ok(_repository.GetModules());
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10011, e);
             }
         }
 
@@ -49,9 +64,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(modules);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10012, e);
             }
         }
 
@@ -71,9 +86,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(module);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10013, e);
             }
         }
 
@@ -97,9 +112,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(module);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10014, e);
             }
         }
 
@@ -121,9 +136,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return new FileActionResult(module.GetFileInfo());
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10015, e);
             }
         }
 
@@ -142,9 +157,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok(module);
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10016, e);
             }
         }
 
@@ -166,9 +181,9 @@ namespace DSCPullServerWeb.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
-                return InternalServerError();
+                return HandleUnexpectedException(10017, e);
             }
         }
     }
