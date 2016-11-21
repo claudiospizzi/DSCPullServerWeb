@@ -33,7 +33,7 @@
 
 function Unpublish-DSCPullServerModule
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -77,7 +77,10 @@ function Unpublish-DSCPullServerModule
 
     try
     {
-        Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Unpublish Module (remove it from the pull server)"))
+        {
+            Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        }
     }
     catch
     {

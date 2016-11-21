@@ -33,7 +33,7 @@
 
 function Update-DSCPullServerModuleChecksum
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -77,13 +77,16 @@ function Update-DSCPullServerModuleChecksum
 
     try
     {
-        $modules = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
-
-        foreach ($module in $modules)
+        if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Update Module Checksum"))
         {
-            $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
+            $modules = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-            Write-Output $module
+            foreach ($module in $modules)
+            {
+                $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
+
+                Write-Output $module
+            }
         }
     }
     catch

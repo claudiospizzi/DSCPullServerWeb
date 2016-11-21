@@ -33,7 +33,7 @@
 
 function Publish-DSCPullServerConfiguration
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -79,11 +79,14 @@ function Publish-DSCPullServerConfiguration
 
     try
     {
-        $configuration = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Publish Configuration (replace, if the configuration already exists on the pull server)"))
+        {
+            $configuration = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-        $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+            $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
 
-        Write-Output $configuration
+            Write-Output $configuration
+        }
     }
     catch
     {

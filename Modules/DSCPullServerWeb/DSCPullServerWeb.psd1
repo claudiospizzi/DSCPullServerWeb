@@ -17,14 +17,14 @@
     FunctionsToExport    = @(
         'Get-DSCPullServerConfiguration'
         'Get-DSCPullServerModule'
-        'Save-DSCPullServerConfiguration'
-        'Save-DSCPullServerModule'
-        'Update-DSCPullServerConfigurationChecksum'
-        'Update-DSCPullServerModuleChecksum'
         'Publish-DSCPullServerConfiguration'
         'Publish-DSCPullServerModule'
+        'Save-DSCPullServerConfiguration'
+        'Save-DSCPullServerModule'
         'Unpublish-DSCPullServerConfiguration'
         'Unpublish-DSCPullServerModule'
+        'Update-DSCPullServerConfigurationChecksum'
+        'Update-DSCPullServerModuleChecksum'
     )
     CmdletsToExport      = @()
     VariablesToExport    = @()

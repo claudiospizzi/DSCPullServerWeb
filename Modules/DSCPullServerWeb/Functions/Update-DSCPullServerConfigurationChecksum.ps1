@@ -34,7 +34,7 @@
 
 function Update-DSCPullServerConfigurationChecksum
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -73,13 +73,16 @@ function Update-DSCPullServerConfigurationChecksum
 
     try
     {
-        $configurations = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
-
-        foreach ($configuration in $configurations)
+        if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Update Configuration Checksum"))
         {
-            $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+            $configurations = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-            Write-Output $configuration
+            foreach ($configuration in $configurations)
+            {
+                $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
+
+                Write-Output $configuration
+            }
         }
     }
     catch

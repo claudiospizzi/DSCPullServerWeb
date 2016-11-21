@@ -33,7 +33,7 @@
 
 function Publish-DSCPullServerModule
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -84,11 +84,14 @@ function Publish-DSCPullServerModule
 
     try
     {
-        $module = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Publish Module (replace, if the module already exists on the pull server)"))
+        {
+            $module = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
 
-        $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
+            $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
 
-        Write-Output $module
+            Write-Output $module
+        }
     }
     catch
     {

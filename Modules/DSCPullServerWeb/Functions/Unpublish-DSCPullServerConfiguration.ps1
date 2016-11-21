@@ -33,7 +33,7 @@
 
 function Unpublish-DSCPullServerConfiguration
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([PSObject])]
     param
     (
@@ -72,7 +72,10 @@ function Unpublish-DSCPullServerConfiguration
 
     try
     {
-        Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Unpublish Configuration (remove it from the pull server)"))
+        {
+            Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        }
     }
     catch
     {
