@@ -75,7 +75,7 @@ function Update-DSCPullServerConfigurationChecksum
     {
         if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Update Configuration Checksum"))
         {
-            $configurations = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+            $configurations = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
             foreach ($configuration in $configurations)
             {

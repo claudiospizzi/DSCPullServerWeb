@@ -79,7 +79,7 @@ function Update-DSCPullServerModuleChecksum
     {
         if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Update Module Checksum"))
         {
-            $modules = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+            $modules = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
             foreach ($module in $modules)
             {

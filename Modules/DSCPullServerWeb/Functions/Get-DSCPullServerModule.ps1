@@ -95,7 +95,7 @@ function Get-DSCPullServerModule
 
     try
     {
-        $modules = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        $modules = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
         foreach ($module in $modules)
         {

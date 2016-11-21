@@ -84,7 +84,7 @@ function Save-DSCPullServerModule
 
     try
     {
-        Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+        Invoke-RestMethod @restMethodParam -ErrorAction Stop
     }
     catch
     {

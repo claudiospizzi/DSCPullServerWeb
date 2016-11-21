@@ -86,7 +86,7 @@ function Publish-DSCPullServerModule
     {
         if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Publish Module (replace, if the module already exists on the pull server)"))
         {
-            $module = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+            $module = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
             $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
 

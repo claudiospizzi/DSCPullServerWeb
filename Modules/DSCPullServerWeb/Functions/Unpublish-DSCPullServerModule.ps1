@@ -79,7 +79,7 @@ function Unpublish-DSCPullServerModule
     {
         if ($PSCmdlet.ShouldProcess("Module: $Name, Version: $Version", "Unpublish Module (remove it from the pull server)"))
         {
-            Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+            Invoke-RestMethod @restMethodParam -ErrorAction Stop
         }
     }
     catch

@@ -79,12 +79,12 @@ function Save-DSCPullServerConfiguration
 
     try
     {
-         Invoke-RestMethod @RestMethodParam -ErrorAction -ErrorAction Stop
+         Invoke-RestMethod @restMethodParam -ErrorAction Stop
     }
     catch
     {
         $target = $restMethodParam.Method.ToUpper() + ' ' + $restMethodParam.Uri
 
-        Write-Error -Message 'Unable to save the configuration.' -Exception $_.Exception -Category ConnectionError -TargetObject $target
+        Write-Error -Message "Unable to save the configuration: $_" -Exception $_.Exception -Category ConnectionError -TargetObject $target
     }
 }

@@ -81,7 +81,7 @@ function Publish-DSCPullServerConfiguration
     {
         if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Publish Configuration (replace, if the configuration already exists on the pull server)"))
         {
-            $configuration = Invoke-RestMethod @RestMethodParam -ErrorAction Stop
+            $configuration = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
             $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
 
