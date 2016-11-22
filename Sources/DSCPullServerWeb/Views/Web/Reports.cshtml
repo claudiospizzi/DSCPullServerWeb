@@ -2,4 +2,40 @@
     <div class="col-md-12">
         <h1 class="page-header page-header-icon page-header-icon-reports">@ViewBag.Name</h1>
     </div>
+
+    <div class="col-md-12">
+        <p>All received DSC status reports on the pull server.</p>
+    </div>
+
+    <div class="col-md-12">
+        <div class="text-right">
+            <button id="reportsRefreshButton" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-12 dsc-loader" id="table-reports-loader">
+        <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
+    </div>
+
+    <div class="col-md-12 dsc-table" id="table-reports-content" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <colgroup>
+                    <col style="width: 100%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>?</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    @*<div class="col-md-12" id="table-reports-exception" style="display: none;">
+        <p class="text-danger bg-danger">500 (Internal Server Error)</p>
+    </div>*@
 </div>

@@ -95,6 +95,8 @@
     <script src="~/Scripts/site.js"></script>
     <script>
         var path = window.location.pathname.toString()
+        if (path.indexOf("/Web/Nodes") == 0) { uiUpdateTable('nodes'); }
+        if (path.indexOf("/Web/Reports") == 0) { uiUpdateTable('reports'); }
         if (path.indexOf("/Web/Configurations") == 0) { uiUpdateTable('configurations'); }
         if (path.indexOf("/Web/Modules") == 0) { uiUpdateTable('modules'); }
     </script>

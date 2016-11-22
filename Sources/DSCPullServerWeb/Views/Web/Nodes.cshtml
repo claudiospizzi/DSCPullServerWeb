@@ -2,4 +2,48 @@
     <div class="col-md-12">
         <h1 class="page-header page-header-icon page-header-icon-nodes">@ViewBag.Name</h1>
     </div>
+
+    <div class="col-md-12">
+        <p>All registered DSC nodes on the pull server.</p>
+    </div>
+
+    <div class="col-md-12">
+        <div class="text-right">
+            <button id="nodesRefreshButton" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-12 dsc-loader" id="table-nodes-loader">
+        <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
+    </div>
+
+    <div class="col-md-12 dsc-table" id="table-nodes-content" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <colgroup>
+                    <col style="width: 20%;" />
+                    <col style="width: 20%;" />
+                    <col style="width: 20%;" />
+                    <col style="width: 20%;" />
+                    <col style="width: 20%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Agent ID</th>
+                        <th>Node Name</th>
+                        <th>LCM Version</th>
+                        <th>IP Address</th>
+                        <th>Configuration Names</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    @*<div class="col-md-12" id="table-nodes-exception" style="display: none;">
+        <p class="text-danger bg-danger">500 (Internal Server Error)</p>
+    </div>*@
 </div>
