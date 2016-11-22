@@ -10,8 +10,12 @@
 
         string Description { get; }
 
+        string ModulePath { get; }
+
         string ConfigurationPath { get; }
 
-        string ModulePath { get; }
+        string DatabasePath { get; }
+
+        string RegistrationKeyPath { get; }
     }
 }

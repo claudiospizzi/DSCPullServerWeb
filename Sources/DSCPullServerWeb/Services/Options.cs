@@ -17,21 +17,26 @@ namespace DSCPullServerWeb.Services
 
         private void LoadConfig()
         {
-            Title             = WebConfigurationManager.AppSettings["Title"];
-            Description       = WebConfigurationManager.AppSettings["Description"];
-            ConfigurationPath = WebConfigurationManager.AppSettings["ConfigurationPath"];
-            ModulePath        = WebConfigurationManager.AppSettings["ModulePath"];
+            Title               = WebConfigurationManager.AppSettings["Title"];
+            Description         = WebConfigurationManager.AppSettings["Description"];
+            ModulePath          = WebConfigurationManager.AppSettings["ModulePath"];
+            ConfigurationPath   = WebConfigurationManager.AppSettings["ConfigurationPath"];
+            DatabasePath        = WebConfigurationManager.AppSettings["DatabasePath"];
+            RegistrationKeyPath = WebConfigurationManager.AppSettings["RegistrationKeyPath"];
 
 #if DEBUG
             // For debugging, change the path to the App_Data folder, where the
             // test files and databases are stored.
-            ConfigurationPath = HttpContext.Current.Server.MapPath(ConfigurationPath);
-            ModulePath        = HttpContext.Current.Server.MapPath(ModulePath);
+            ModulePath          = HttpContext.Current.Server.MapPath(ModulePath);
+            ConfigurationPath   = HttpContext.Current.Server.MapPath(ConfigurationPath);
+            DatabasePath        = HttpContext.Current.Server.MapPath(DatabasePath);
+            RegistrationKeyPath = HttpContext.Current.Server.MapPath(RegistrationKeyPath);
 #endif
 
-            ConfigurationPath = ConfigurationPath.TrimEnd(new char[] { '\\', '/' });
-            ModulePath        = ModulePath.TrimEnd(new char[] { '\\', '/' });
-
+            ModulePath          = ModulePath.TrimEnd(new char[] { '\\', '/' });
+            ConfigurationPath   = ConfigurationPath.TrimEnd(new char[] { '\\', '/' });
+            DatabasePath        = DatabasePath.TrimEnd(new char[] { '\\', '/' });
+            RegistrationKeyPath = RegistrationKeyPath.TrimEnd(new char[] { '\\', '/' });
         }
 
         private void VerifyConfig()
@@ -44,13 +49,21 @@ namespace DSCPullServerWeb.Services
             {
                 Description = DESCRIPTION;
             }
+            if (String.IsNullOrEmpty(ModulePath))
+            {
+                throw new Exception("ModulePath app setting not found!");
+            }
             if (String.IsNullOrEmpty(ConfigurationPath))
             {
                 throw new Exception("ConfigurationPath app setting not found!");
             }
-            if (String.IsNullOrEmpty(ModulePath))
+            if (String.IsNullOrEmpty(DatabasePath))
             {
-                throw new Exception("ModulePath app setting not found!");
+                throw new Exception("DatabasePath app setting not found!");
+            }
+            if (String.IsNullOrEmpty(RegistrationKeyPath))
+            {
+                throw new Exception("RegistrationKeyPath app setting not found!");
             }
         }
 
@@ -66,13 +79,25 @@ namespace DSCPullServerWeb.Services
             private set;
         }
 
+        public String ModulePath
+        {
+            get;
+            private set;
+        }
+
         public String ConfigurationPath
         {
             get;
             private set;
         }
 
-        public String ModulePath
+        public String DatabasePath
+        {
+            get;
+            private set;
+        }
+
+        public String RegistrationKeyPath
         {
             get;
             private set;
