@@ -46,18 +46,18 @@ function navigate(section) {
 }
 
 // Events for the content show (navigate to)
-$('#home-section').on('show', function () { updateHome() });
-$('#nodes-section').on('show', function () { updateNodes() });
-$('#reports-section').on('show', function () { updateReports() });
+$('#home-section').on('show', function () { });
+$('#nodes-section').on('show', function () { uiUpdateTable('nodes') });
+$('#reports-section').on('show', function () { uiUpdateTable('reports') });
 $('#configurations-section').on('show', function () { uiUpdateTable('configurations') });
 $('#modules-section').on('show', function () { uiUpdateTable('modules') });
 
 // Events for the content hide (navigate from)
-$('#home-section').on('hide', function () { clearHome() });
-$('#nodes-section').on('hide', function () { clearNodes() });
-$('#reports-section').on('hide', function () { clearReports() });
-$('#configurations-section').on('hide', function () { clearConfigurations() });
-$('#modules-section').on('hide', function () { clearModules() });
+$('#home-section').on('hide', function () { });
+$('#nodes-section').on('hide', function () { uiClearTable('nodes') });
+$('#reports-section').on('hide', function () { uiClearTable('reports') });
+$('#configurations-section').on('hide', function () { uiClearTable('configurations') });
+$('#modules-section').on('hide', function () { uiClearTable('modules') });
 
 
 
@@ -126,6 +126,16 @@ function uiShowTableContent(page) {
 function uiCreateTableRow(page, item) {
     var html;
     switch (page) {
+        case "nodes":
+            html += uiCreateTableCell(item.AgentId);
+            html += uiCreateTableCell(item.NodeName);
+            html += uiCreateTableCell(item.LCMVersion);
+            html += uiCreateTableCell(item.IPAddress.split(";").join("<br>"));
+            html += uiCreateTableCell(item.ConfigurationNames);
+            break;
+        case "reports":
+            html += uiCreateTableCell("ToDo");
+            break;
         case "configurations":
             html += uiCreateTableCell(item.Name);
             html += uiCreateTableCell(uiFormatSize(item.Size));
@@ -199,6 +209,24 @@ function uiFormatChecksumStatus(checksumStatus) {
     }
     return '<span class="label label-' + style + '">' + checksumStatus + '</span>';
 }
+
+
+
+// EVENT LISTENERS: NODES
+// ===============================
+
+$('#nodesRefreshButton').on("click", function (e) {
+    uiUpdateTable('nodes');
+});
+
+
+
+// EVENT LISTENERS: REPORTS
+// ===============================
+
+$('#reportsRefreshButton').on("click", function (e) {
+    uiUpdateTable('reports');
+});
 
 
 
