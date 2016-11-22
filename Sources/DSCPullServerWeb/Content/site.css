@@ -112,14 +112,7 @@ body {
 
 /* DSC Table View */
 
-#table-configurations-exception > p,
-#table-modules-exception > p {
-    padding: 15px 15px;
-    text-align: center;
-}
-
-#table-configurations-loader > p,
-#table-modules-loader > p {
+.dsc-loader > p {
     padding: 15px 15px;
     text-align: center;
     color: #808080;
