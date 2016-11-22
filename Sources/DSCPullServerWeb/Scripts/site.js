@@ -134,7 +134,7 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(item.ConfigurationNames);
             break;
         case "reports":
-            html += uiCreateTableCell("ToDo");
+            html += uiCreateTableCell(item.Status);
             break;
         case "configurations":
             html += uiCreateTableCell(item.Name);

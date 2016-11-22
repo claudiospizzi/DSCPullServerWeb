@@ -4,6 +4,7 @@ using System.Web.Http;
 
 namespace DSCPullServerWeb.Controllers
 {
+    [RoutePrefix("api")]
     public class ReportsController : ApiController
     {
         private ILogger _logger;

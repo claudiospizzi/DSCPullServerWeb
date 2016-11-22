@@ -30,7 +30,7 @@ namespace DSCPullServerWeb.Services
 
             reports.Add(new Report()
             {
-                Status = 'Success'
+                Status = "Success"
             });
 
             return reports;
