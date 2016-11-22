@@ -1,7 +1,7 @@
 
 Configuration PullServer
 {
-    Import-DscResource -ModuleName DSCPullServerWeb -ModuleVersion 1.0.0
+    #Import-DscResource -ModuleName DSCPullServerWeb -ModuleVersion 1.0.0
     Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 1.1
     Import-DscResource -ModuleName xPSDesiredStateConfiguration -ModuleVersion 5.0.0.0
 
@@ -11,6 +11,12 @@ Configuration PullServer
         {
             Ensure = 'Present'
             Name   = 'DSC-Service'
+        }
+
+        WindowsFeature IISMgmtConsoleFeature
+        {
+            Ensure = 'Present'
+            Name   = 'Web-Mgmt-Console'
         }
 
         foreach ($config in $ConfigurationData.PullServerConfig)
@@ -36,27 +42,27 @@ Configuration PullServer
                 )
             }
 
-            DscPullServerWeb "DSCPullServerWeb$name"
-            {
-                Ensure                = 'Present'
-                EndpointName          = "PSDSCPullServerWeb$name"
-                Port                  = $config.WebPort
-                Title                 = "DSC Pull Server Web $name"
-                Description           = "Web and API access to the $name DSC Pull Server."
-                PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb$name"
-                ModulePath            = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name\Modules"
-                ConfigurationPath     = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name\Configuration"
-                DatabasePath          = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name"
-                RegistrationKeyPath   = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name"
+            # DscPullServerWeb "DSCPullServerWeb$name"
+            # {
+            #     Ensure                = 'Present'
+            #     EndpointName          = "PSDSCPullServerWeb$name"
+            #     Port                  = $config.WebPort
+            #     Title                 = "DSC Pull Server Web $name"
+            #     Description           = "Web and API access to the $name DSC Pull Server."
+            #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb$name"
+            #     ModulePath            = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name\Modules"
+            #     ConfigurationPath     = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name\Configuration"
+            #     DatabasePath          = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name"
+            #     RegistrationKeyPath   = "$Env:ProgramFiles\WindowsPowerShell\DscServices\$name"
 
-                DependsOn = @(
-                    "[xDscWebService]DSCPullServer$name"
-                )
-            }
+            #     DependsOn = @(
+            #         "[xDscWebService]DSCPullServer$name"
+            #     )
+            # }
         }
     }
 }
 
 $configurationData = Import-PowerShellDataFile -Path "$PSScriptRoot\PullServer.psd1"
 
-PullServer -ConfigurationData $configurationData
+PullServer -ConfigurationData $configurationData -OutputPath "$PSScriptRoot\PullServer"
