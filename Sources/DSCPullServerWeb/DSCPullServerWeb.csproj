@@ -131,6 +131,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ConfigurationsController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
+    <Compile Include="Controllers\NodesController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\WebController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -143,9 +145,13 @@
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\FileBase.cs" />
     <Compile Include="Models\Module.cs" />
+    <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DummyDatabaseRepository.cs" />
     <Compile Include="Services\FileSystemRepository.cs" />
     <Compile Include="Services\IConfigurationRepository.cs" />
+    <Compile Include="Services\IDatabaseRepository.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\IModuleRepository.cs" />
     <Compile Include="Services\IOptions.cs" />
