@@ -17,6 +17,7 @@ namespace DSCPullServerWeb.Services
 
         private void LoadConfig()
         {
+            Name                = WebConfigurationManager.AppSettings["Name"];
             Title               = WebConfigurationManager.AppSettings["Title"];
             Description         = WebConfigurationManager.AppSettings["Description"];
             ModulePath          = WebConfigurationManager.AppSettings["ModulePath"];
@@ -41,6 +42,10 @@ namespace DSCPullServerWeb.Services
 
         private void VerifyConfig()
         {
+            if (String.IsNullOrEmpty(Name))
+            {
+                throw new Exception("Name app setting not found!");
+            }
             if (String.IsNullOrEmpty(Title))
             {
                 Title = TITLE;
@@ -65,6 +70,12 @@ namespace DSCPullServerWeb.Services
             {
                 throw new Exception("RegistrationKeyPath app setting not found!");
             }
+        }
+
+        public String Name
+        {
+            get;
+            private set;
         }
 
         public String Title
