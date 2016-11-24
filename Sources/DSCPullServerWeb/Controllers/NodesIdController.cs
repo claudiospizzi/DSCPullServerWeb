@@ -5,15 +5,15 @@ using System.Web.Http;
 namespace DSCPullServerWeb.Controllers
 {
     [RoutePrefix("api")]
-    public class NodesController : ApiController
+    public class NodesIdController : ApiController
     {
         private ILogger _logger;
 
         private IDatabaseRepository _repository;
 
-        public NodesController(ILogger logger, IDatabaseRepository repository)
+        public NodesIdController(ILogger logger, IDatabaseRepository repository)
         {
-            _logger     = logger;
+            _logger = logger;
             _repository = repository;
         }
 
@@ -28,14 +28,14 @@ namespace DSCPullServerWeb.Controllers
 #endif
         }
 
-        // GET /api/nodes
+        // GET /api/nodes/id
         [HttpGet]
-        [Route("nodes")]
+        [Route("nodes/id")]
         public IHttpActionResult Get()
         {
             try
             {
-                return Ok(_repository.GetNodes());
+                return Ok(_repository.GetIdNodes());
             }
             catch (Exception e)
             {

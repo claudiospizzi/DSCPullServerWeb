@@ -14,7 +14,7 @@
 })(jQuery);
 
 // Global constants
-var pages = ['home', 'nodes', 'reports', 'configurations', 'modules']
+var pages = ['home', 'nodes', 'reports', 'configurations', 'modules'];
 
 
 
@@ -23,41 +23,41 @@ var pages = ['home', 'nodes', 'reports', 'configurations', 'modules']
 
 // Click events for the navigation
 pages.forEach(function (value, index, array) {
-    $('#' + value + '-nav').click(function () { navigate(value) })
-})
+    $('#' + value + '-nav').click(function () { navigate(value); });
+});
 
 // Navigation function
 function navigate(section) {
 
     // Hide all pages and remove navigation active highlighting
     pages.forEach(function (value, index, array) {
-        $('#' + value + '-section').hide()
+        $('#' + value + '-section').hide();
         $('#' + value + '-nav').parent().removeClass("active");
-    })
+    });
 
     // Show the target page and mark the navigation as active
-    $('#' + section + '-section').show()
+    $('#' + section + '-section').show();
     $('#' + section + '-nav').parent().addClass("active");
 
     // Hide the toggle navbar is needed
-    if ($('.navbar-toggle').css('display') != 'none') {
-        $('.navbar-toggle').click()
+    if ($('.navbar-toggle').css('display') !== 'none') {
+        $('.navbar-toggle').click();
     }
 }
 
 // Events for the content show (navigate to)
 $('#home-section').on('show', function () { });
-$('#nodes-section').on('show', function () { uiUpdateTable('nodes') });
-$('#reports-section').on('show', function () { uiUpdateTable('reports') });
-$('#configurations-section').on('show', function () { uiUpdateTable('configurations') });
-$('#modules-section').on('show', function () { uiUpdateTable('modules') });
+$('#nodes-section').on('show', function () { uiUpdateTable('nodes-id'); uiUpdateTable('nodes-names'); });
+$('#reports-section').on('show', function () { uiUpdateTable('reports'); });
+$('#configurations-section').on('show', function () { uiUpdateTable('configurations'); });
+$('#modules-section').on('show', function () { uiUpdateTable('modules'); });
 
 // Events for the content hide (navigate from)
 $('#home-section').on('hide', function () { });
-$('#nodes-section').on('hide', function () { uiClearTable('nodes') });
-$('#reports-section').on('hide', function () { uiClearTable('reports') });
-$('#configurations-section').on('hide', function () { uiClearTable('configurations') });
-$('#modules-section').on('hide', function () { uiClearTable('modules') });
+$('#nodes-section').on('hide', function () { uiClearTable('nodes-id'); uiUpdateTable('nodes-names'); });
+$('#reports-section').on('hide', function () { uiClearTable('reports'); });
+$('#configurations-section').on('hide', function () { uiClearTable('configurations'); });
+$('#modules-section').on('hide', function () { uiClearTable('modules'); });
 
 
 
@@ -67,7 +67,7 @@ $('#modules-section').on('hide', function () { uiClearTable('modules') });
 $('#modal').on('hidden.bs.modal', function (e) {
     $('#modal-title').html('');
     $('#modal-text').html('');
-})
+});
 
 function uiShowModal(title, text) {
     $('#modal-title').html(title);
@@ -97,7 +97,7 @@ function uiShowModalHttpRequestError(xhr, message) {
 function uiUpdateTable(page) {
     uiShowTableLoader(page);
     uiClearTable(page);
-    $.getJSON('/api/' + page)
+    $.getJSON('/api/' + page.replace("-", "/"))
         .done(function (data) {
             $.each(data, function (key, item) {
                 $('#table-' + page + '-content > div > table > tbody').append(uiCreateTableRow(page, item));
@@ -110,28 +110,37 @@ function uiUpdateTable(page) {
 }
 
 function uiClearTable(page) {
-    $('#table-' + page + '-content > div > table > tbody').empty()
+    $('#table-' + page + '-content > div > table > tbody').empty();
 }
 
 function uiShowTableLoader(page) {
-    $('#table-' + page + '-content').hide()
-    $('#table-' + page + '-loader').show()
+    $('#table-' + page + '-content').hide();
+    $('#table-' + page + '-loader').show();
 }
 
 function uiShowTableContent(page) {
-    $('#table-' + page + '-loader').hide()
-    $('#table-' + page + '-content').show()
+    $('#table-' + page + '-loader').hide();
+    $('#table-' + page + '-content').show();
 }
 
 function uiCreateTableRow(page, item) {
     var html;
     switch (page) {
-        case "nodes":
+        case "nodes-id":
+            html += uiCreateTableCell(item.ConfigurationID);
+            html += uiCreateTableCell(item.TargetName);
+            html += uiCreateTableCell(item.NodeCompliant);
+            html += uiCreateTableCell(item.Dirty);
+            html += uiCreateTableCell(item.StatusCode);
+            html += uiCreateTableCell(uiFormatDateTime(item.LastHeartbeatTime));
+            html += uiCreateTableCell(uiFormatDateTime(item.LastComplianceTime));
+            break;
+        case "nodes-names":
             html += uiCreateTableCell(item.AgentId);
             html += uiCreateTableCell(item.NodeName);
-            html += uiCreateTableCell(item.LCMVersion);
-            html += uiCreateTableCell(item.IPAddress.split(";").join("<br>"));
             html += uiCreateTableCell(item.ConfigurationNames);
+            html += uiCreateTableCell(uiFormatIPAddress(item.IPAddress));
+            html += uiCreateTableCell(item.LCMVersion);
             break;
         case "reports":
             html += uiCreateTableCell(item.Status);
@@ -141,7 +150,7 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(uiFormatSize(item.Size));
             html += uiCreateTableCell(uiFormatDateTime(item.Created));
             html += uiCreateTableCell(uiFormatChecksum(item.Checksum));
-            html += uiCreateTableCell(uiFormatChecksumStatus(item.ChecksumStatus))
+            html += uiCreateTableCell(uiFormatChecksumStatus(item.ChecksumStatus));
             html += uiCreateTableCell(
                 uiCreateTableButtonDownload(page, item.Name, item.Name + '.mof') + ' ' +
                 uiCreateTableButtonHash('apiHashConfiguration(\'' + item.Name + '\')') + ' ' +
@@ -154,7 +163,7 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(uiFormatSize(item.Size));
             html += uiCreateTableCell(uiFormatDateTime(item.Created));
             html += uiCreateTableCell(uiFormatChecksum(item.Checksum));
-            html += uiCreateTableCell(uiFormatChecksumStatus(item.ChecksumStatus))
+            html += uiCreateTableCell(uiFormatChecksumStatus(item.ChecksumStatus));
             html += uiCreateTableCell(
                 uiCreateTableButtonDownload(page, item.Name + '/' + item.Version, item.Name + '_' + item.Version + '.zip') + ' ' +
                 uiCreateTableButtonHash('apiHashModule(\'' + item.Name + '\', \'' + item.Version + '\')') + ' ' +
@@ -186,7 +195,7 @@ function uiFormatDateTime(datetime) {
 }
 
 function uiFormatSize(size) {
-    return Math.round(size / 1024) + ' KB'
+    return Math.round(size / 1024) + ' KB';
 }
 
 function uiFormatChecksum(checksum) {
@@ -210,13 +219,27 @@ function uiFormatChecksumStatus(checksumStatus) {
     return '<span class="label label-' + style + '">' + checksumStatus + '</span>';
 }
 
+function uiFormatIPAddress(ipAddress) {
+    var ipAddresses = new Array();
+    ipAddress.split(";").forEach(function (value, index, array) {
+        if (value !== '::1' && value !== '127.0.0.1' && value !== '::2000:0:0:0' && value.lastIndexOf('fe80:', 0) !== 0) {
+            ipAddresses.push(value);
+        }
+    });
+    return ipAddresses.join("<br>")
+}
+
 
 
 // EVENT LISTENERS: NODES
 // ===============================
 
-$('#nodesRefreshButton').on("click", function (e) {
-    uiUpdateTable('nodes');
+$('#nodesIdRefreshButton').on("click", function (e) {
+    uiUpdateTable('nodes-id');
+});
+
+$('#nodesNamesRefreshButton').on("click", function (e) {
+    uiUpdateTable('nodes-names');
 });
 
 
@@ -234,20 +257,20 @@ $('#reportsRefreshButton').on("click", function (e) {
 // ===============================
 
 $('#configurationsUploadButton').on('change', function (e) {
-    if (e.target.files.length != 1) {
-        uiShowModal('Configuration Upload Failed', 'Please select exactly one file to upload.')
+    if (e.target.files.length !== 1) {
+        uiShowModal('Configuration Upload Failed', 'Please select exactly one file to upload.');
         return;
     }
     if (this.value.lastIndexOf('.mof') === -1) {
-        uiShowModal('Configuration Upload Failed', 'Please select a valid MOF-file with the extension .mof.')
+        uiShowModal('Configuration Upload Failed', 'Please select a valid MOF-file with the extension .mof.');
         return;
     }
     if (window.FormData === undefined) {
-        uiShowModal('Configuration Upload Failed', 'This browser doesn\'t support HTML5 file uploads.')
+        uiShowModal('Configuration Upload Failed', 'This browser doesn\'t support HTML5 file uploads.');
         return;
     }
     apiUploadConfiguration(e.target.files[0]);
-    $('#configurationsUploadButton').val('')
+    $('#configurationsUploadButton').val('');
 });
 
 $('#configurationsRefreshButton').on("click", function (e) {
@@ -260,20 +283,20 @@ $('#configurationsRefreshButton').on("click", function (e) {
 // ========================
 
 $('#modulesUploadButton').on('change', function (e) {
-    if (e.target.files.length != 1) {
-        uiShowModal('Module Upload Failed', 'Please select exactly one file to upload.')
+    if (e.target.files.length !== 1) {
+        uiShowModal('Module Upload Failed', 'Please select exactly one file to upload.');
         return;
     }
     if (this.value.lastIndexOf('.zip') === -1) {
-        uiShowModal('Module Upload Failed', 'Please select a valid zip-file with the extension .zip.')
+        uiShowModal('Module Upload Failed', 'Please select a valid zip-file with the extension .zip.');
         return;
     }
     if (window.FormData === undefined) {
-        uiShowModal('Module Upload Failed', 'This browser doesn\'t support HTML5 file uploads.')
+        uiShowModal('Module Upload Failed', 'This browser doesn\'t support HTML5 file uploads.');
         return;
     }
     apiUploadModule(e.target.files[0]);
-    $('#modulesUploadButton').val('')
+    $('#modulesUploadButton').val('');
 });
 
 $('#modulesRefreshButton').on("click", function (e) {
@@ -286,7 +309,7 @@ $('#modulesRefreshButton').on("click", function (e) {
 // =============================
 
 function apiUploadConfiguration(file) {
-    var name = file.name.substring(0, file.name.length - 4)
+    var name = file.name.substring(0, file.name.length - 4);
     $.ajax({
         type: "PUT",
         url: '/api/configurations/' + name,
@@ -337,7 +360,7 @@ function apiDeleteConfiguration(name) {
 // ======================
 
 function apiUploadModule(file) {
-    var parts   = file.name.substring(0, file.name.length - 4).split('_', 2)
+    var parts = file.name.substring(0, file.name.length - 4).split('_', 2);
     var name    = parts[0];
     var version = parts[1];
     $.ajax({

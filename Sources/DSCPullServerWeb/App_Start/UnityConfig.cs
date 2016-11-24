@@ -16,7 +16,7 @@ namespace DSCPullServerWeb
             container.RegisterType<IOptions, Options>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModuleRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IConfigurationRepository, FileSystemRepository>(new HierarchicalLifetimeManager());
-            container.RegisterType<IDatabaseRepository, DummyDatabaseRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDatabaseRepository, EsentDatabaseRepository>(new ContainerControlledLifetimeManager());
 
             container.Resolve<ILogger>();
             container.Resolve<IOptions>();

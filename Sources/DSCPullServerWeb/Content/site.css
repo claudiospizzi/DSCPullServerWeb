@@ -97,7 +97,7 @@ body {
     overflow: hidden;
 }
 
-.btn-upload-extension input.upload {
+.btn-upload-extension .upload {
     position: absolute;
     top: 0;
     right: 0;

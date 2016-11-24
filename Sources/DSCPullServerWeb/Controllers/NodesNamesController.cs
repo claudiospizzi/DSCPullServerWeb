@@ -5,15 +5,15 @@ using System.Web.Http;
 namespace DSCPullServerWeb.Controllers
 {
     [RoutePrefix("api")]
-    public class ReportsController : ApiController
+    public class NodesNamesController : ApiController
     {
         private ILogger _logger;
 
         private IDatabaseRepository _repository;
 
-        public ReportsController(ILogger logger, IDatabaseRepository repository)
+        public NodesNamesController(ILogger logger, IDatabaseRepository repository)
         {
-            _logger     = logger;
+            _logger = logger;
             _repository = repository;
         }
 
@@ -28,18 +28,18 @@ namespace DSCPullServerWeb.Controllers
 #endif
         }
 
-        // GET /api/reports
+        // GET /api/nodes/names
         [HttpGet]
-        [Route("reports")]
+        [Route("nodes/names")]
         public IHttpActionResult Get()
         {
             try
             {
-                return Ok(_repository.GetReports());
+                return Ok(_repository.GetNamesNodes());
             }
             catch (Exception e)
             {
-                return HandleUnexpectedException(10041, e);
+                return HandleUnexpectedException(10031, e);
             }
         }
     }

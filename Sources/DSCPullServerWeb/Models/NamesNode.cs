@@ -1,6 +1,8 @@
-﻿namespace DSCPullServerWeb.Models
+﻿using System.Collections.Generic;
+
+namespace DSCPullServerWeb.Models
 {
-    public class Node
+    public class NamesNode
     {
         public string AgentId
         {
@@ -26,7 +28,7 @@
             set;
         }
 
-        public string[] ConfigurationNames
+        public IList<string> ConfigurationNames
         {
             get;
             set;
