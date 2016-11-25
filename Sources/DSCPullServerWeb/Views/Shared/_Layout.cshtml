@@ -43,10 +43,10 @@
                         <li class="@Html.IsSelected("Web", "Configurations")">@Html.ActionLink("Configurations", "Configurations", "Web")</li>
                         <li class="@Html.IsSelected("Web", "Modules"       )">@Html.ActionLink("Modules",        "Modules",        "Web")</li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
+                    @*<ul class="nav navbar-nav navbar-right">
                         <li class="@Html.IsSelected("Web", "Cmdlets"       )">@Html.ActionLink("Cmdlets",        "Cmdlets",        "Web")</li>
                         <li class="@Html.IsSelected("Web", "RestApi"       )">@Html.ActionLink("REST API",       "RestApi",        "Web")</li>
-                    </ul>
+                    </ul>*@
                 </div>
             </div>
         </nav>
@@ -77,10 +77,10 @@
         <footer class="footer">
             <div class="row">
                 <div class="col-md-6">
-                    <p><small>Open-source on <a href="https://github.com/claudiospizzi/DSCPullServerWeb">GitHub</a> by <a href="https://github.com/claudiospizzi">Claudio Spizzi</a>. Licensed under <a href="https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/LICENSE">MIT license</a>.</small></p>
+                    <p><small>@Html.Raw(@ViewBag.Footer)</small></p>
                 </div>
                 <div class="col-md-6" style="text-align: right;">
-                    <p><small>Pull Server Uri: http://localhost:8080</small></p>
+                    <p><small>Server: @ViewBag.InfoServer, Version: @ViewBag.InfoVersion</small></p>
                 </div>
             </div>
         </footer>
@@ -95,7 +95,7 @@
     <script src="~/Scripts/site.js"></script>
     <script>
         var path = window.location.pathname.toString()
-        if (path.indexOf("/Web/Nodes") == 0) { uiUpdateTable('nodes'); }
+        if (path.indexOf("/Web/Nodes") == 0) { uiUpdateTable('nodes-id'); uiUpdateTable('nodes-names'); }
         if (path.indexOf("/Web/Reports") == 0) { uiUpdateTable('reports'); }
         if (path.indexOf("/Web/Configurations") == 0) { uiUpdateTable('configurations'); }
         if (path.indexOf("/Web/Modules") == 0) { uiUpdateTable('modules'); }

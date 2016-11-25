@@ -39,7 +39,7 @@ namespace DSCPullServerWeb.Controllers
             }
             catch (Exception e)
             {
-                return HandleUnexpectedException(10031, e);
+                return HandleUnexpectedException(10041, e);
             }
         }
     }

@@ -9,7 +9,9 @@ namespace DSCPullServerWeb.Services
     /// </summary>
     public interface IDatabaseRepository
     {
-        IList<Node> GetNodes();
+        IList<IdNode> GetIdNodes();
+
+        IList<NamesNode> GetNamesNodes();
 
         IList<Report> GetReports();
     }

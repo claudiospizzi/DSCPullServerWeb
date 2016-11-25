@@ -4,38 +4,46 @@
     </div>
 
     <div class="col-md-12">
-        <p>All registered DSC nodes on the pull server.</p>
+        <p>All registered DSC nodes on the pull server. The nodes are divided into the old and new registration system. The old system introduced with WMF 4.0 is based no the <strong>ConfigurationID</strong>, the new system since WMF 5.0 uses the <strong>ConfigurationNames</strong>.</p>
+    </div>
+
+    <div class="col-md-12">
+        <h3>ConfigurationID</h3>
     </div>
 
     <div class="col-md-12">
         <div class="text-right">
-            <button id="nodesRefreshButton" type="button" class="btn btn-default">
+            <button id="nodesIdRefreshButton" type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-refresh"></span> Refresh
             </button>
         </div>
     </div>
 
-    <div class="col-md-12 dsc-loader" id="table-nodes-loader">
+    <div class="col-md-12 dsc-loader" id="table-nodes-id-loader">
         <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
     </div>
 
-    <div class="col-md-12 dsc-table" id="table-nodes-content" style="display: none;">
+    <div class="col-md-12 dsc-table" id="table-nodes-id-content" style="display: none;">
         <div class="table-responsive">
             <table class="table table-hover">
                 <colgroup>
-                    <col style="width: 20%;" />
-                    <col style="width: 20%;" />
-                    <col style="width: 20%;" />
-                    <col style="width: 20%;" />
-                    <col style="width: 20%;" />
+                    <col style="width: 30%;" />
+                    <col style="width: 14%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 16%;" />
+                    <col style="width: 16%;" />
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Agent ID</th>
-                        <th>Node Name</th>
-                        <th>LCM Version</th>
-                        <th>IP Address</th>
-                        <th>Configuration Names</th>
+                        <th>Configuration ID</th>
+                        <th>Target Name</th>
+                        <th>Compliant</th>
+                        <th>Dirty</th>
+                        <th>Status</th>
+                        <th>Last Heartbeat</th>
+                        <th>Last Compliance</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -43,7 +51,43 @@
         </div>
     </div>
 
-    @*<div class="col-md-12" id="table-nodes-exception" style="display: none;">
-        <p class="text-danger bg-danger">500 (Internal Server Error)</p>
-    </div>*@
+    <div class="col-md-12">
+        <h3>ConfigurationNames</h3>
+    </div>
+
+    <div class="col-md-12">
+        <div class="text-right">
+            <button id="nodesNamesRefreshButton" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-12 dsc-loader" id="table-nodes-names-loader">
+        <p><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></p>
+    </div>
+
+    <div class="col-md-12 dsc-table" id="table-nodes-names-content" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <colgroup>
+                    <col style="width: 30%;" />
+                    <col style="width: 25%;" />
+                    <col style="width: 18%;" />
+                    <col style="width: 17%;" />
+                    <col style="width: 10%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Agent ID</th>
+                        <th>Node Name</th>
+                        <th>Configuration Names</th>
+                        <th>IP Address</th>
+                        <th>LCM Version</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 </div>

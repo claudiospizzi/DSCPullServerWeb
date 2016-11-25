@@ -1,4 +1,6 @@
 ﻿using DSCPullServerWeb.Services;
+using System;
+using System.Reflection;
 using System.Web.Mvc;
 
 namespace DSCPullServerWeb.Controllers
@@ -13,6 +15,9 @@ namespace DSCPullServerWeb.Controllers
 
             ViewBag.Title       = _options.Title;
             ViewBag.Description = _options.Description;
+            ViewBag.Footer      = _options.Footer;
+            ViewBag.InfoServer  = Environment.MachineName;
+            ViewBag.InfoVersion = Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         public ActionResult Home()

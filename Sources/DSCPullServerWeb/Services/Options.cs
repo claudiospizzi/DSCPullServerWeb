@@ -10,6 +10,8 @@ namespace DSCPullServerWeb.Services
 
         private const string DESCRIPTION = "Website with a REST API to manage the PowerShell DSC web pull server.";
 
+        private const string FOOTER = "Open-source on <a href=\"https://github.com/claudiospizzi/DSCPullServerWeb\">GitHub</a> by <a href=\"https://github.com/claudiospizzi\" > Claudio Spizzi</a>. Licensed under <a href=\"https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/LICENSE\" > MIT license</a>.";
+
         public Options()
         {
             LoadConfig();
@@ -17,8 +19,10 @@ namespace DSCPullServerWeb.Services
 
         private void LoadConfig()
         {
+            Name                = WebConfigurationManager.AppSettings["Name"];
             Title               = WebConfigurationManager.AppSettings["Title"];
             Description         = WebConfigurationManager.AppSettings["Description"];
+            Footer              = WebConfigurationManager.AppSettings["Footer"];
             ModulePath          = WebConfigurationManager.AppSettings["ModulePath"];
             ConfigurationPath   = WebConfigurationManager.AppSettings["ConfigurationPath"];
             DatabasePath        = WebConfigurationManager.AppSettings["DatabasePath"];
@@ -37,10 +41,16 @@ namespace DSCPullServerWeb.Services
             ConfigurationPath   = ConfigurationPath.TrimEnd(new char[] { '\\', '/' });
             DatabasePath        = DatabasePath.TrimEnd(new char[] { '\\', '/' });
             RegistrationKeyPath = RegistrationKeyPath.TrimEnd(new char[] { '\\', '/' });
+
+            VerifyConfig();
         }
 
         private void VerifyConfig()
         {
+            if (String.IsNullOrEmpty(Name))
+            {
+                throw new Exception("Name app setting not found!");
+            }
             if (String.IsNullOrEmpty(Title))
             {
                 Title = TITLE;
@@ -48,6 +58,10 @@ namespace DSCPullServerWeb.Services
             if (String.IsNullOrEmpty(Description))
             {
                 Description = DESCRIPTION;
+            }
+            if (String.IsNullOrEmpty(Footer))
+            {
+                Footer = FOOTER;
             }
             if (String.IsNullOrEmpty(ModulePath))
             {
@@ -67,6 +81,12 @@ namespace DSCPullServerWeb.Services
             }
         }
 
+        public String Name
+        {
+            get;
+            private set;
+        }
+
         public String Title
         {
             get;
@@ -74,6 +94,12 @@ namespace DSCPullServerWeb.Services
         }
 
         public String Description
+        {
+            get;
+            private set;
+        }
+
+        public String Footer
         {
             get;
             private set;

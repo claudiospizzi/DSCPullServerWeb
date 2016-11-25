@@ -15,15 +15,18 @@
         'Resources\DSCPullServerWeb.Formats.ps1xml'
     )
     FunctionsToExport    = @(
+        'Get-DSCPullServerIdNode'
+        'Get-DSCPullServerNamesNode'
+        'Get-DSCPullServerReport'
         'Get-DSCPullServerConfiguration'
-        'Get-DSCPullServerModule'
-        'Publish-DSCPullServerConfiguration'
-        'Publish-DSCPullServerModule'
         'Save-DSCPullServerConfiguration'
-        'Save-DSCPullServerModule'
+        'Publish-DSCPullServerConfiguration'
         'Unpublish-DSCPullServerConfiguration'
-        'Unpublish-DSCPullServerModule'
         'Update-DSCPullServerConfigurationChecksum'
+        'Get-DSCPullServerModule'
+        'Save-DSCPullServerModule'
+        'Publish-DSCPullServerModule'
+        'Unpublish-DSCPullServerModule'
         'Update-DSCPullServerModuleChecksum'
     )
     CmdletsToExport      = @()

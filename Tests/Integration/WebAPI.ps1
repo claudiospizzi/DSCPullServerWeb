@@ -9,21 +9,116 @@ Describe 'WebAPI' {
 
     $api = 'http://localhost:34361/api'
 
+    Context 'Nodes by Id' {
+
+        $expectedNodes = @(
+            @{
+                ConfigurationID    = 'DD34ADD4-DF15-4FC5-A922-B0B2D4E8809A'
+                TargetName         = '192.168.144.82'
+                NodeCompliant      = $true
+                Dirty              = $false
+                LastHeartbeatTime  = [DateTime] '2016-11-24 15:40:25.228'
+                LastComplianceTime = [DateTime] '2016-11-24 15:40:25.228'
+                StatusCode         = '0'
+                ServerCheckSum     = '3F660B4567B21A92EF715289036FCC282E9F834465040BEED7E716855A0DA04F'
+                TargetCheckSum     = '3F660B4567B21A92EF715289036FCC282E9F834465040BEED7E716855A0DA04F'
+            }
+        )
+
+        It 'should return all nodes' {
+
+            # Arrange
+            $expectedCount = 1
+
+            # Act
+            $actualNodes = @(Get-DSCPullServerIdNode -Uri $api)
+
+            # Assert
+            $actualNodes.Count | Should Be $expectedCount
+            for ($c = 0; $c -lt $expectedCount; $c++)
+            {
+                $actualNodes[$c].ConfigurationID    | Should Be $expectedNodes[$c].ConfigurationID
+                $actualNodes[$c].TargetName         | Should Be $expectedNodes[$c].TargetName
+                $actualNodes[$c].NodeCompliant      | Should Be $expectedNodes[$c].NodeCompliant
+                $actualNodes[$c].Dirty              | Should Be $expectedNodes[$c].Dirty
+                $actualNodes[$c].LastHeartbeatTime  | Should Be $expectedNodes[$c].LastHeartbeatTime
+                $actualNodes[$c].LastComplianceTime | Should Be $expectedNodes[$c].LastComplianceTime
+                $actualNodes[$c].StatusCode         | Should Be $expectedNodes[$c].StatusCode
+                $actualNodes[$c].ServerCheckSum     | Should Be $expectedNodes[$c].ServerCheckSum
+                $actualNodes[$c].TargetCheckSum     | Should Be $expectedNodes[$c].TargetCheckSum
+            } 
+        }
+    }
+
+    Context 'Nodes by Names' {
+
+        $expectedNodes = @(
+            @{
+                AgentId            = 'bc9fdf70-b252-11e6-841a-00155d67ca7a'
+                NodeName           = 'LAB-DSC-NODE32'
+                LCMVersion         = '2.0'
+                IPAddress          = '192.168.144.83;127.0.0.1;fe80::5150:a3fe:bae2:a0c6%4;::2000:0:0:0;::1;::2000:0:0:0'
+                ConfigurationNames = @('MyConfigName')
+            }
+        )
+
+        It 'should return all nodes' {
+
+            # Arrange
+            $expectedCount = 1
+
+            # Act
+            $actualNodes = @(Get-DSCPullServerNamesNode -Uri $api)
+
+            # Assert
+            $actualNodes.Count | Should Be $expectedCount
+            for ($c = 0; $c -lt $expectedCount; $c++)
+            {
+                $actualNodes[$c].AgentId            | Should Be $expectedNodes[$c].AgentId
+                $actualNodes[$c].NodeName           | Should Be $expectedNodes[$c].NodeName
+                $actualNodes[$c].LCMVersion         | Should Be $expectedNodes[$c].LCMVersion
+                $actualNodes[$c].IPAddress          | Should Be $expectedNodes[$c].IPAddress
+                $actualNodes[$c].ConfigurationNames | Should Be $expectedNodes[$c].ConfigurationNames
+            } 
+        }
+    }
+
+    Context 'Reports' {
+
+        It 'should return all reports' {
+
+            # Arrange
+            $expectedCount = 40
+
+            # Act
+            $actualReports = @(Get-DSCPullServerReport -Uri $api)
+
+            # Assert
+            $actualReports.Count | Should Be $expectedCount
+        }
+    }
+
     Context 'Configurations' {
 
         $expectedConfigurations = @(
             @{
                 Name           = 'FeatureDemo'
+                Size           = 1846
+                Created        = [DateTime] '2016-11-17T17:45:38.1428987+01:00'
                 Checksum       = '1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B'
                 ChecksumStatus = 'Valid'
             }
             @{
                 Name           = 'FileDemo'
+                Size           = 2178
+                Created        = [DateTime] '2016-11-17T17:45:38.1619006+01:00'
                 Checksum       = '2DEF328446FF7D9CA96DF51495394D26697CB43ADF3E671C133820755D2A6E2D'
                 ChecksumStatus = 'Invalid'
             }
             @{
                 Name           = 'RegistryDemo'
+                Size           = 2026
+                Created        = [DateTime] '2016-11-17T18:57:54.7429415+01:00'
                 Checksum       = ''
                 ChecksumStatus = 'Missing'
             }
@@ -42,6 +137,8 @@ Describe 'WebAPI' {
             for ($c = 0; $c -lt $expectedCount; $c++)
             {
                 $actualConfigurations[$c].Name           | Should Be $expectedConfigurations[$c].Name
+                $actualConfigurations[$c].Size           | Should Be $expectedConfigurations[$c].Size
+                $actualConfigurations[$c].Created        | Should Be $expectedConfigurations[$c].Created
                 $actualConfigurations[$c].Checksum       | Should Be $expectedConfigurations[$c].Checksum
                 $actualConfigurations[$c].ChecksumStatus | Should Be $expectedConfigurations[$c].ChecksumStatus
             }
@@ -183,18 +280,24 @@ Describe 'WebAPI' {
             @{
                 Name           = 'SharePointDsc'
                 Version        = '1.3.0.0'
+                Size           = 429285
+                Created        = [DateTime] "2016-11-03T15:11:20.4960172+01:00"
                 Checksum       = 'EBBE30927695ADAE86A989C2627653861563E81C98B855303EC92138A0212F47'
                 ChecksumStatus = 'Valid'
             }
             @{
                 Name           = 'SharePointDsc'
                 Version        = '1.4.0.0'
+                Size           = 441882
+                Created        = [DateTime] "2016-11-03T15:11:48.6318305+01:00"
                 Checksum       = '35B1622E1890BAA2D529EDFB07285BEEFCFE8F8D3A4640FF785E1E30E64181A9'
                 ChecksumStatus = 'Invalid'
             }
             @{
                 Name           = 'SystemLocaleDsc'
                 Version        = '1.1.0.0'
+                Size           = 9566
+                Created        = [DateTime] "2016-11-03T15:13:04.2023868+01:00"
                 Checksum       = ''
                 ChecksumStatus = 'Missing'
             }
@@ -213,7 +316,10 @@ Describe 'WebAPI' {
             for ($c = 0; $c -lt $expectedCount; $c++)
             {
                 $actualModules[$c].Name           | Should Be $expectedModules[$c].Name
+                $actualModules[$c].Version        | Should Be $expectedModules[$c].Version
+                $actualModules[$c].Size           | Should Be $expectedModules[$c].Size
                 $actualModules[$c].Checksum       | Should Be $expectedModules[$c].Checksum
+                $actualModules[$c].Created        | Should Be $expectedModules[$c].Created
                 $actualModules[$c].ChecksumStatus | Should Be $expectedModules[$c].ChecksumStatus
             }
         }
