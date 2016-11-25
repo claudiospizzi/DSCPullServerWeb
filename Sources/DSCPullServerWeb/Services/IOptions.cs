@@ -12,6 +12,8 @@
 
         string Description { get; }
 
+        string Footer { get; }
+
         string ModulePath { get; }
 
         string ConfigurationPath { get; }
