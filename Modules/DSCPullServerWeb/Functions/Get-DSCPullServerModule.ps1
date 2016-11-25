@@ -99,6 +99,8 @@ function Get-DSCPullServerModule
 
         foreach ($module in $modules)
         {
+            $module.Created = [DateTime] $module.Created
+
             $module.PSTypeNames.Insert(0, 'DSCPullServerWeb.Module')
 
             Write-Output $module

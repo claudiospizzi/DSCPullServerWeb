@@ -87,6 +87,8 @@ function Get-DSCPullServerConfiguration
 
         foreach ($configuration in $configurations)
         {
+            $configuration.Created = [DateTime] $configuration.Created
+
             $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')
 
             Write-Output $configuration
