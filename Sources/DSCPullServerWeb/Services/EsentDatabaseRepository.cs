@@ -123,7 +123,57 @@ namespace DSCPullServerWeb.Services
 
         public IList<Report> GetReports()
         {
-            throw new NotImplementedException();
+            List<Report> reports = new List<Report>();
+
+            using (EsentSession session = new EsentSession(_database))
+            {
+                session.Open();
+
+                JET_SESID sessionId = session.GetSessionId();
+                JET_DBID databaseId = session.GetDatabaseId();
+                JET_TABLEID tableId;
+
+                Api.OpenTable(sessionId, databaseId, TABLE_STATUS_REPORT, OpenTableGrbit.ReadOnly, out tableId);
+
+                Api.MoveBeforeFirst(session.GetSessionId(), tableId);
+
+                while (Api.TryMoveNext(sessionId, tableId))
+                {
+                    IDictionary<string, JET_COLUMNID> columnDictionary = Api.GetColumnDictionary(sessionId, tableId);
+
+                    Report report = new Report()
+                    {
+                        Id                   = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["Id"]),
+                        JobId                = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["JobId"]),
+                        NodeName             = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["NodeName"]),
+                        IPAddress            = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["IPAddress"]),
+                        RerfreshMode         = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["RefreshMode"]),
+                        OperationType        = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["OperationType"]),
+                        Status               = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["Status"]),
+                        RebootRequested      = Api.RetrieveColumnAsBoolean(sessionId, tableId, columnDictionary["RebootRequested"]).GetValueOrDefault(),
+                        StartTime            = Api.RetrieveColumnAsDateTime(sessionId, tableId, columnDictionary["StartTime"]).GetValueOrDefault(),
+                        EndTime              = Api.RetrieveColumnAsDateTime(sessionId, tableId, columnDictionary["EndTime"]).GetValueOrDefault(),
+                        LastModifiedTime     = Api.RetrieveColumnAsDateTime(sessionId, tableId, columnDictionary["LastModifiedTime"]).GetValueOrDefault(),
+                        LCMVersion           = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["LCMVersion"]),
+                        ConfigurationVersion = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["ConfigurationVersion"]),
+                        ReportFormatVersion  = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["ReportFormatVersion"]),
+                        Errors               = (List<string>)Api.DeserializeObjectFromColumn(sessionId, tableId, columnDictionary["Errors"]),
+                        StatusData           = (List<string>)Api.DeserializeObjectFromColumn(sessionId, tableId, columnDictionary["StatusData"])
+                    };
+
+                    // Field AdditionalData is only available on WS2016 and WMF 5.1
+                    if (columnDictionary.Keys.Contains("AdditionalData"))
+                    {
+                        report.AdditionalData = Api.RetrieveColumnAsString(sessionId, tableId, columnDictionary["AdditionalData"]);
+                    }
+
+                    reports.Add(report);
+                }
+
+                Api.JetCloseTable(sessionId, tableId);
+            }
+
+            return reports.OrderBy(r => r.StartTime).ToList();
         }
 
         #endregion

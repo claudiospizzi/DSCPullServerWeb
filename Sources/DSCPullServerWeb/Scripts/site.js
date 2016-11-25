@@ -143,6 +143,10 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(item.LCMVersion);
             break;
         case "reports":
+            html += uiCreateTableCell(item.Id);
+            html += uiCreateTableCell(item.NodeName);
+            html += uiCreateTableCell(item.OperationType);
+            html += uiCreateTableCell(uiFormatDateTime(item.StartTime));
             html += uiCreateTableCell(item.Status);
             break;
         case "configurations":
