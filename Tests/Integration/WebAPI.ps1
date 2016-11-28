@@ -46,7 +46,7 @@ Describe 'WebAPI' {
                 $actualNodes[$c].StatusCode         | Should Be $expectedNodes[$c].StatusCode
                 $actualNodes[$c].ServerCheckSum     | Should Be $expectedNodes[$c].ServerCheckSum
                 $actualNodes[$c].TargetCheckSum     | Should Be $expectedNodes[$c].TargetCheckSum
-            } 
+            }
         }
     }
 
@@ -79,7 +79,7 @@ Describe 'WebAPI' {
                 $actualNodes[$c].LCMVersion         | Should Be $expectedNodes[$c].LCMVersion
                 $actualNodes[$c].IPAddress          | Should Be $expectedNodes[$c].IPAddress
                 $actualNodes[$c].ConfigurationNames | Should Be $expectedNodes[$c].ConfigurationNames
-            } 
+            }
         }
     }
 
