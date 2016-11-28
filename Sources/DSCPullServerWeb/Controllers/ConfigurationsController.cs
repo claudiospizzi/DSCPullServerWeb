@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace DSCPullServerWeb.Controllers
 {
-    [RoutePrefix("api")]
+    [RoutePrefix("api/v1")]
     public class ConfigurationsController : ApiController
     {
         private ILogger _logger;
@@ -32,7 +32,7 @@ namespace DSCPullServerWeb.Controllers
 #endif
         }
 
-        // GET /api/configurations
+        // GET /api/v1/configurations
         [HttpGet]
         [Route("configurations")]
         public IHttpActionResult Get()
@@ -47,7 +47,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/configurations/MyConfig
+        // GET /api/v1/configurations/MyConfig
         [HttpGet]
         [Route("configurations/{name}")]
         public IHttpActionResult Get(string name)
@@ -69,7 +69,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/configurations/MyConfig/hash
+        // GET /api/v1/configurations/MyConfig/hash
         [HttpGet]
         [Route("configurations/{name}/hash")]
         public IHttpActionResult Hash(string name)
@@ -95,8 +95,8 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/configurations/MyConfig/download
-        // GET /api/configurations/MyConfig/download/MyConfig.mof
+        // GET /api/v1/configurations/MyConfig/download
+        // GET /api/v1/configurations/MyConfig/download/MyConfig.mof
         [HttpGet]
         [Route("configurations/{name}/download")]
         [Route("configurations/{name}/download/{file}")]
@@ -119,7 +119,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // PUT /api/configurations/MyConfig
+        // PUT /api/v1/configurations/MyConfig
         [HttpPut]
         [Route("configurations/{name}")]
         public async Task<IHttpActionResult> Upload(string name)
@@ -140,7 +140,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // DELETE /api/configurations/MyConfig
+        // DELETE /api/v1/configurations/MyConfig
         [HttpDelete]
         [Route("configurations/{name}")]
         public IHttpActionResult Delete(string name)

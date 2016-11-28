@@ -57,7 +57,7 @@ function Unpublish-DSCPullServerConfiguration
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Delete'
-        Uri    = "$Uri/configurations/$Name"
+        Uri    = "$Uri/v1/configurations/$Name"
     }
 
     # Depending on the credential input, add the default or specfic credentials.

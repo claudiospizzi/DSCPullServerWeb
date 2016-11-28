@@ -4,7 +4,7 @@ using System.Web.Http;
 
 namespace DSCPullServerWeb.Controllers
 {
-    [RoutePrefix("api")]
+    [RoutePrefix("api/v1")]
     public class NodesIdController : ApiController
     {
         private ILogger _logger;
@@ -28,7 +28,7 @@ namespace DSCPullServerWeb.Controllers
 #endif
         }
 
-        // GET /api/nodes/id
+        // GET /api/v1/nodes/id
         [HttpGet]
         [Route("nodes/id")]
         public IHttpActionResult Get()

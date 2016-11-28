@@ -68,7 +68,7 @@ function Get-DSCPullServerModule
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Get'
-        Uri    = "$Uri/modules"
+        Uri    = "$Uri/v1/modules"
     }
 
     # If a name was specified, append it to the uri and check if also a version

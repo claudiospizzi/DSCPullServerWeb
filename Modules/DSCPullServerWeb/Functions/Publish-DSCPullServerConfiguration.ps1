@@ -63,7 +63,7 @@ function Publish-DSCPullServerConfiguration
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Put'
-        Uri    = "$Uri/configurations/$Name"
+        Uri    = "$Uri/v1/configurations/$Name"
         InFile = $Path
     }
 

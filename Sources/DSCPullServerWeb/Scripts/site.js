@@ -97,7 +97,7 @@ function uiShowModalHttpRequestError(xhr, message) {
 function uiUpdateTable(page) {
     uiShowTableLoader(page);
     uiClearTable(page);
-    $.getJSON('/api/' + page.replace("-", "/"))
+    $.getJSON('/api/v1/' + page.replace("-", "/"))
         .done(function (data) {
             $.each(data, function (key, item) {
                 $('#table-' + page + '-content > div > table > tbody').append(uiCreateTableRow(page, item));
@@ -183,7 +183,7 @@ function uiCreateTableCell(html) {
 }
 
 function uiCreateTableButtonDownload(page, relative, filename) {
-    return '<a type="button" target="_blank" href="/api/' + page + '/' + relative + '/download/' + filename + '" class="btn btn-default btn-xs" title="Download"><span class="glyphicon glyphicon-download-alt"></span></a>';
+    return '<a type="button" target="_blank" href="/api/v1/' + page + '/' + relative + '/download/' + filename + '" class="btn btn-default btn-xs" title="Download"><span class="glyphicon glyphicon-download-alt"></span></a>';
 }
 
 function uiCreateTableButtonHash(callback) {
@@ -316,7 +316,7 @@ function apiUploadConfiguration(file) {
     var name = file.name.substring(0, file.name.length - 4);
     $.ajax({
         type: "PUT",
-        url: '/api/configurations/' + name,
+        url: '/api/v1/configurations/' + name,
         contentType: false,
         processData: false,
         data: file,
@@ -332,7 +332,7 @@ function apiUploadConfiguration(file) {
 
 function apiHashConfiguration(name) {
     $.ajax({
-        url: '/api/configurations/' + name + '/hash',
+        url: '/api/v1/configurations/' + name + '/hash',
         type: 'GET',
         success: function (result) {
             uiUpdateTable('configurations');
@@ -346,7 +346,7 @@ function apiHashConfiguration(name) {
 
 function apiDeleteConfiguration(name) {
     $.ajax({
-        url: '/api/configurations/' + name,
+        url: '/api/v1/configurations/' + name,
         type: 'DELETE',
         success: function (result) {
             uiUpdateTable('configurations');
@@ -369,7 +369,7 @@ function apiUploadModule(file) {
     var version = parts[1];
     $.ajax({
         type: "PUT",
-        url: '/api/modules/' + name + '/' + version,
+        url: '/api/v1/modules/' + name + '/' + version,
         contentType: false,
         processData: false,
         data: file,
@@ -385,7 +385,7 @@ function apiUploadModule(file) {
 
 function apiHashModule(name, version) {
     $.ajax({
-        url: '/api/modules/' + name + '/' + version + '/hash',
+        url: '/api/v1/modules/' + name + '/' + version + '/hash',
         type: 'GET',
         success: function (result) {
             uiUpdateTable('modules');
@@ -399,7 +399,7 @@ function apiHashModule(name, version) {
 
 function apiDeleteModule(name, version) {
     $.ajax({
-        url: '/api/modules/' + name + '/' + version,
+        url: '/api/v1/modules/' + name + '/' + version,
         type: 'DELETE',
         success: function (result) {
             uiUpdateTable('modules');

@@ -62,7 +62,7 @@ function Get-DSCPullServerConfiguration
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Get'
-        Uri    = "$Uri/configurations"
+        Uri    = "$Uri/v1/configurations"
     }
 
     # If a name was specified, append it to the uri.

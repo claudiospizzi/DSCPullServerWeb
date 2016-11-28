@@ -68,7 +68,7 @@ function Publish-DSCPullServerModule
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Put'
-        Uri    = "$Uri/modules/$Name/$Version"
+        Uri    = "$Uri/v1/modules/$Name/$Version"
         InFile = $Path
     }
 

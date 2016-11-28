@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace DSCPullServerWeb.Controllers
 {
-    [RoutePrefix("api")]
+    [RoutePrefix("api/v1")]
     public class ModulesController : ApiController
     {
         private ILogger _logger;
@@ -33,7 +33,7 @@ namespace DSCPullServerWeb.Controllers
 #endif
         }
 
-        // GET /api/modules
+        // GET /api/v1/modules
         [HttpGet]
         [Route("modules")]
         public IHttpActionResult Get()
@@ -48,7 +48,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule
+        // GET /api/v1/modules/MyModule
         [HttpGet]
         [Route("modules/{name}")]
         public IHttpActionResult Get(string name)
@@ -70,7 +70,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule/1.0.0.0
+        // GET /api/v1/modules/MyModule/1.0.0.0
         [HttpGet]
         [Route("modules/{name}/{version}")]
         public IHttpActionResult Get(string name, string version)
@@ -92,7 +92,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule/1.0.0.0/hash
+        // GET /api/v1/modules/MyModule/1.0.0.0/hash
         [HttpGet]
         [Route("modules/{name}/{version}/hash")]
         public IHttpActionResult Hash(string name, string version)
@@ -118,8 +118,8 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // GET /api/modules/MyModule/1.0.0.0/download
-        // GET /api/modules/MyModule/1.0.0.0/download/MyModule_1.0.0.0.zip
+        // GET /api/v1/modules/MyModule/1.0.0.0/download
+        // GET /api/v1/modules/MyModule/1.0.0.0/download/MyModule_1.0.0.0.zip
         [HttpGet]
         [Route("modules/{name}/{version}/download")]
         [Route("modules/{name}/{version}/download/{file}")]
@@ -142,7 +142,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // PUT /api/modules/MyModule/1.0.0.0
+        // PUT /api/v1/modules/MyModule/1.0.0.0
         [HttpPut]
         [Route("modules/{name}/{version}")]
         public async Task<IHttpActionResult> Upload(string name, string version)
@@ -163,7 +163,7 @@ namespace DSCPullServerWeb.Controllers
             }
         }
 
-        // DELETE /api/modules/MyModule/1.0.0.0
+        // DELETE /api/v1/modules/MyModule/1.0.0.0
         [HttpDelete]
         [Route("modules/{name}/{version}")]
         public IHttpActionResult Delete(string name, string version)

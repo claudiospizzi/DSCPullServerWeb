@@ -62,7 +62,7 @@ function Unpublish-DSCPullServerModule
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Delete'
-        Uri    = "$Uri/modules/$Name/$Version"
+        Uri    = "$Uri/v1/modules/$Name/$Version"
     }
 
     # Depending on the credential input, add the default or specfic credentials.

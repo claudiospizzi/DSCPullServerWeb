@@ -63,7 +63,7 @@ function Save-DSCPullServerConfiguration
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method  = 'Get'
-        Uri     = "$Uri/configurations/$Name/download"
+        Uri     = "$Uri/v1/configurations/$Name/download"
         OutFile = $Path
     }
 

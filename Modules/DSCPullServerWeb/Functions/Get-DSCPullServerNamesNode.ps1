@@ -52,7 +52,7 @@ function Get-DSCPullServerNamesNode
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Get'
-        Uri    = "$Uri/nodes/names"
+        Uri    = "$Uri/v1/nodes/names"
     }
 
     # Depending on the credential input, add the default or specfic credentials.

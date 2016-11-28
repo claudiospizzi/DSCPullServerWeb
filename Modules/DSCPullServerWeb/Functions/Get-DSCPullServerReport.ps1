@@ -51,7 +51,7 @@ function Get-DSCPullServerReport
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
         Method = 'Get'
-        Uri    = "$Uri/reports"
+        Uri    = "$Uri/v1/reports"
     }
 
     # Depending on the credential input, add the default or specfic credentials.
