@@ -43,6 +43,15 @@ manually on your local system:
 
 ## Features
 
+* **Get-DSCPullServerIdNode**  
+  Returns all ConfigurationID nodes from a DSC Pull Server.
+
+* **Get-DSCPullServerNamesNode**  
+  Returns all ConfigurationNames nodes from a DSC Pull Server.
+
+* **Get-DSCPullServerReport**  
+  Returns all reports from a DSC Pull Server.
+
 * **Get-DSCPullServerConfiguration**  
   Returns MOF configurations from a DSC Pull Server.
 
