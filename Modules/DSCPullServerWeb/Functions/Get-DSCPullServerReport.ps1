@@ -70,9 +70,9 @@ function Get-DSCPullServerReport
 
         foreach ($node in $nodes)
         {
-            $nodeStartTime        = [DateTime] $node.StartTime
-            $nodeEndTime          = [DateTime] $node.EndTime
-            $nodeLastModifiedTime = [DateTime] $node.LastModifiedTime
+            $node.StartTime        = [DateTime] $node.StartTime
+            $node.EndTime          = [DateTime] $node.EndTime
+            $node.LastModifiedTime = [DateTime] $node.LastModifiedTime
 
             $node.PSTypeNames.Insert(0, 'DSCPullServerWeb.Report')
 
