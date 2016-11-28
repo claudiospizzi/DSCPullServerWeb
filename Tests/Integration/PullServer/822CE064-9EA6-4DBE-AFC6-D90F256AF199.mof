@@ -1,0 +1,48 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=claudio
+@GenerationDate=11/24/2016 01:52:24
+@GenerationHost=CASA-NB-01
+*/
+
+instance of MSFT_FileDirectoryConfiguration as $MSFT_FileDirectoryConfiguration1ref
+{
+ResourceID = "[File]TestLogConfigurationId";
+ Type = "File";
+ Ensure = "Present";
+ Contents = "Test Log Configuration Id";
+ DestinationPath = "C:\\TestLogConfigurationId.txt";
+ ModuleName = "PSDesiredStateConfiguration";
+ SourceInfo = "::4::5::File";
+
+ModuleVersion = "1.0";
+
+ ConfigurationName = "TestLogConfigurationId";
+
+};
+instance of OMI_ConfigurationDocument
+
+
+                    {
+ Version="2.0.0";
+ 
+
+                        MinimumCompatibleVersion = "1.0.0";
+ 
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+ 
+
+                        Author="claudio";
+ 
+
+                        GenerationDate="11/24/2016 01:52:24";
+ 
+
+                        GenerationHost="CASA-NB-01";
+ 
+
+                        Name="TestLogConfigurationId";
+
+
+                    };
