@@ -59,5 +59,35 @@
             ConfigurationId    = $null
             ConfigurationNames = @('MyConfigName')
         }
+
+        @{
+            NodeName = 'LAB-DSC-SERVER3'
+            Role     = @('PullServer')
+
+            CertificateThumbPrint = '22668C2DE28F5E455BB136D50DE8B0CA0CECF9D7'
+            RegistrationKey       = '822CE064-9EA6-4DBE-AFC6-D90F256AF199'
+        }
+
+        @{
+            NodeName = 'LAB-DSC-NODE31'
+            Role     = @('NodeLcm')
+
+            PullServerUrl   = 'https://LAB-DSC-SERVER3.spizzi.lab:8080/PSDSCPullServer.svc'
+            RegistrationKey = '822CE064-9EA6-4DBE-AFC6-D90F256AF199'
+
+            ConfigurationId    = 'DD34ADD4-DF15-4FC5-A922-B0B2D4E8809A'
+            ConfigurationNames = $null
+        }
+
+        @{
+            NodeName = 'LAB-DSC-NODE32'
+            Role     = @('NodeLcm')
+
+            PullServerUrl   = 'https://LAB-DSC-SERVER3.spizzi.lab:8080/PSDSCPullServer.svc'
+            RegistrationKey = '822CE064-9EA6-4DBE-AFC6-D90F256AF199'
+
+            ConfigurationId    = $null
+            ConfigurationNames = @('MyConfigName')
+        }
     )
 }
