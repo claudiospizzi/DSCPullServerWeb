@@ -24,7 +24,7 @@ platform: Any CPU
 
 # Execute compile and buildbefore_build:
 before_build:
-  - nuget restore
+  - nuget restore "Sources"
 build:
   verbosity: minimal
 after_build:
