@@ -50,6 +50,10 @@ function Get-TargetResource
         $RegistrationKeyPath = "$Env:ProgramFiles\WindowsPowerShell\DscService"
     )
 
+
+    Write-Verbose "Get current configuration for $EndpointName"
+
+
     $website = Get-Website -Name $EndpointName
 
     if ($null -ne $website)
@@ -151,6 +155,9 @@ function Set-TargetResource
     )
 
 
+    Write-Verbose "Set new configuration for $EndpointName"
+
+
     ## ABSENT: Remove existing website from the local system
 
     if ($Ensure -eq 'Absent')
@@ -224,6 +231,11 @@ function Test-TargetResource
         $RegistrationKeyPath = "$Env:ProgramFiles\WindowsPowerShell\DscService"
     )
 
+
+    Write-Verbose "Test current configuration of $EndpointName for desired state"
+
+
+    # ToDo
 }
 
 Export-ModuleMember -Function *-TargetResource
