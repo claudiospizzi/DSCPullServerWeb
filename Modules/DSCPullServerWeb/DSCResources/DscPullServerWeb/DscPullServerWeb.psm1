@@ -54,7 +54,7 @@ function Get-TargetResource
     Write-Verbose "Get current configuration for $EndpointName"
 
 
-    $website = Get-Website -Name $EndpointName
+    $website = $null # Get-Website -Name $EndpointName      # T O  D O
 
     if ($null -ne $website)
     {
@@ -107,7 +107,7 @@ function Get-TargetResource
 
 function Set-TargetResource
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([void])]
     param
     (
@@ -162,14 +162,17 @@ function Set-TargetResource
 
     if ($Ensure -eq 'Absent')
     {
-        $website = Get-Website -Name $EndpointName
-
-        if ($null -ne $website)
+        if ($PSCmdlet.ShouldProcess($EndpointName, 'Remove'))
         {
-            Write-Verbose "Removing website $EndpointName"
+            $website = $null # Get-Website -Name $EndpointName      # T O  D O
 
-            # PSWSIISEndpoint\Remove-PSWSEndpoint -SiteName $EndpointName
-            # ToDo: Remove Website
+            if ($null -ne $website)
+            {
+                Write-Verbose "Removing website $EndpointName"
+
+                # PSWSIISEndpoint\Remove-PSWSEndpoint -SiteName $EndpointName
+                # ToDo: Remove Website
+            }
         }
     }
 
@@ -178,7 +181,9 @@ function Set-TargetResource
 
     if ($Ensure -eq 'Present')
     {
-
+        if ($PSCmdlet.ShouldProcess($EndpointName, 'Add'))
+        {
+        }
     }
 }
 
@@ -236,6 +241,10 @@ function Test-TargetResource
 
 
     # ToDo
+}
+
+function Get-TargetResourceDetail
+{
 }
 
 Export-ModuleMember -Function *-TargetResource
