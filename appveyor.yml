@@ -22,7 +22,9 @@ version: '{build}'
 configuration: Release
 platform: Any CPU
 
-# Execute compile and build
+# Execute compile and buildbefore_build:
+before_build:
+  - nuget restore
 build:
   verbosity: minimal
 after_build:
