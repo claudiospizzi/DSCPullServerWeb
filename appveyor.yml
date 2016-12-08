@@ -29,12 +29,12 @@ before_build:
 build:
   verbosity: minimal
 after_build:
-  - ps: .\Scripts\build.ps1 -AppVeyor -Verbose
+  - ps: .\Scripts\build.ps1 -AppVeyor
 
 # Execute test script
 test_script:
-  - ps: .\Scripts\test.ps1 -AppVeyor -Verbose
+  - ps: .\Scripts\test.ps1 -AppVeyor
 
 # Execute deploy script
 deploy_script:
-  - ps: .\Scripts\release.ps1 -AppVeyor -Verbose
+  - ps: .\Scripts\release.ps1 -AppVeyor
