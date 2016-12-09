@@ -1,6 +1,9 @@
 
 #Import-Module "$PSScriptRoot\PSWSIISEndpoint.psm1" -Verbose:$false
 
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSDSCDscTestsPresent', '')]
+param()
+
 function Get-TargetResource
 {
     [CmdletBinding()]
