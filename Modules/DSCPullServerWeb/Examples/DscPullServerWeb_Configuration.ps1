@@ -3,7 +3,6 @@ Configuration DSCPullServerWithWeb
 {
     Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 1.1
     Import-DscResource -ModuleName xPSDesiredStateConfiguration -ModuleVersion 5.0.0.0
-
     # Import-DscResource -ModuleName DSCPullServerWeb
 
     Node 'localhost'
@@ -46,9 +45,10 @@ Configuration DSCPullServerWithWeb
         #     Ensure                = 'Present'
         #     EndpointName          = 'PSDSCPullServerWeb'
         #     Port                  = 8090
+        #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServer"
+        #     CertificateThumbPrint = '1234567890ABCDEF1234567890ABCDEF12345678'
         #     Title                 = 'DSC Pull Server Web'
         #     Description           = 'Web and API access to the DSC Pull Server.'
-        #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServer"
         #     ModulePath            = "$Env:ProgramFiles\WindowsPowerShell\DscService\Modules"
         #     ConfigurationPath     = "$Env:ProgramFiles\WindowsPowerShell\DscService\Configuration"
         #     DatabasePath          = "$Env:ProgramFiles\WindowsPowerShell\DscService"
