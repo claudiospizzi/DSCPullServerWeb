@@ -23,6 +23,14 @@ function Get-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
+        
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $CertificateThumbPrint,
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -31,10 +39,6 @@ function Get-TargetResource
         [Parameter(Mandatory = $false)]
         [System.String]
         $Description = 'Website with a REST API to manage the PowerShell DSC web pull server.',
-
-        [Parameter(Mandatory = $false)]
-        [System.String]
-        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -57,11 +61,15 @@ function Get-TargetResource
     Write-Verbose "Get current configuration for $EndpointName"
 
 
-    $website = $null # Get-Website -Name $EndpointName      # T O  D O
+    $website = Get-Website -Name $EndpointName
 
     if ($null -ne $website)
     {
         $Ensure = 'Present'
+
+        # Get the IIS port from the binding information and the physical path
+        $Port         = $website.Bindings.Collection[0].BindingInformation.Split(':')[1]
+        $PhysicalPath = $website.physicalPath
 
         # Get Full Path for web.config file
         $webConfigFullPath = Join-Path -Path $website.physicalPath -ChildPath 'web.config'
@@ -75,36 +83,32 @@ function Get-TargetResource
         $ConfigurationPath   = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'ConfigurationPath'
         $DatabasePath        = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'DatabasePath'
         $RegistrationKeyPath = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'RegistrationKeyPath'
-
-        # Get the IIS port from the binding information
-        $Port = $website.Bindings.Collection[0].BindingInformation.Split(':')[1]
     }
     else
     {
-        $Ensure = 'Absent'
-
-        $Title       = ''
-        $Description = ''
-
+        $Ensure              = 'Absent'
+        $Port                = 0
+        $Title               = ''
+        $Description         = ''
+        $PhysicalPath        = ''
         $ModulePath          = ''
         $ConfigurationPath   = ''
         $DatabasePath        = ''
         $RegistrationKeyPath = ''
-
-        $Port = 0
     }
 
     @{
-        EndpointName        = $EndpointName
-        Ensure              = $Ensure
-        Port                = $Port
-        Title               = $Title
-        Description         = $Description
-        PhysicalPath        = $website.physicalPath
-        ModulePath          = $ModulePath
-        ConfigurationPath   = $ConfigurationPath
-        DatabasePath        = $DatabasePath
-        RegistrationKeyPath = $RegistrationKeyPath
+        EndpointName          = $EndpointName
+        Ensure                = $Ensure
+        Port                  = $Port
+        PhysicalPath          = $PhysicalPath
+        CertificateThumbPrint = $CertificateThumbPrint
+        Title                 = $Title
+        Description           = $Description
+        ModulePath            = $ModulePath
+        ConfigurationPath     = $ConfigurationPath
+        DatabasePath          = $DatabasePath
+        RegistrationKeyPath   = $RegistrationKeyPath
     }
 }
 
@@ -127,6 +131,14 @@ function Set-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
+        
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $CertificateThumbPrint,
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -135,10 +147,6 @@ function Set-TargetResource
         [Parameter(Mandatory = $false)]
         [System.String]
         $Description = 'Website with a REST API to manage the PowerShell DSC web pull server.',
-
-        [Parameter(Mandatory = $false)]
-        [System.String]
-        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -167,7 +175,7 @@ function Set-TargetResource
     {
         if ($PSCmdlet.ShouldProcess($EndpointName, 'Remove'))
         {
-            $website = $null # Get-Website -Name $EndpointName      # T O  D O
+            $website = Get-Website -Name $EndpointName
 
             if ($null -ne $website)
             {
@@ -186,6 +194,87 @@ function Set-TargetResource
     {
         if ($PSCmdlet.ShouldProcess($EndpointName, 'Add'))
         {
+            $physicalPathSource = $PSScriptRoot | Split-Path | Split-Path | Join-Path -ChildPath 'Binaries\Website'
+
+
+            # Create the physical path folder if it does not exist
+            if (-not (Test-Path -Path $PhysicalPath))
+            {
+                Write-Verbose "Create website physical path $PhysicalPath"
+
+                New-Item -Path $PhysicalPath -ItemType Directory -Force | Out-Null
+            }
+
+
+            # Copy the files to the target folder, if the folder versions are not equal
+            if (-not (Test-WebsiteFile -Source $physicalPathSource -Destination $PhysicalPath))
+            {
+                Write-Verbose "Deploy website files to $PhysicalPath"
+
+                # Try to stop the website and the app pool, in order to prevent file locks
+                if (Test-Path -Path "IIS:\Sites\$EndpointName")    { Stop-Website -Name $EndpointName -ErrorAction SilentlyContinue }
+                if (Test-Path -Path "IIS:\AppPools\$EndpointName") { Stop-WebAppPool -Name $EndpointName -ErrorAction SilentlyContinue }
+
+                Get-ChildItem -Path $PhysicalPath -Recurse | Remove-Item -Force
+
+                Copy-Item -Path "$physicalPathSource\*" -Destination $PhysicalPath -Recurse -Force
+            }
+
+
+            # Create the app pool if it does not exist
+            if (-not (Test-Path -Path "IIS:\AppPools\$EndpointName"))
+            {
+                Write-Verbose "Create the app pool $PhysicalPath"
+
+                New-WebAppPool -Name $EndpointName
+            }
+
+
+            # Change the app pool identity to local system
+            if ((Get-Item -Path "IIS:\AppPools\$EndpointName").processModel.identityType -ne 'LocalSystem')
+            {
+                Write-Verbose 'Set the local system account as app pool identity'
+
+                $appPool = Get-Item -Path "IIS:\AppPools\$EndpointName"
+                $appPool.processModel.identityType = 'LocalSystem'
+                $appPool | Set-Item
+            }
+
+
+            # Enable 32 bit applications on 64 bit operations systems
+            if (-not (Get-Item -Path "IIS:\AppPools\$EndpointName").enable32BitAppOnWin64)
+            {
+                Write-Verbose "Enable the option enable32BitAppOnWin64"
+
+                Set-itemProperty -Path "IIS:\AppPools\$EndpointName" -Name 'enable32BitAppOnWin64' -Value $true
+            }
+
+
+            # Create the website if it does not exist
+            if (-not (Test-Path -Path "IIS:\Sites\$EndpointName"))
+            {
+                Write-Verbose 'Create a new IIS website'
+
+                New-Website -Name $EndpointName -PhysicalPath $PhysicalPath -ApplicationPool $EndpointName -Port $Port -Ssl
+            }
+
+
+            # Check the certificate binding
+            $binding = (Get-Item -Path "IIS:\Sites\$EndpointName").Bindings.Collection
+            if ($binding.certificateHash -ne $CertificateThumbPrint)
+            {
+                Write-Verbose 'Update the SSL certificate'
+
+                if (-not ([string]::IsNullOrEmpty($binding.certificateHash)))
+                {
+                    $binding.RemoveSslCertificate()
+                }
+
+                $binding.AddSslCertificate($CertificateThumbPrint, 'My')
+            }
+            
+
+            # Set web.config values....
         }
     }
 }
@@ -209,6 +298,14 @@ function Test-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
+        
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $CertificateThumbPrint,
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -217,10 +314,6 @@ function Test-TargetResource
         [Parameter(Mandatory = $false)]
         [System.String]
         $Description = 'Website with a REST API to manage the PowerShell DSC web pull server.',
-
-        [Parameter(Mandatory = $false)]
-        [System.String]
-        $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -244,10 +337,72 @@ function Test-TargetResource
 
 
     # ToDo
+
+    return $false
 }
 
 function Get-TargetResourceDetail
 {
+}
+
+function Get-WebConfigAppSetting
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $WebConfigFullPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AppSettingName
+    )
+    
+    $appSettingValue = ''
+
+    if ((Test-Path -Path $WebConfigFullPath))
+    {
+        $webConfigXml = [xml](Get-Content -Path $WebConfigFullPath)
+
+        foreach ($item in $webConfigXml.configuration.appSettings.add)
+        {
+            if ($item.key -eq $AppSettingName)
+            {
+                $appSettingValue = $item.value
+                break
+            }
+        }
+    }
+    
+    $appSettingValue
+}
+
+function Test-WebsiteFile
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Source,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Destination
+    )
+
+    if (-not (Test-Path -Path "$Destination\bin\DSCPullServerWeb.dll"))
+    {
+        return $false
+    }
+
+    $sourceVersion      = (Get-Item -Path "$Source\bin\DSCPullServerWeb.dll").VersionInfo.FileVersion
+    $destinationVersion = (Get-Item -Path "$Destination\bin\DSCPullServerWeb.dll").VersionInfo.FileVersion
+
+    return ($sourceVersion -eq $destinationVersion)
 }
 
 Export-ModuleMember -Function *-TargetResource

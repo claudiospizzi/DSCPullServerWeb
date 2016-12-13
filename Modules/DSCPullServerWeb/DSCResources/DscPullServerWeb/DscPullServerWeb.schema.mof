@@ -3,10 +3,11 @@ class DscPullServerWeb : OMI_BaseResource
 {
   [Key] string EndpointName;
   [Write,ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] string Ensure;
-  [Write] uint32 Port;
-  [Write] string Title;
   [Write] string Description;
   [Write] string PhysicalPath;
+  [Required] string CertificateThumbPrint;
+  [Write] uint32 Port;
+  [Write] string Title;
   [Write] string ModulePath;
   [Write] string ConfigurationPath;
   [Write] string DatabasePath;
