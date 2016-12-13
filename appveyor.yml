@@ -8,6 +8,8 @@ environment:
     secure: g7atusVu/SvLWa4397EhDExCquI2srCWwO2JetLpnQ57V8Pzm27Eq9kj/v8X6wkd
   PSGalleryKey:
     secure: +o4/iom8ZO0TkCMSM0gInMHq/ioFlK7LRh2jJULTBejba3nCjp2EOv94DcTS2r20
+  DeployOnBuild: True
+  PublishProfile: Default
 
 # Install required Pester and PSScriptAnalyzer modules
 install:
