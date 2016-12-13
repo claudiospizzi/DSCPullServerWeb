@@ -49,6 +49,11 @@ $ModuleVersion = (Import-PowerShellDataFile -Path "$ProjectPath\Modules\$ModuleN
 
 Write-Verbose '** BUILD'
 
+# Copy the published ASP.NET website content to the module path into a
+# subdirectory called Asserts.
+New-Item -Path "$ProjectPath\Modules\$ModuleName\Binaries\Website\" -ItemType Directory -Force | Out-Null
+Copy-Item -Path "$ProjectPath\Sources\$ModuleName\pub\*" -Destination "$ProjectPath\Modules\$ModuleName\Binaries\Website\" -Recurse -Force
+
 # In case of PowerShell, creating a build means zipping the requried files.
 # Thanks to the project structure, all requried but no extra files are in
 # the modules folder.
