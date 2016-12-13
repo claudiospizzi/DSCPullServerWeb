@@ -23,7 +23,7 @@ function Get-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
-        
+
         [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
@@ -131,7 +131,7 @@ function Set-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
-        
+
         [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
@@ -272,7 +272,7 @@ function Set-TargetResource
 
                 $binding.AddSslCertificate($CertificateThumbPrint, 'My')
             }
-            
+
 
             # Set web.config values....
         }
@@ -298,7 +298,7 @@ function Test-TargetResource
         [Parameter(Mandatory = $false)]
         [System.UInt32]
         $Port = 8090,
-        
+
         [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
@@ -359,7 +359,7 @@ function Get-WebConfigAppSetting
         [System.String]
         $AppSettingName
     )
-    
+
     $appSettingValue = ''
 
     if ((Test-Path -Path $WebConfigFullPath))
@@ -375,7 +375,7 @@ function Get-WebConfigAppSetting
             }
         }
     }
-    
+
     $appSettingValue
 }
 
