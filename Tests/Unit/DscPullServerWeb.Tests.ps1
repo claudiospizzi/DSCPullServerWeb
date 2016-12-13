@@ -16,7 +16,7 @@ Describe 'DscPullServerWeb' {
 
         It 'Do It!' {
 
-            Get-TargetResource -EndpointName $endpointName
+            Get-TargetResource -EndpointName $endpointName -CertificateThumbPrint '1234567890ABCDEF1234567890ABCDEF12345678'
         }
     }
 
@@ -24,7 +24,7 @@ Describe 'DscPullServerWeb' {
 
         It 'Do It!' {
 
-            Set-TargetResource -EndpointName $endpointName
+            Set-TargetResource -EndpointName $endpointName -CertificateThumbPrint '1234567890ABCDEF1234567890ABCDEF12345678'
         }
     }
 
@@ -32,7 +32,7 @@ Describe 'DscPullServerWeb' {
 
         It 'Do It!' {
 
-            Test-TargetResource -EndpointName $endpointName
+            Test-TargetResource -EndpointName $endpointName -CertificateThumbPrint '1234567890ABCDEF1234567890ABCDEF12345678'
         }
     }
 }
