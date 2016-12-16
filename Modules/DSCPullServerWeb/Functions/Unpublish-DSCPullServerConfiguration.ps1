@@ -74,6 +74,8 @@ function Unpublish-DSCPullServerConfiguration
     {
         if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Unpublish Configuration (remove it from the pull server)"))
         {
+            Update-SystemNetServicePointManager
+
             Invoke-RestMethod @restMethodParam -ErrorAction Stop
         }
     }

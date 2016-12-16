@@ -79,7 +79,9 @@ function Save-DSCPullServerConfiguration
 
     try
     {
-         Invoke-RestMethod @restMethodParam -ErrorAction Stop
+        Update-SystemNetServicePointManager
+
+        Invoke-RestMethod @restMethodParam -ErrorAction Stop
     }
     catch
     {

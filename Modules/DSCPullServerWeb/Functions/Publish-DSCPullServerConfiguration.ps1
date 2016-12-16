@@ -81,6 +81,8 @@ function Publish-DSCPullServerConfiguration
     {
         if ($PSCmdlet.ShouldProcess("Configuration: $Name", "Publish Configuration (replace, if the configuration already exists on the pull server)"))
         {
+            Update-SystemNetServicePointManager
+
             $configuration = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
             $configuration.PSTypeNames.Insert(0, 'DSCPullServerWeb.Configuration')

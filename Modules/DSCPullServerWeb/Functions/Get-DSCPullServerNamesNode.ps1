@@ -67,6 +67,8 @@ function Get-DSCPullServerNamesNode
 
     try
     {
+        Update-SystemNetServicePointManager
+
         $nodes = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
         foreach ($node in $nodes)

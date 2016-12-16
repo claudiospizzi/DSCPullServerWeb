@@ -83,6 +83,8 @@ function Get-DSCPullServerConfiguration
 
     try
     {
+        Update-SystemNetServicePointManager
+
         $configurations = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
         foreach ($configuration in $configurations)

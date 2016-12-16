@@ -95,6 +95,8 @@ function Get-DSCPullServerModule
 
     try
     {
+        Update-SystemNetServicePointManager
+
         $modules = Invoke-RestMethod @restMethodParam -ErrorAction Stop
 
         foreach ($module in $modules)

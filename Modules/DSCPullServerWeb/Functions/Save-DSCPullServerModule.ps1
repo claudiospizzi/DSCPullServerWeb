@@ -84,6 +84,8 @@ function Save-DSCPullServerModule
 
     try
     {
+        Update-SystemNetServicePointManager
+
         Invoke-RestMethod @restMethodParam -ErrorAction Stop
     }
     catch
