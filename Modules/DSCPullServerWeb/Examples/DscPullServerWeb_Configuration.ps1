@@ -26,7 +26,7 @@ Configuration DSCPullServerWithWeb
             Ensure                   = 'Present'
             EndpointName             = 'PSDSCPullServer'
             Port                     = 8080
-            PhysicalPath             = "$Env:SystemDrive\inetpub\PSDSCPullServer"
+            PhysicalPath             = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb"
             CertificateThumbPrint    = '1234567890ABCDEF1234567890ABCDEF12345678'
             UseSecurityBestPractices = $true
             ModulePath               = "$Env:ProgramFiles\WindowsPowerShell\DscService\Modules"
