@@ -306,6 +306,13 @@
     <Content Include="App_Data\Demo\Databases\WS2016_WMF51_ESENT\edbres00001.jrs" />
     <Content Include="App_Data\Demo\Databases\WS2016_WMF51_ESENT\edbres00002.jrs" />
     <Content Include="App_Data\Demo\Databases\WS2016_WMF51_ESENT\edbtmp.log" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\Devices.edb" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edb.chk" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edb.log" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edb00001.log" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edbres00001.jrs" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edbres00002.jrs" />
+    <Content Include="App_Data\Demo\Databases\WS2012R2_WMF50_ESENT_EMPTY\edbtmp.log" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
