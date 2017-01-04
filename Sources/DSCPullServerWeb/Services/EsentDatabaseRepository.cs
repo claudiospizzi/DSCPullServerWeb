@@ -48,7 +48,7 @@ namespace DSCPullServerWeb.Services
                 JET_DBID databaseId = session.GetDatabaseId();
                 JET_TABLEID tableId;
 
-                if (DatabaseExists(sessionId, databaseId, TABLE_DEVICES))
+                if (DatabaseTableExists(sessionId, databaseId, TABLE_DEVICES))
                 {
                     Api.OpenTable(sessionId, databaseId, TABLE_DEVICES, OpenTableGrbit.ReadOnly, out tableId);
 
@@ -101,7 +101,7 @@ namespace DSCPullServerWeb.Services
                 JET_DBID databaseId = session.GetDatabaseId();
                 JET_TABLEID tableId;
 
-                if (DatabaseExists(sessionId, databaseId, TABLE_REGISTRATION_DATA))
+                if (DatabaseTableExists(sessionId, databaseId, TABLE_REGISTRATION_DATA))
                 {
                     Api.OpenTable(sessionId, databaseId, TABLE_REGISTRATION_DATA, OpenTableGrbit.ReadOnly, out tableId);
 
@@ -150,7 +150,7 @@ namespace DSCPullServerWeb.Services
                 JET_DBID databaseId = session.GetDatabaseId();
                 JET_TABLEID tableId;
 
-                if (DatabaseExists(sessionId, databaseId, TABLE_STATUS_REPORT))
+                if (DatabaseTableExists(sessionId, databaseId, TABLE_STATUS_REPORT))
                 {
                     Api.OpenTable(sessionId, databaseId, TABLE_STATUS_REPORT, OpenTableGrbit.ReadOnly, out tableId);
 
@@ -202,7 +202,7 @@ namespace DSCPullServerWeb.Services
 
         #endregion
 
-        private Boolean DatabaseExists(JET_SESID sessionId, JET_DBID databaseId, String tableName)
+        private Boolean DatabaseTableExists(JET_SESID sessionId, JET_DBID databaseId, String tableName)
         {
             return Api.GetTableNames(sessionId, databaseId).Select(t => t == tableName).Count() == 1;
         }
