@@ -7,7 +7,7 @@ Import-Module -Name "$ModulePath\$ModuleName" -Force
 
 Describe 'WebAPI' {
 
-    $api = 'http://localhost:34361/api'
+    $api = 'http://localhost:8090/api'
 
     Context 'Nodes by Id' {
 
