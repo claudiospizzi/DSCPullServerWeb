@@ -13,6 +13,13 @@ Action                                                                | Method  
 [Download Configuration](#download-configuration)                     | `GET`    | /api/v1/configurations/{name}/download/{file}
 [Upload Configuration](#upload-configuration)                         | `PUT`    | /api/v1/configurations/{name}
 [Delete Configuration](#delete-configuration)                         | `DELETE` | /api/v1/configurations/{name}
+[Get All Modules](#get-all-modules)                                   | `GET`    | /api/v1/modules
+[Get All Module Versions](#get-all-module-versions)                   | `GET`    | /api/v1/modules/{name}
+[Get Module](#get-module)                                             | `GET`    | /api/v1/modules/{name}/{version}
+[Calculate Module Checksum](#calculate-module-checksum)               | `GET`    | /api/v1/modules/{name}/{version}/hash
+[Download Module](#download-module)                                   | `GET`    | /api/v1/modules/{name}/{version}/download/{file}
+[Upload Module](#upload-module)                                       | `PUT`    | /api/v1/modules/{name}/{version}
+[Delete Module](#delete-module)                                       | `DELETE` | /api/v1/modules/{name}/{version}
 
 
 
