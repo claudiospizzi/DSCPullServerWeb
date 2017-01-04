@@ -5,13 +5,14 @@
 
 ## Overview
 
-* [Configurations](#configurations)
-  * [Get All Configurations](#get-all-configurations)
-  * [Get Configuration](#get-configuration)
-  * [Update Configuration Checksum](#update-configuration-checksum)
-  * [Download Configuration](#download-configuration)
-  * [Upload Configuration](#upload-configuration)
-  * [Delete Configuration](#delete-configuration)
+Action                                                          | Method   | URI
+---                                                             | ---      | ---
+[Get All Configurations](#get-all-configurations)               | `GET`    | /api/v1/configurations
+[Get Configuration](#get-configuration)                         | `GET`    | /api/v1/configurations/{name}
+[Update Configuration Checksum](#update-configuration-checksum) | `GET`    | /api/v1/configurations/{name}/hash
+[Download Configuration](#download-configuration)               | `GET`    | /api/v1/configurations/{name}/download/{file}
+[Upload Configuration](#upload-configuration)                   | `PUT`    | /api/v1/configurations/{name}
+[Delete Configuration](#delete-configuration)                   | `DELETE` | /api/v1/configurations/{name}
 
 
 
