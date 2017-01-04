@@ -1,7 +1,24 @@
 
 # DSCPullServerWeb REST API
 
-## Get All Configurations
+
+
+## Overview
+
+* [Configurations](#configurations)
+  * [Get All Configurations](#get-all-configurations)
+  * [Get Configuration](#get-configuration)
+  * [Update Configuration Checksum](#update-configuration-checksum)
+  * [Download Configuration](#download-configuration)
+  * [Upload Configuration](#upload-configuration)
+  * [Delete Configuration](#delete-configuration)
+
+
+
+## Configurations
+
+
+### Get All Configurations
 
 Returns json data about all configurations.
 
@@ -45,9 +62,246 @@ Returns json data about all configurations.
   ```
 
 * **Error Response (401 UNAUTHORIZED)**  
-  You are unauthorized to make this request.
+  You are not authorized to make this request.
 
 * **Sample Call**
   ```powershell
   Invoke-RestMethod -Method GET -Uri 'http://localhost:8090/api/v1/configurations' -UseDefaultCredentials
   ```
+
+
+### Get Configuration
+
+Returns json data about a single configuration.
+
+* **URL**  
+  /api/v1/configurations/{name}
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  **name** `[string]` *REQUIRED*
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```json
+  {
+    "Name": "FeatureDemo",
+    "Size": 1846,
+    "Created": "2016-11-17T20:32:44.8854668+01:00",
+    "Checksum": "1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B",
+    "ChecksumStatus": "Valid"
+  }
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Error Response (404 NOT FOUND)**  
+  Configuration doesn't exist.
+
+* **Sample Call**
+  ```powershell
+  Invoke-RestMethod -Method GET -Uri 'http://localhost:8090/api/v1/configurations/FeatureDemo' -UseDefaultCredentials
+  ```
+
+
+### Update Configuration Checksum
+
+Updates the checksum of a single configuration.
+
+* **URL**  
+  /api/v1/configurations/{name}/hash
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  **name** `[string]` *REQUIRED*
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```json
+  {
+    "Name": "FeatureDemo",
+    "Size": 1846,
+    "Created": "2016-11-17T20:32:44.8854668+01:00",
+    "Checksum": "1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B",
+    "ChecksumStatus": "Valid"
+  }
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Error Response (404 NOT FOUND)**  
+  Configuration doesn't exist.
+
+* **Sample Call**
+  ```powershell
+  Invoke-RestMethod -Method GET -Uri 'http://localhost:8090/api/v1/configurations/FeatureDemo/hash' -UseDefaultCredentials
+  ```
+
+
+### Download Configuration
+
+Download the configuration as MOF file. The file name is optional but usefull
+when working with a web browser.
+
+* **URL**  
+  /api/v1/configurations/{name}/download/{file}
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  **name** `[string]` *REQUIRED*
+  **file** `[string]` *OPTIONAL*
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```mof
+  /*
+  @TargetNode='localhost'
+  @GeneratedBy=claudio
+  @GenerationDate=11/03/2016 11:06:58
+  @GenerationHost=PC01
+  */
+
+  instance of MSFT_RoleResource as $MSFT_RoleResource1ref
+  {
+    ResourceID = "[WindowsFeature]RoleExample";
+    Ensure = "Present";
+    SourceInfo = "::35::9::WindowsFeature";
+    Name = "Web-Server";
+    ModuleName = "PsDesiredStateConfiguration";
+    ModuleVersion = "1.0";
+    ConfigurationName = "FeatureDemo";
+  };
+  instance of OMI_ConfigurationDocument
+  {
+    Version="2.0.0";
+    MinimumCompatibleVersion = "1.0.0";
+    CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+    Author="claudio";
+    GenerationDate="11/03/2016 11:06:58";
+    GenerationHost="PC01";
+    Name="FeatureDemo";
+  };
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Error Response (404 NOT FOUND)**  
+  Configuration doesn't exist.
+
+* **Sample Call**
+  ```powershell
+  Invoke-RestMethod -Method GET -Uri 'http://localhost:8090/api/v1/configurations/FeatureDemo/download' -OutFile 'C:\Temp\FeatureDemo.mof' -UseDefaultCredentials
+  ```
+
+
+### Upload Configuration
+
+Update a new configuration.
+
+* **URL**  
+  /api/v1/configurations/{name}
+
+* **Method**  
+  `PUT`
+
+* **Query Parameters**  
+  **name** `[string]` *REQUIRED*
+
+* **Data Parameters**  
+  ```mof
+  /*
+  @TargetNode='localhost'
+  @GeneratedBy=claudio
+  @GenerationDate=11/03/2016 11:06:58
+  @GenerationHost=PC01
+  */
+
+  instance of MSFT_RoleResource as $MSFT_RoleResource1ref
+  {
+    ResourceID = "[WindowsFeature]RoleExample";
+    Ensure = "Present";
+    SourceInfo = "::35::9::WindowsFeature";
+    Name = "Web-Server";
+    ModuleName = "PsDesiredStateConfiguration";
+    ModuleVersion = "1.0";
+    ConfigurationName = "FeatureDemo";
+  };
+  instance of OMI_ConfigurationDocument
+  {
+    Version="2.0.0";
+    MinimumCompatibleVersion = "1.0.0";
+    CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+    Author="claudio";
+    GenerationDate="11/03/2016 11:06:58";
+    GenerationHost="PC01";
+    Name="FeatureDemo";
+  };
+  ```
+
+* **Success Response (200 OK):**  
+  ```json
+  {
+    "Name": "FeatureDemo",
+    "Size": 1846,
+    "Created": "2016-11-17T20:32:44.8854668+01:00",
+    "Checksum": "1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B",
+    "ChecksumStatus": "Valid"
+  }
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Sample Call**
+  ```powershell
+  Invoke-RestMethod -Method PUT -Uri 'http://localhost:8090/api/v1/configurations/FeatureDemo' -InFile 'C:\Temp\FeatureDemo.mof' -UseDefaultCredentials
+  ```
+
+
+### Delete Configuration
+
+Delete n existing configuration.
+
+* **URL**  
+  /api/v1/configurations/{name}
+
+* **Method**  
+  `DELETE`
+
+* **Query Parameters**  
+  **name** `[string]` *REQUIRED*
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**
+  Empty
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Error Response (404 NOT FOUND)**  
+  Configuration doesn't exist.
+
+* **Sample Call**
+  ```powershell
+  Invoke-RestMethod -Method DELETE -Uri 'http://localhost:8090/api/v1/configurations/FeatureDemo' -UseDefaultCredentials
+  ```
+
+
+
