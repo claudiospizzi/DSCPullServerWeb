@@ -204,7 +204,9 @@ namespace DSCPullServerWeb.Services
 
         private Boolean DatabaseTableExists(JET_SESID sessionId, JET_DBID databaseId, String tableName)
         {
-            return Api.GetTableNames(sessionId, databaseId).Select(t => t == tableName).Count() == 1;
+            IEnumerable<String> tableNames = Api.GetTableNames(sessionId, databaseId);
+
+            return tableNames.Contains(tableName);
         }
     }
 }
