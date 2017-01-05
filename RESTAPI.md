@@ -618,5 +618,177 @@ Delete an existing module.
   Invoke-RestMethod -Method DELETE -Uri "$api/modules/SharePointDsc/1.3.0.0" -UseDefaultCredentials
   ```
 
+## Nodes
+
+### Get All Nodes (Id)
+
+Returns json data about all nodes which were registered by ConfigurationId.
+
+* **URL**  
+  /api/v1/nodes/id
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  None
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```json
+  [
+    {
+      "ConfigurationID": "DD34ADD4-DF15-4FC5-A922-B0B2D4E8809A",
+      "TargetName": "192.168.144.62",
+      "NodeCompliant": true,
+      "Dirty": false,
+      "LastHeartbeatTime": "2016-11-24T15:40:25.243",
+      "LastComplianceTime": "2016-11-24T15:40:25.243",
+      "StatusCode": 0,
+      "ServerCheckSum": "3F660B4567B21A92EF715289036FCC282E9F834465040BEED7E716855A0DA04F",
+      "TargetCheckSum": "3F660B4567B21A92EF715289036FCC282E9F834465040BEED7E716855A0DA04F"
+    },
+    {
+      "ConfigurationID": "MyConfigName",
+      "TargetName": "192.168.144.63",
+      "NodeCompliant": true,
+      "Dirty": false,
+      "LastHeartbeatTime": "2016-11-24T15:40:25.702",
+      "LastComplianceTime": "2016-11-24T15:40:25.702",
+      "StatusCode": 0,
+      "ServerCheckSum": "B49C830299D1B19A0860D01494E6E51755FD89E6FA63F8F8C6349F9D226F6888",
+      "TargetCheckSum": "B49C830299D1B19A0860D01494E6E51755FD89E6FA63F8F8C6349F9D226F6888"
+    }
+  ]
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Sample Call**
+  ```powershell
+  $api = 'https://localhost:8090/api/v1'
+  Invoke-RestMethod -Method GET -Uri "$api/nodes/id" -UseDefaultCredentials
+  ```
 
 
+### Get All Nodes (Names)
+
+Returns json data about all nodes which were registered by ConfigurationNames.
+
+* **URL**  
+  /api/v1/nodes/names
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  None
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```json
+  [
+    {
+      "AgentId": "f59847f8-424a-47c2-8fc7-151fe6acfdad",
+      "NodeName": "LAB-DSC-NODE11",
+      "LCMVersion": "2.0",
+      "IPAddress": "192.168.144.64;127.0.0.1;fe80::1c06:7782:e09a:4a10%12;::2000:0:0:0;::1;::2000:0:0:0",
+      "ConfigurationNames": [ "MySpecialConfig" ]
+    },
+    {
+      "AgentId": "b0ca2747-b1dd-11e6-80bf-00155d67ca75",
+      "NodeName": "LAB-DSC-NODE12",
+      "LCMVersion": "2.0",
+      "IPAddress": "192.168.144.63;127.0.0.1;fe80::21e3:3984:e9d2:4107%12;::2000:0:0:0;::1;::2000:0:0:0",
+      "ConfigurationNames": [ "MyConfigName" ]
+    }
+  ]
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Sample Call**
+  ```powershell
+  $api = 'https://localhost:8090/api/v1'
+  Invoke-RestMethod -Method GET -Uri "$api/nodes/names" -UseDefaultCredentials
+  ```
+
+
+
+## Reports
+
+
+### Get All Reports
+
+Returns json data about all reports.
+
+* **URL**  
+  /api/v1/reports
+
+* **Method**  
+  `GET`
+
+* **Query Parameters**  
+  None
+
+* **Data Parameters**  
+  None
+
+* **Success Response (200 OK):**  
+  ```json
+  [
+    {
+      "Id": "DD34ADD4-DF15-4FC5-A922-B0B2D4E8809A",
+      "JobId": "fdb22ac8-b253-11e6-80bf-00155d67ca74",
+      "NodeName": "",
+      "IPAddress": "",
+      "RerfreshMode": "",
+      "OperationType": "",
+      "Status": "",
+      "RebootRequested": true,
+      "StartTime": "1899-12-30T00:00:00",
+      "EndTime": "1899-12-30T00:00:00",
+      "LastModifiedTime": "2016-11-24T15:40:50.503",
+      "LCMVersion": "",
+      "ConfigurationVersion": "",
+      "ReportFormatVersion": "2.0",
+      "Errors": [ "<<< Errors in JSON format. Output truncated!!! >>>" ],
+      "StatusData": [],
+      "AdditionalData": null
+    },
+    {
+      "Id": "b0ca2747-b1dd-11e6-80bf-00155d67ca75",
+      "JobId": "b0ca2748-b1dd-11e6-80bf-00155d67ca75",
+      "NodeName": "LAB-DSC-NODE12",
+      "IPAddress": "192.168.144.63;127.0.0.1;fe80::21e3:3984:e9d2:4107%12;::2000:0:0:0;::1;::2000:0:0:0",
+      "RerfreshMode": "Pull",
+      "OperationType": "LocalConfigurationManager",
+      "Status": "Failure",
+      "RebootRequested": true,
+      "StartTime": "2016-11-24T01:34:05.58",
+      "EndTime": "2016-11-24T01:34:17.58",
+      "LastModifiedTime": "2016-11-24T15:30:43.833",
+      "LCMVersion": "2.0",
+      "ConfigurationVersion": "2.0.0",
+      "ReportFormatVersion": "2.0",
+      "Errors": [],
+      "StatusData": [ "<<< Status data in JSON format. Output truncated! >>>" ],
+      "AdditionalData": null
+    }
+  ]
+  ```
+
+* **Error Response (401 UNAUTHORIZED)**  
+  You are not authorized to make this request.
+
+* **Sample Call**
+  ```powershell
+  $api = 'https://localhost:8090/api/v1'
+  Invoke-RestMethod -Method GET -Uri "$api/reports" -UseDefaultCredentials
+  ```
