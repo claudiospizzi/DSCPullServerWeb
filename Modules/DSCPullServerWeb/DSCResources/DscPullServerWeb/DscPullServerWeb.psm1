@@ -191,8 +191,31 @@ function Set-TargetResource
             {
                 Write-Verbose "Removing website $EndpointName"
 
-                # PSWSIISEndpoint\Remove-PSWSEndpoint -SiteName $EndpointName
-                # ToDo: Remove Website
+                $physicalPath = $website.PhysicalPath
+
+                # Remove the website if it does exist
+                if (Test-Path -Path "IIS:\Sites\$EndpointName")
+                {
+                    Write-Verbose 'Remove the IIS website'
+
+                    Remove-Website -Name $EndpointName
+                }
+
+                # Remove the app pool if it does exist
+                if (Test-Path -Path "IIS:\AppPools\$EndpointName")
+                {
+                    Write-Verbose "Remove the IIS app pool"
+
+                    Remove-WebAppPool -Name $EndpointName
+                }
+
+                # Remove the physical path
+                if (Test-Path -Path $physicalPath)
+                {
+                    Write-Verbose 'Remove the physical path'
+
+                    Remove-Item -Path $physicalPath -Confirm:$false -Recurse -Force
+                }
             }
         }
     }
