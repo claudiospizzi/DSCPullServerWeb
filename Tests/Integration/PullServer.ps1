@@ -51,6 +51,7 @@ Configuration PullServerCfg
             #     Ensure                = 'Present'
             #     EndpointName          = "PSDSCPullServerWeb$name"
             #     Port                  = $config.WebPort
+            #     Name                  = $name
             #     Title                 = "DSC Pull Server Web $name"
             #     Description           = "Web and API access to the $name DSC Pull Server."
             #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb$name"

@@ -47,6 +47,7 @@ Configuration DSCPullServerWithWeb
         #     Port                  = 8090
         #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb"
         #     CertificateThumbPrint = '1234567890ABCDEF1234567890ABCDEF12345678'
+        #     Name                  = 'Default'
         #     Title                 = 'DSC Pull Server Web'
         #     Description           = 'Web and API access to the DSC Pull Server.'
         #     ModulePath            = "$Env:ProgramFiles\WindowsPowerShell\DscService\Modules"
