@@ -18,9 +18,10 @@ The DSCPullServerWeb PowerShell module provides an extension to an on-premises
 DSC Pull Server. It will provide a user-friendly website to manage modules and
 configurations as well as show all registered nodes and their reports.
 
-In addition, the website provides a REST API to get all information
-automatically. The module contains various PowerShell cmdlets with the noun
-prefix DSCPullServer to manage the modules and configurations from PowerShell.
+In addition, the website provides a [REST API]. The website UI itself uses the
+REST API to interact with the DSC Pull Server. The REST API can be called
+directly or throught the provided [PowerShell cmdlets](#features). The cmdlets
+mock all API functions.
 
 
 ## Requirements
@@ -98,6 +99,10 @@ manually on your local system:
 ### 1.0.0
 
 * Initial release
+* HTML5-based website with a user-friendly UI
+* REST API to interact with the DSC Pull Server
+* Cmdlets to interact with the REST API
+* DSC resource to setup the DSC Pull Server Web endpoint
 
 
 ## Contribute
@@ -119,6 +124,8 @@ to `.\Scripts\debug.ps1`, which is ignored by git. Now add the command to the
 debug file and start it.
 
 
+
+[REST API]: (https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/RESTAPI.md)
 
 [PowerShell Gallery]: https://www.powershellgallery.com/packages/DSCPullServerWeb
 [PowerShellGet]: https://technet.microsoft.com/en-us/library/dn807169.aspx
