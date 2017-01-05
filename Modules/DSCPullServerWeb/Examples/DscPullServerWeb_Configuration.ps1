@@ -45,7 +45,7 @@ Configuration DSCPullServerWithWeb
         #     Ensure                = 'Present'
         #     EndpointName          = 'PSDSCPullServerWeb'
         #     Port                  = 8090
-        #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServer"
+        #     PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb"
         #     CertificateThumbPrint = '1234567890ABCDEF1234567890ABCDEF12345678'
         #     Title                 = 'DSC Pull Server Web'
         #     Description           = 'Web and API access to the DSC Pull Server.'
