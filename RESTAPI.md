@@ -9,14 +9,14 @@ Action                                                                | Method  
 ---                                                                   | ---      | ---
 [Get All Configurations](#get-all-configurations)                     | `GET`    | /api/v1/configurations
 [Get Configuration](#get-configuration)                               | `GET`    | /api/v1/configurations/{name}
-[Calculate Configuration Checksum](#calculate-configuration-checksum) | `GET`    | /api/v1/configurations/{name}/hash
+[Calculate Configuration Checksum](#calculate-configuration-checksum) | `PATCH`  | /api/v1/configurations/{name}/checksum
 [Download Configuration](#download-configuration)                     | `GET`    | /api/v1/configurations/{name}/download/{file}
 [Upload Configuration](#upload-configuration)                         | `PUT`    | /api/v1/configurations/{name}
 [Delete Configuration](#delete-configuration)                         | `DELETE` | /api/v1/configurations/{name}
 [Get All Modules](#get-all-modules)                                   | `GET`    | /api/v1/modules
 [Get All Module Versions](#get-all-module-versions)                   | `GET`    | /api/v1/modules/{name}
 [Get Module](#get-module)                                             | `GET`    | /api/v1/modules/{name}/{version}
-[Calculate Module Checksum](#calculate-module-checksum)               | `GET`    | /api/v1/modules/{name}/{version}/hash
+[Calculate Module Checksum](#calculate-module-checksum)               | `PATCH`  | /api/v1/modules/{name}/{version}/checksum
 [Download Module](#download-module)                                   | `GET`    | /api/v1/modules/{name}/{version}/download/{file}
 [Upload Module](#upload-module)                                       | `PUT`    | /api/v1/modules/{name}/{version}
 [Delete Module](#delete-module)                                       | `DELETE` | /api/v1/modules/{name}/{version}
@@ -75,7 +75,7 @@ Returns json data about all configurations.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/configurations" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/configurations" -UseDefaultCredentials
   ```
 
 
@@ -115,7 +115,7 @@ Returns json data about a single configuration.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/configurations/FeatureDemo" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/configurations/FeatureDemo" -UseDefaultCredentials
   ```
 
 
@@ -124,7 +124,7 @@ Returns json data about a single configuration.
 Updates the checksum of a single configuration.
 
 * **URL**  
-  /api/v1/configurations/{name}/hash
+  /api/v1/configurations/{name}/checksum
 
 * **Method**  
   `GET`
@@ -155,7 +155,7 @@ Updates the checksum of a single configuration.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/configurations/FeatureDemo/hash" -UseDefaultCredentials
+  Invoke-RestMethod -Method Patch -Uri "$api/configurations/FeatureDemo/checksum" -UseDefaultCredentials
   ```
 
 
@@ -217,7 +217,7 @@ when working with a web browser.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/configurations/FeatureDemo/download" -OutFile 'C:\FeatureDemo.mof' -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/configurations/FeatureDemo/download" -OutFile 'C:\FeatureDemo.mof' -UseDefaultCredentials
   ```
 
 
@@ -282,7 +282,7 @@ Update a new configuration.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method PUT -Uri "$api/configurations/FeatureDemo" -InFile 'C:\FeatureDemo.mof' -UseDefaultCredentials
+  Invoke-RestMethod -Method Put -Uri "$api/configurations/FeatureDemo" -InFile 'C:\FeatureDemo.mof' -UseDefaultCredentials
   ```
 
 
@@ -374,7 +374,7 @@ Returns json data about all modules.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/modules" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/modules" -UseDefaultCredentials
   ```
 
 
@@ -425,7 +425,7 @@ Returns json data about all versions of a module.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/modules/SharePointDsc" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/modules/SharePointDsc" -UseDefaultCredentials
   ```
 
 
@@ -467,7 +467,7 @@ Returns json data about a module.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/modules/SharePointDsc/1.3.0.0" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/modules/SharePointDsc/1.3.0.0" -UseDefaultCredentials
   ```
 
 
@@ -476,7 +476,7 @@ Returns json data about a module.
 Updates the checksum of a single module.
 
 * **URL**  
-  /api/v1/modules/{name}/{version}/hash
+  /api/v1/modules/{name}/{version}/checksum
 
 * **Method**  
   `GET`
@@ -509,7 +509,7 @@ Updates the checksum of a single module.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/modules/SharePointDsc/1.3.0.0/hash" -UseDefaultCredentials
+  Invoke-RestMethod -Method Patch -Uri "$api/modules/SharePointDsc/1.3.0.0/checksum" -UseDefaultCredentials
   ```
 
 
@@ -544,7 +544,7 @@ when working with a web browser.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/modules/SharePointDsc/1.3.0.0/download" -OutFile 'C:\SharePointDsc_1.3.0.0.zip' -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/modules/SharePointDsc/1.3.0.0/download" -OutFile 'C:\SharePointDsc_1.3.0.0.zip' -UseDefaultCredentials
   ```
 
 
@@ -583,7 +583,7 @@ Update a new module.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method PUT -Uri "$api/modules/SharePointDsc/1.3.0.0' -InFile 'C:\SharePointDsc_1.3.0.0.zip" -UseDefaultCredentials
+  Invoke-RestMethod -Method Put -Uri "$api/modules/SharePointDsc/1.3.0.0' -InFile 'C:\SharePointDsc_1.3.0.0.zip" -UseDefaultCredentials
   ```
 
 
@@ -670,7 +670,7 @@ Returns json data about all nodes which were registered by ConfigurationId.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/nodes/id" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/nodes/id" -UseDefaultCredentials
   ```
 
 
@@ -716,7 +716,7 @@ Returns json data about all nodes which were registered by ConfigurationNames.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/nodes/names" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/nodes/names" -UseDefaultCredentials
   ```
 
 
@@ -790,5 +790,5 @@ Returns json data about all reports.
 * **Sample Call**
   ```powershell
   $api = 'https://localhost:8090/api/v1'
-  Invoke-RestMethod -Method GET -Uri "$api/reports" -UseDefaultCredentials
+  Invoke-RestMethod -Method Get -Uri "$api/reports" -UseDefaultCredentials
   ```

@@ -332,8 +332,8 @@ function apiUploadConfiguration(file) {
 
 function apiHashConfiguration(name) {
     $.ajax({
-        url: '/api/v1/configurations/' + name + '/hash',
-        type: 'GET',
+        url: '/api/v1/configurations/' + name + '/checksum',
+        type: 'PATCH',
         success: function (result) {
             uiUpdateTable('configurations');
         },
@@ -385,8 +385,8 @@ function apiUploadModule(file) {
 
 function apiHashModule(name, version) {
     $.ajax({
-        url: '/api/v1/modules/' + name + '/' + version + '/hash',
-        type: 'GET',
+        url: '/api/v1/modules/' + name + '/' + version + '/checksum',
+        type: 'PATCH',
         success: function (result) {
             uiUpdateTable('modules');
         },

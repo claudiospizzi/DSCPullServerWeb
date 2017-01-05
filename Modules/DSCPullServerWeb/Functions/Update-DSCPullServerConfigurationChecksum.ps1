@@ -57,8 +57,8 @@ function Update-DSCPullServerConfigurationChecksum
 
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
-        Method = 'Get'
-        Uri    = "$Uri/v1/configurations/$Name/hash"
+        Method = 'Patch'
+        Uri    = "$Uri/v1/configurations/$Name/checksum"
     }
 
     # Depending on the credential input, add the default or specfic credentials.

@@ -61,8 +61,8 @@ function Update-DSCPullServerModuleChecksum
 
     # Use splatting to prepare the parameters.
     $restMethodParam = @{
-        Method = 'Get'
-        Uri    = "$Uri/v1/modules/$Name/$Version/hash"
+        Method = 'Patch'
+        Uri    = "$Uri/v1/modules/$Name/$Version/checksum"
     }
 
     # Depending on the credential input, add the default or specfic credentials.
