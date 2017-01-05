@@ -20,6 +20,9 @@ Action                                                                | Method  
 [Download Module](#download-module)                                   | `GET`    | /api/v1/modules/{name}/{version}/download/{file}
 [Upload Module](#upload-module)                                       | `PUT`    | /api/v1/modules/{name}/{version}
 [Delete Module](#delete-module)                                       | `DELETE` | /api/v1/modules/{name}/{version}
+[Get All Nodes (Id)](#get-all-nodes-id)                               | `GET`    | /api/v1/nodes/id
+[Get All Nodes (Names)](#get-all-nodes-names)                         | `GET`    | /api/v1/nodes/names
+[Get All Reports](#get-all-reports)                                   | `GET`    | /api/v1/reports
 
 
 

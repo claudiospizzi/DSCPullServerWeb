@@ -104,21 +104,21 @@ Describe 'WebAPI' {
             @{
                 Name           = 'FeatureDemo'
                 Size           = 1846
-                Created        = [DateTime] '2016-11-17T17:45:38.1428987+01:00'
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Configuration\FeatureDemo.mof").CreationTime
                 Checksum       = '1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B'
                 ChecksumStatus = 'Valid'
             }
             @{
                 Name           = 'FileDemo'
                 Size           = 2178
-                Created        = [DateTime] '2016-11-17T17:45:38.1619006+01:00'
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Configuration\FileDemo.mof").CreationTime
                 Checksum       = '2DEF328446FF7D9CA96DF51495394D26697CB43ADF3E671C133820755D2A6E2D'
                 ChecksumStatus = 'Invalid'
             }
             @{
                 Name           = 'RegistryDemo'
                 Size           = 2026
-                Created        = [DateTime] '2016-11-17T18:57:54.7429415+01:00'
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Configuration\RegistryDemo.mof").CreationTime
                 Checksum       = ''
                 ChecksumStatus = 'Missing'
             }
@@ -281,7 +281,7 @@ Describe 'WebAPI' {
                 Name           = 'SharePointDsc'
                 Version        = '1.3.0.0'
                 Size           = 429285
-                Created        = [DateTime] "2016-11-03T15:11:20.4960172+01:00"
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Modules\SharePointDsc_1.3.0.0.zip").CreationTime
                 Checksum       = 'EBBE30927695ADAE86A989C2627653861563E81C98B855303EC92138A0212F47'
                 ChecksumStatus = 'Valid'
             }
@@ -289,7 +289,7 @@ Describe 'WebAPI' {
                 Name           = 'SharePointDsc'
                 Version        = '1.4.0.0'
                 Size           = 441882
-                Created        = [DateTime] "2016-11-03T15:11:48.6318305+01:00"
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Modules\SharePointDsc_1.4.0.0.zip").CreationTime
                 Checksum       = '35B1622E1890BAA2D529EDFB07285BEEFCFE8F8D3A4640FF785E1E30E64181A9'
                 ChecksumStatus = 'Invalid'
             }
@@ -297,7 +297,7 @@ Describe 'WebAPI' {
                 Name           = 'SystemLocaleDsc'
                 Version        = '1.1.0.0'
                 Size           = 9566
-                Created        = [DateTime] "2016-11-03T15:13:04.2023868+01:00"
+                Created        = (Get-Item -Path "$PSScriptRoot\..\..\Sources\DSCPullServerWeb\App_Data\Demo\Modules\SystemLocaleDsc_1.1.0.0.zip").CreationTime
                 Checksum       = ''
                 ChecksumStatus = 'Missing'
             }
