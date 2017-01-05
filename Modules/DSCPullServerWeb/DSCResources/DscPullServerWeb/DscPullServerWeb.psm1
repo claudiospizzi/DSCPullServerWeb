@@ -301,6 +301,11 @@ function Set-TargetResource
             {
                 Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'RegistrationKeyPath' -AppSettingValue $RegistrationKeyPath
             }
+
+
+            # Start
+            Start-Website -Name $EndpointName -ErrorAction SilentlyContinue
+            Start-WebAppPool -Name $EndpointName -ErrorAction SilentlyContinue
         }
     }
 }
@@ -362,13 +367,38 @@ function Test-TargetResource
     Write-Verbose "Test current configuration of $EndpointName for desired state"
 
 
-    # ToDo
+    # Get the current configuration
+
+    $current = Get-TargetResource @PSBoundParameters
+
+
+    # Verify in case the desired state is absent
+
+    if (($Ensure -eq 'Absent') -and
+        ($Ensure -eq $current.Ensure))
+    {
+        return $true
+    }
+
+
+    # Verify in case the desired state is present
+
+    if (($Ensure                -eq 'Present') -and
+        ($Ensure                -eq $current.Ensure) -and
+        ($PhysicalPath          -eq $current.PhysicalPath) -and
+        ($Port                  -eq $current.Port) -and
+        ($CertificateThumbPrint -eq $current.CertificateThumbPrint) -and
+        ($Title                 -eq $current.Title) -and
+        ($Description           -eq $current.Description) -and
+        ($ModulePath            -eq $current.ModulePath) -and
+        ($ConfigurationPath     -eq $current.ConfigurationPath) -and
+        ($DatabasePath          -eq $current.DatabasePath) -and
+        ($RegistrationKeyPath   -eq $current.RegistrationKeyPath))
+    {
+        return $true
+    }
 
     return $false
-}
-
-function Get-TargetResourceDetail
-{
 }
 
 function Get-WebConfigAppSetting
