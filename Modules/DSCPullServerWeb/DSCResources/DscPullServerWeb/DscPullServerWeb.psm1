@@ -1,6 +1,4 @@
 
-#Import-Module "$PSScriptRoot\PSWSIISEndpoint.psm1" -Verbose:$false
-
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSDSCDscTestsPresent', '')]
 param()
 
@@ -21,12 +19,12 @@ function Get-TargetResource
         $Ensure = 'Present',
 
         [Parameter(Mandatory = $false)]
-        [System.UInt32]
-        $Port = 8090,
-
-        [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $false)]
+        [System.UInt32]
+        $Port = 8090,
 
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -58,50 +56,51 @@ function Get-TargetResource
     )
 
 
-    Write-Verbose "Get current configuration for $EndpointName"
-
-
-    $website = Get-Website -Name $EndpointName
-
-    if ($null -ne $website)
+    if (Test-Path -Path "IIS:\Sites\$EndpointName")
     {
+        Write-Verbose "Website $EndpointName found, DscPullServerWeb is present."
+
         $Ensure = 'Present'
 
-        # Get the IIS port from the binding information and the physical path
-        $Port         = $website.Bindings.Collection[0].BindingInformation.Split(':')[1]
-        $PhysicalPath = $website.physicalPath
+        # Get Website and the full path for web.config file
+        $websiteItem   = Get-Item -Path "IIS:\Sites\$EndpointName"
+        $webConfigPath = Join-Path -Path $website.physicalPath -ChildPath 'web.config'
 
-        # Get Full Path for web.config file
-        $webConfigFullPath = Join-Path -Path $website.physicalPath -ChildPath 'web.config'
+        # Get the IIS port from the binding information and the physical path
+        $PhysicalPath          = $websiteItem.physicalPath
+        $Port                  = $websiteItem.Bindings.Collection[0].BindingInformation.Split(':')[1]
+        $CertificateThumbPrint = $websiteItem.Bindings.Collection[0].CertificateHash
 
         # Get the title and description information
-        $Title       = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'Title'
-        $Description = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'Description'
+        $Title       = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title'
+        $Description = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Description'
 
         # Get module, configuration, database and registry key path from the web.config file
-        $ModulePath          = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'ModulePath'
-        $ConfigurationPath   = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'ConfigurationPath'
-        $DatabasePath        = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'DatabasePath'
-        $RegistrationKeyPath = Get-WebConfigAppSetting -WebConfigFullPath $webConfigFullPath -AppSettingName 'RegistrationKeyPath'
+        $ModulePath          = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ModulePath'
+        $ConfigurationPath   = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ConfigurationPath'
+        $DatabasePath        = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'DatabasePath'
+        $RegistrationKeyPath = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'RegistrationKeyPath'
     }
     else
     {
+        Write-Verbose "Website $EndpointName not found, DscPullServerWeb is absent."
+
         $Ensure              = 'Absent'
+        $PhysicalPath        = ''
         $Port                = 0
         $Title               = ''
         $Description         = ''
-        $PhysicalPath        = ''
         $ModulePath          = ''
         $ConfigurationPath   = ''
         $DatabasePath        = ''
         $RegistrationKeyPath = ''
     }
 
-    @{
+    return @{
         EndpointName          = $EndpointName
         Ensure                = $Ensure
-        Port                  = $Port
         PhysicalPath          = $PhysicalPath
+        Port                  = $Port
         CertificateThumbPrint = $CertificateThumbPrint
         Title                 = $Title
         Description           = $Description
@@ -129,12 +128,12 @@ function Set-TargetResource
         $Ensure = 'Present',
 
         [Parameter(Mandatory = $false)]
-        [System.UInt32]
-        $Port = 8090,
-
-        [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $false)]
+        [System.UInt32]
+        $Port = 8090,
 
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -195,7 +194,7 @@ function Set-TargetResource
         if ($PSCmdlet.ShouldProcess($EndpointName, 'Add'))
         {
             $physicalPathSource = $PSScriptRoot | Split-Path | Split-Path | Join-Path -ChildPath 'Binaries\Website'
-
+            $webConfigPath = Join-Path -Path $PhysicalPath -ChildPath 'web.config'
 
             # Create the physical path folder if it does not exist
             if (-not (Test-Path -Path $PhysicalPath))
@@ -259,7 +258,7 @@ function Set-TargetResource
             }
 
 
-            # Check the certificate binding
+            # Check and update the certificate binding
             $binding = (Get-Item -Path "IIS:\Sites\$EndpointName").Bindings.Collection
             if ($binding.certificateHash -ne $CertificateThumbPrint)
             {
@@ -274,7 +273,34 @@ function Set-TargetResource
             }
 
 
-            # Set web.config values....
+            # Check title and description configurations
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title') -ne $Title)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title' -AppSettingValue $Title
+            }
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Description') -ne $Description)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Description' -AppSettingValue $Description
+            }
+
+
+            # Check path configurations
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ModulePath') -ne $ModulePath)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ModulePath' -AppSettingValue $ModulePath
+            }
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ConfigurationPath') -ne $ConfigurationPath)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'ConfigurationPath' -AppSettingValue $ConfigurationPath
+            }
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'DatabasePath') -ne $DatabasePath)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'DatabasePath' -AppSettingValue $DatabasePath
+            }
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'RegistrationKeyPath') -ne $RegistrationKeyPath)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'RegistrationKeyPath' -AppSettingValue $RegistrationKeyPath
+            }
         }
     }
 }
@@ -296,12 +322,12 @@ function Test-TargetResource
         $Ensure = 'Present',
 
         [Parameter(Mandatory = $false)]
-        [System.UInt32]
-        $Port = 8090,
-
-        [Parameter(Mandatory = $false)]
         [System.String]
         $PhysicalPath = "$Env:SystemDrive\inetpub\$EndpointName",
+
+        [Parameter(Mandatory = $false)]
+        [System.UInt32]
+        $Port = 8090,
 
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -353,7 +379,7 @@ function Get-WebConfigAppSetting
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $WebConfigFullPath,
+        $Path,
 
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -362,9 +388,9 @@ function Get-WebConfigAppSetting
 
     $appSettingValue = ''
 
-    if ((Test-Path -Path $WebConfigFullPath))
+    if ((Test-Path -Path $Path))
     {
-        $webConfigXml = [xml](Get-Content -Path $WebConfigFullPath)
+        $webConfigXml = [xml](Get-Content -Path $Path)
 
         foreach ($item in $webConfigXml.configuration.appSettings.add)
         {
@@ -377,6 +403,43 @@ function Get-WebConfigAppSetting
     }
 
     $appSettingValue
+}
+
+function Set-WebConfigAppSetting
+{
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AppSettingName,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AppSettingValue
+    )
+
+    if ((Test-Path -Path $Path))
+    {
+        if ($PSCmdlet.ShouldProcess($Path, "Update $AppSettingName"))
+        {
+            $webConfigXml = [xml](Get-Content -Path $Path)
+
+            foreach ($item in $webConfigXml.configuration.appSettings.add)
+            {
+                if ($item.key -eq $AppSettingName)
+                {
+                    $item.value = $AppSettingValue
+                }
+            }
+
+            $webConfigXml.Save($Path)
+        }
+    }
 }
 
 function Test-WebsiteFile
