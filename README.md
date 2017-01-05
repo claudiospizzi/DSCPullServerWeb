@@ -96,6 +96,10 @@ manually on your local system:
 
 ## Versions
 
+### 1.0.2
+
+* Update the DSC resource removal action
+
 ### 1.0.1
 
 * Fix empty path in DSC resoruce
