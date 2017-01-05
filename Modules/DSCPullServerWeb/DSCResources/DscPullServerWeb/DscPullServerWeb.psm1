@@ -68,7 +68,7 @@ function Get-TargetResource
 
         # Get Website and the full path for web.config file
         $websiteItem   = Get-Item -Path "IIS:\Sites\$EndpointName"
-        $webConfigPath = Join-Path -Path $website.physicalPath -ChildPath 'web.config'
+        $webConfigPath = Get-Website -Name $EndpointName | Select-Object -ExpandProperty PhysicalPath | Join-Path -ChildPath 'web.config'
 
         # Get the IIS port from the binding information and the physical path
         $PhysicalPath          = $websiteItem.physicalPath
