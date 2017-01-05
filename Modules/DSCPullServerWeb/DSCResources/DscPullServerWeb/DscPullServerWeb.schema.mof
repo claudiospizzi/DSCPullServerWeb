@@ -6,6 +6,7 @@ class DscPullServerWeb : OMI_BaseResource
   [Write] string PhysicalPath;
   [Write] uint32 Port;
   [Required] string CertificateThumbPrint;
+  [Write] string Name;
   [Write] string Title;
   [Write] string Description;
   [Write] string ModulePath;

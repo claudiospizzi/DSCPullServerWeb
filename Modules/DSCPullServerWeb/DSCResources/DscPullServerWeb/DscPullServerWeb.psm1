@@ -32,6 +32,10 @@ function Get-TargetResource
 
         [Parameter(Mandatory = $false)]
         [System.String]
+        $Name = 'Default',
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
         $Title = 'DSC Pull Server Web',
 
         [Parameter(Mandatory = $false)]
@@ -72,6 +76,7 @@ function Get-TargetResource
         $CertificateThumbPrint = $websiteItem.Bindings.Collection[0].CertificateHash
 
         # Get the title and description information
+        $Name        = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Name'
         $Title       = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title'
         $Description = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Description'
 
@@ -88,6 +93,7 @@ function Get-TargetResource
         $Ensure              = 'Absent'
         $PhysicalPath        = ''
         $Port                = 0
+        $Name                = ''
         $Title               = ''
         $Description         = ''
         $ModulePath          = ''
@@ -102,6 +108,7 @@ function Get-TargetResource
         PhysicalPath          = $PhysicalPath
         Port                  = $Port
         CertificateThumbPrint = $CertificateThumbPrint
+        Name                  = $Name
         Title                 = $Title
         Description           = $Description
         ModulePath            = $ModulePath
@@ -138,6 +145,10 @@ function Set-TargetResource
         [Parameter(Mandatory = $true)]
         [System.String]
         $CertificateThumbPrint,
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -273,7 +284,11 @@ function Set-TargetResource
             }
 
 
-            # Check title and description configurations
+            # Check name, title and description configurations
+            if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Name') -ne $Name)
+            {
+                Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Name' -AppSettingValue $Name
+            }
             if ((Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title') -ne $Title)
             {
                 Set-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title' -AppSettingValue $Title
@@ -340,6 +355,10 @@ function Test-TargetResource
 
         [Parameter(Mandatory = $false)]
         [System.String]
+        $Name = 'Default',
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
         $Title = 'DSC Pull Server Web',
 
         [Parameter(Mandatory = $false)]
@@ -388,6 +407,7 @@ function Test-TargetResource
         ($PhysicalPath          -eq $current.PhysicalPath) -and
         ($Port                  -eq $current.Port) -and
         ($CertificateThumbPrint -eq $current.CertificateThumbPrint) -and
+        ($Name                  -eq $current.Name) -and
         ($Title                 -eq $current.Title) -and
         ($Description           -eq $current.Description) -and
         ($ModulePath            -eq $current.ModulePath) -and
