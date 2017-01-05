@@ -14,12 +14,22 @@ configurations.
 
 ## Introduction
 
-tbd
+The DSCPullServerWeb PowerShell module provides an extension to an on-premises
+DSC Pull Server. It will provide a user-friendly website to manage modules and
+configurations as well as show all registered nodes and their reports.
+
+In addition, the website provides a REST API to get all information
+automatically. The module contains various PowerShell cmdlets with the noun
+prefix DSCPullServer to manage the modules and configurations from PowerShell.
 
 
 ## Requirements
 
-tbd
+The following minimum requirements are necessary to use this module:
+
+* Windows PowerShell 5.0
+* Windows Server 2012 R2
+* DSC Pull Server with ESENT database
 
 
 ## Installation
@@ -85,9 +95,9 @@ manually on your local system:
 
 ## Versions
 
-### 0.0.1
+### 1.0.0
 
-* tbd
+* Initial release
 
 
 ## Contribute
