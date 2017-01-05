@@ -9,7 +9,7 @@
 WebAPI and website to manage the DSC pull server artifacts nodes, modules and
 configurations.
 
-![DSC Pull Server Web](https://raw.githubusercontent.com/claudiospizzi/DSCPullServerWeb/dev/Assets/screenshot.png)
+![DSC Pull Server Web](https://raw.githubusercontent.com/claudiospizzi/DSCPullServerWeb/dev/Assets/configurations.png)
 
 
 ## Introduction
