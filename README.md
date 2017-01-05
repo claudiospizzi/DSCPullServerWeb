@@ -96,6 +96,11 @@ manually on your local system:
 
 ## Versions
 
+### 1.0.1
+
+* Fix empty path in DSC resoruce
+* Change GET /hash to PATCH /checksum
+
 ### 1.0.0
 
 * Initial release
