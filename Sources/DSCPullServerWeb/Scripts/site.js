@@ -261,6 +261,10 @@ $('#reportsRefreshButton').on("click", function (e) {
 // ===============================
 
 $('#configurationsUploadButton').on('change', function (e) {
+    if (e.target.files.length === 0) {
+        // No file selected
+        return
+    }
     if (e.target.files.length !== 1) {
         uiShowModal('Configuration Upload Failed', 'Please select exactly one file to upload.');
         return;
@@ -287,6 +291,10 @@ $('#configurationsRefreshButton').on("click", function (e) {
 // ========================
 
 $('#modulesUploadButton').on('change', function (e) {
+    if (e.target.files.length === 0) {
+        // No file selected
+        return
+    }
     if (e.target.files.length !== 1) {
         uiShowModal('Module Upload Failed', 'Please select exactly one file to upload.');
         return;
