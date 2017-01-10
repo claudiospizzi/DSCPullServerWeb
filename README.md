@@ -35,6 +35,8 @@ The following minimum requirements are necessary to use this module:
 
 ## Installation
 
+### Module
+
 With PowerShell 5.0, the new [PowerShell Gallery] was introduced. Additionally,
 the new module [PowerShellGet] was added to the default WMF 5.0 installation.
 With the cmdlet `Install-Module`, a published module from the PowerShell Gallery
@@ -50,6 +52,12 @@ manually on your local system:
 
 1. Download the latest release from GitHub as a ZIP file: [GitHub Releases]
 2. Extract the module and install it: [Installing a PowerShell Module]
+
+### Website
+
+The DSC Pull Server website can be installed with the embedded DSC resource.
+Refer to the following example to install the website on your DSC pull server:
+[DscPullServerWeb_Configuration.ps1](https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/Modules/DSCPullServerWeb/Examples/DscPullServerWeb_Configuration.ps1)
 
 
 ## Features
