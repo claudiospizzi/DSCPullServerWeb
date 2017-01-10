@@ -30,17 +30,20 @@ Configuration DSCPullServerWithWeb
 
         xDscWebService 'DSCPullServer'
         {
+            State                    = 'Started'
             Ensure                   = 'Present'
+
             EndpointName             = 'PSDSCPullServer'
             Port                     = 8080
+
             PhysicalPath             = "$Env:SystemDrive\inetpub\PSDSCPullServer"
             CertificateThumbPrint    = $CertificateThumbPrint
             UseSecurityBestPractices = $true
+
             ModulePath               = "$Env:ProgramFiles\WindowsPowerShell\DscService\Modules"
             ConfigurationPath        = "$Env:ProgramFiles\WindowsPowerShell\DscService\Configuration"
             DatabasePath             = "$Env:ProgramFiles\WindowsPowerShell\DscService"
             RegistrationKeyPath      = "$Env:ProgramFiles\WindowsPowerShell\DscService"
-            State                    = 'Started'
 
             DependsOn = @(
                 '[WindowsFeature]DSCServiceFeature'
@@ -50,13 +53,17 @@ Configuration DSCPullServerWithWeb
         DscPullServerWeb 'DSCPullServerWeb'
         {
             Ensure                = 'Present'
+
             EndpointName          = 'PSDSCPullServerWeb'
             Port                  = 8090
+
             PhysicalPath          = "$Env:SystemDrive\inetpub\PSDSCPullServerWeb"
             CertificateThumbPrint = $CertificateThumbPrint
+
             Name                  = 'Default'
             Title                 = 'DSC Pull Server Web'
             Description           = 'Web and API access to the DSC Pull Server.'
+
             ModulePath            = "$Env:ProgramFiles\WindowsPowerShell\DscService\Modules"
             ConfigurationPath     = "$Env:ProgramFiles\WindowsPowerShell\DscService\Configuration"
             DatabasePath          = "$Env:ProgramFiles\WindowsPowerShell\DscService"
