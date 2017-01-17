@@ -104,6 +104,10 @@ Refer to the following example to install the website on your DSC pull server:
 
 ## Versions
 
+### Unreleased
+
+* Add Windows Firewall rule for the DSC Pull Server Web port
+
 ### 1.0.2
 
 * Update the DSC resource removal action

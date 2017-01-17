@@ -216,6 +216,9 @@ function Set-TargetResource
 
                     Remove-Item -Path $physicalPath -Confirm:$false -Recurse -Force
                 }
+
+                # Remove Windows Firewall rule
+                & netsh.exe advfirewall firewall delete rule name=$EndpointName protocol=tcp localport=$Port | Out-Null
             }
         }
     }
@@ -305,6 +308,11 @@ function Set-TargetResource
 
                 $binding.AddSslCertificate($CertificateThumbPrint, 'My')
             }
+
+
+            # Add Windows Firewall rule
+            & netsh.exe advfirewall firewall delete rule name=$EndpointName protocol=tcp localport=$Port | Out-Null
+            & netsh.exe advfirewall firewall add rule name=$EndpointName dir=in action=allow protocol=TCP localport=$Port | Out-Null
 
 
             # Check name, title and description configurations
