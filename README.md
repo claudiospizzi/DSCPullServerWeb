@@ -140,9 +140,19 @@ To debug the module, just copy the existing `.\Scripts\debug.default.ps1` file
 to `.\Scripts\debug.ps1`, which is ignored by git. Now add the command to the
 debug file and start it.
 
+### Acknowledgment
+
+This module has been inspired by [grayzu] and his presentation at the PowerShell
+Summit EU 2015 about the [DSCPullServerUI] in the [What's Up with the DSC Pull Server]
+session.
 
 
-[REST API]: (https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/RESTAPI.md)
+
+[grayzu]: https://github.com/grayzu
+[DSCPullServerUI]: https://github.com/grayzu/DSCPullServerUI
+[What's Up with the DSC Pull Server]: https://www.youtube.com/watch?v=y3-_XBQTpS8
+
+[REST API]: https://github.com/claudiospizzi/DSCPullServerWeb/blob/dev/RESTAPI.md
 
 [PowerShell Gallery]: https://www.powershellgallery.com/packages/DSCPullServerWeb
 [PowerShellGet]: https://technet.microsoft.com/en-us/library/dn807169.aspx
