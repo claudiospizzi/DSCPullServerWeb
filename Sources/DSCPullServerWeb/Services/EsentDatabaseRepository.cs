@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DSCPullServerWeb.Databases;
 using DSCPullServerWeb.Models;
-using DSCPullServerWeb.Databases;
-using System.IO;
 using Microsoft.Isam.Esent.Interop;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace DSCPullServerWeb.Services
 {
@@ -201,6 +200,11 @@ namespace DSCPullServerWeb.Services
         }
 
         #endregion
+
+        public static Boolean DatabaseExist(String path)
+        {
+            return File.Exists(Path.Combine(path, DATABASE_NAME));
+        }
 
         private Boolean DatabaseTableExists(JET_SESID sessionId, JET_DBID databaseId, String tableName)
         {
