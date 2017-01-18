@@ -103,7 +103,7 @@ function uiShowConfirm(action, title, text, callback) {
 }
 
 function uiShowConfirmDelete(object, callback) {
-    uiShowConfirm('Delete', 'Delete', 'Do you really want to delete ' + object + '?', callback);
+    uiShowConfirm('Delete', 'Confirm', 'Do you really want to delete ' + object + '?', callback);
 }
 
 function uiUpdateTable(page) {
