@@ -548,8 +548,7 @@ function Get-WebConfigAuthenticationMode
 
 function Set-WebConfigAuthenticationMode
 {
-    [CmdletBinding()]
-    [OutputType([System.String])]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -568,13 +567,19 @@ function Set-WebConfigAuthenticationMode
     {
         'Anonymous'
         {
-            Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $true
-            Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $false
+            if ($PSCmdlet.ShouldProcess('Anonymous', 'Enable'))
+            {
+                Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $true
+                Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $false
+            }
         }
         'Windows'
         {
-            Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $false
-            Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $true
+            if ($PSCmdlet.ShouldProcess('Windows', 'Enable'))
+            {
+                Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $false
+                Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $true
+            }
         }
     }
 }
@@ -608,8 +613,7 @@ function Get-WebConfigAuthorizationGroup
 
 function Enable-WebConfigAuthorizationGroup
 {
-    [CmdletBinding()]
-    [OutputType([System.String])]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -625,7 +629,7 @@ function Enable-WebConfigAuthorizationGroup
 
     if ((Test-Path -Path $Path))
     {
-        if ($PSCmdlet.ShouldProcess($Group, 'Add'))
+        if ($PSCmdlet.ShouldProcess($Group, 'Enable'))
         {
             $webConfigXml = [xml](Get-Content -Path $Path)
 
@@ -648,8 +652,7 @@ function Enable-WebConfigAuthorizationGroup
 
 function Disable-WebConfigAuthorizationGroup
 {
-    [CmdletBinding()]
-    [OutputType([System.String])]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -659,7 +662,7 @@ function Disable-WebConfigAuthorizationGroup
 
     if ((Test-Path -Path $Path))
     {
-        if ($PSCmdlet.ShouldProcess($Group, 'Remove'))
+        if ($PSCmdlet.ShouldProcess($Group, 'Disable'))
         {
             $webConfigXml = [xml](Get-Content -Path $Path)
 
