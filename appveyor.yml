@@ -16,7 +16,7 @@ install:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
   - ps: Install-Module Pester -Force
   - ps: Install-Module PSScriptAnalyzer -Force
-  - ps: Install-Module xPSDesiredStateConfiguration -RequiredVersion 5.0.0.0 -Force
+  - ps: Install-Module xPSDesiredStateConfiguration -RequiredVersion 5.1.0.0 -Force
 
 # Set version to build number
 version: '{build}'

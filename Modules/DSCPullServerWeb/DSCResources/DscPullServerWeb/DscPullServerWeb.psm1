@@ -537,7 +537,7 @@ function Get-WebConfigAuthenticationMode
     {
         return 'Anonymous'
     }
-    
+
     if ($anonymousAuthentication.Value -eq $false -and $windowsAuthentication.Value -eq $true)
     {
         return 'Windows'
@@ -634,7 +634,7 @@ function Enable-WebConfigAuthorizationGroup
 
             $denyNode = $webConfigXml.CreateNode([System.Xml.XmlNodeType]::Element, 'deny', $null)
             $denyNode.SetAttribute('users', '*')
-            
+
             $authorizationNode = $webConfigXml.CreateNode([System.Xml.XmlNodeType]::Element, 'authorization', $null)
             $authorizationNode.AppendChild($allowNode)
             $authorizationNode.AppendChild($denyNode)
@@ -656,7 +656,7 @@ function Disable-WebConfigAuthorizationGroup
         [System.String]
         $Path
     )
-    
+
     if ((Test-Path -Path $Path))
     {
         if ($PSCmdlet.ShouldProcess($Group, 'Remove'))
