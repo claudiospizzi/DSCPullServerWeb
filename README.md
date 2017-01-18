@@ -109,6 +109,7 @@ Refer to the following example to install the website on your DSC pull server:
 * Add Windows Firewall rule for the DSC Pull Server Web port
 * Change target .NET Framework from v4.5.2 to v4.5. to match the pre-installed
   .NET Framework on Windows Server 2012 and higher.
+* Implement IIS Windows Authentication configuration
 
 ### 1.0.2
 

@@ -2,6 +2,11 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSDSCDscTestsPresent', '')]
 param()
 
+
+##
+## DSC METHODS
+##
+
 function Get-TargetResource
 {
     [CmdletBinding()]
@@ -29,6 +34,15 @@ function Get-TargetResource
         [Parameter(Mandatory = $true)]
         [System.String]
         $CertificateThumbPrint,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('Anonymous', 'Windows')]
+        [System.String]
+        $AuthenticationMode = 'Anonymous',
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $AuthorizationGroup = '',
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -75,6 +89,10 @@ function Get-TargetResource
         $Port                  = $websiteItem.Bindings.Collection[0].BindingInformation.Split(':')[1]
         $CertificateThumbPrint = $websiteItem.Bindings.Collection[0].CertificateHash
 
+        # Get authentication and authorization information
+        $AuthenticationMode = Get-WebConfigAuthenticationMode -EndpointName $EndpointName
+        $AuthorizationGroup = Get-WebConfigAuthorizationGroup -Path $webConfigPath
+
         # Get the title and description information
         $Name        = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Name'
         $Title       = Get-WebConfigAppSetting -Path $webConfigPath -AppSettingName 'Title'
@@ -93,6 +111,8 @@ function Get-TargetResource
         $Ensure              = 'Absent'
         $PhysicalPath        = ''
         $Port                = 0
+        $AuthenticationMode  = 'Anonymous'
+        $AuthorizationGroup  = ''
         $Name                = ''
         $Title               = ''
         $Description         = ''
@@ -108,6 +128,8 @@ function Get-TargetResource
         PhysicalPath          = $PhysicalPath
         Port                  = $Port
         CertificateThumbPrint = $CertificateThumbPrint
+        AuthenticationMode    = $AuthenticationMode
+        AuthorizationGroup    = $AuthorizationGroup
         Name                  = $Name
         Title                 = $Title
         Description           = $Description
@@ -145,6 +167,15 @@ function Set-TargetResource
         [Parameter(Mandatory = $true)]
         [System.String]
         $CertificateThumbPrint,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('Anonymous', 'Windows')]
+        [System.String]
+        $AuthenticationMode = 'Anonymous',
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $AuthorizationGroup = '',
 
         [Parameter(Mandatory = $false)]
         [System.String]
@@ -310,6 +341,24 @@ function Set-TargetResource
             }
 
 
+            # Set authentication and authorization information
+            switch ($AuthenticationMode)
+            {
+                'Anonymous'
+                {
+                    Set-WebConfigAuthenticationMode -EndpointName $EndpointName -Mode 'Anonymous'
+
+                    Disable-WebConfigAuthorizationGroup -Path $webConfigPath
+                }
+                'Windows'
+                {
+                    Set-WebConfigAuthenticationMode -EndpointName $EndpointName -Mode 'Windows'
+
+                    Enable-WebConfigAuthorizationGroup -Path $webConfigPath -Group $AuthorizationGroup
+                }
+            }
+
+
             # Add Windows Firewall rule
             & netsh.exe advfirewall firewall delete rule name=$EndpointName protocol=tcp localport=$Port | Out-Null
             & netsh.exe advfirewall firewall add rule name=$EndpointName dir=in action=allow protocol=TCP localport=$Port | Out-Null
@@ -385,6 +434,15 @@ function Test-TargetResource
         $CertificateThumbPrint,
 
         [Parameter(Mandatory = $false)]
+        [ValidateSet('Anonymous', 'Windows')]
+        [System.String]
+        $AuthenticationMode = 'Anonymous',
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $AuthorizationGroup = '',
+
+        [Parameter(Mandatory = $false)]
         [System.String]
         $Name = 'Default',
 
@@ -438,6 +496,8 @@ function Test-TargetResource
         ($PhysicalPath          -eq $current.PhysicalPath) -and
         ($Port                  -eq $current.Port) -and
         ($CertificateThumbPrint -eq $current.CertificateThumbPrint) -and
+        ($AuthenticationMode    -eq $current.AuthenticationMode) -and
+        ($AuthorizationGroup    -eq $current.AuthorizationGroup) -and
         ($Name                  -eq $current.Name) -and
         ($Title                 -eq $current.Title) -and
         ($Description           -eq $current.Description) -and
@@ -450,6 +510,170 @@ function Test-TargetResource
     }
 
     return $false
+}
+
+
+##
+## AUTHENTICATION AND AUTHORIZATION
+##
+
+function Get-WebConfigAuthenticationMode
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $EndpointName
+    )
+
+    $filter = '/system.webServer/security/authentication'
+
+    $anonymousAuthentication = Get-WebConfigurationProperty -Location $EndpointName -Filter "$filter/anonymousAuthentication" -Name 'Enabled'
+    $windowsAuthentication   = Get-WebConfigurationProperty -Location $EndpointName -Filter "$filter/windowsAuthentication" -Name 'Enabled'
+
+    if ($anonymousAuthentication.Value -eq $true -and $windowsAuthentication.Value -eq $false)
+    {
+        return 'Anonymous'
+    }
+    
+    if ($anonymousAuthentication.Value -eq $false -and $windowsAuthentication.Value -eq $true)
+    {
+        return 'Windows'
+    }
+
+    return 'Unknown'
+}
+
+function Set-WebConfigAuthenticationMode
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $EndpointName,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('Anonymous', 'Windows')]
+        [System.String]
+        $Mode
+    )
+
+    $filter = '/system.webServer/security/authentication'
+
+    switch ($Mode)
+    {
+        'Anonymous'
+        {
+            Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $true
+            Set-WebConfigurationProperty -Location $EndpointName -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $false
+        }
+        'Windows'
+        {
+            Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/anonymousAuthentication" -Name 'Enabled' -Value $false
+            Set-WebConfigurationProperty -Location "$EndpointName" -Filter "$filter/windowsAuthentication" -Name 'Enabled' -Value $true
+        }
+    }
+}
+
+function Get-WebConfigAuthorizationGroup
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path
+    )
+
+    $authorizationGroup = ''
+
+    if ((Test-Path -Path $Path))
+    {
+        $webConfigXml = [xml](Get-Content -Path $Path)
+
+        foreach ($item in $webConfigXml.configuration.'system.web'.authorization.allow)
+        {
+            $authorizationGroup = $item.roles
+            break
+        }
+    }
+
+    $authorizationGroup
+}
+
+function Enable-WebConfigAuthorizationGroup
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Group
+    )
+
+    Disable-WebConfigAuthorizationGroup -Path $Path
+
+    if ((Test-Path -Path $Path))
+    {
+        if ($PSCmdlet.ShouldProcess($Group, 'Add'))
+        {
+            $webConfigXml = [xml](Get-Content -Path $Path)
+
+            $allowNode = $webConfigXml.CreateNode([System.Xml.XmlNodeType]::Element, 'allow', $null)
+            $allowNode.SetAttribute('roles', $Group)
+
+            $denyNode = $webConfigXml.CreateNode([System.Xml.XmlNodeType]::Element, 'deny', $null)
+            $denyNode.SetAttribute('users', '*')
+            
+            $authorizationNode = $webConfigXml.CreateNode([System.Xml.XmlNodeType]::Element, 'authorization', $null)
+            $authorizationNode.AppendChild($allowNode)
+            $authorizationNode.AppendChild($denyNode)
+
+            $webConfigXml.configuration.'system.web'.AppendChild($authorizationNode)
+
+            $webConfigXml.Save($Path)
+        }
+    }
+}
+
+function Disable-WebConfigAuthorizationGroup
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path
+    )
+    
+    if ((Test-Path -Path $Path))
+    {
+        if ($PSCmdlet.ShouldProcess($Group, 'Remove'))
+        {
+            $webConfigXml = [xml](Get-Content -Path $Path)
+
+            if ($null -ne $webConfigXml.configuration.'system.web'.authorization)
+            {
+                foreach ($item in $webConfigXml.configuration.'system.web'.authorization)
+                {
+                    $webConfigXml.configuration.'system.web'.RemoveChild($item)
+                }
+            }
+
+            $webConfigXml.Save($Path)
+        }
+    }
 }
 
 function Get-WebConfigAppSetting

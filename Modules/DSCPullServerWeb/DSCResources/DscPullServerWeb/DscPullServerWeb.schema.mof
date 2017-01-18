@@ -6,6 +6,8 @@ class DscPullServerWeb : OMI_BaseResource
   [Write] string PhysicalPath;
   [Write] uint32 Port;
   [Required] string CertificateThumbPrint;
+  [Write,ValueMap{"Anonymous", "Windows"},Values{"Anonymous", "Windows"}] string AuthenticationMode;
+  [Write] string AuthorizationGroup;
   [Write] string Name;
   [Write] string Title;
   [Write] string Description;
