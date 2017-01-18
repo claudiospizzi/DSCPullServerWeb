@@ -94,6 +94,18 @@ function uiShowModalHttpRequestError(xhr, message) {
     uiShowModal(title, text);
 }
 
+function uiShowConfirm(action, title, text, callback) {
+    $('#confirm-title').html(title);
+    $('#confirm-text').html(text);
+    $('#confirm-action').html(action);
+    $('#confirm-action').attr('onclick', callback);
+    $('#confirm').modal();
+}
+
+function uiShowConfirmDelete(object, callback) {
+    uiShowConfirm('Delete', 'Delete', 'Do you really want to delete ' + object + '?', callback);
+}
+
 function uiUpdateTable(page) {
     uiShowTableLoader(page);
     uiClearTable(page);
@@ -158,7 +170,7 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(
                 uiCreateTableButtonDownload(page, item.Name, item.Name + '.mof') + ' ' +
                 uiCreateTableButtonHash('apiHashConfiguration(\'' + item.Name + '\')') + ' ' +
-                uiCreateTableButtonRemove('apiDeleteConfiguration(\'' + item.Name + '\')')
+                uiCreateTableButtonRemove('apiDeleteConfiguration(\'' + item.Name + '\', false)')
             );
             break;
         case 'modules':
@@ -171,7 +183,7 @@ function uiCreateTableRow(page, item) {
             html += uiCreateTableCell(
                 uiCreateTableButtonDownload(page, item.Name + '/' + item.Version, item.Name + '_' + item.Version + '.zip') + ' ' +
                 uiCreateTableButtonHash('apiHashModule(\'' + item.Name + '\', \'' + item.Version + '\')') + ' ' +
-                uiCreateTableButtonRemove('apiDeleteModule(\'' + item.Name + '\', \'' + item.Version + '\')')
+                uiCreateTableButtonRemove('apiDeleteModule(\'' + item.Name + '\', \'' + item.Version + '\', false)')
             );
             break;
     }
@@ -352,18 +364,23 @@ function apiHashConfiguration(name) {
     });
 }
 
-function apiDeleteConfiguration(name) {
-    $.ajax({
-        url: '/api/v1/configurations/' + name,
-        type: 'DELETE',
-        success: function (result) {
-            uiUpdateTable('configurations');
-        },
-        error: function (xhr) {
-            uiShowModalHttpRequestError(xhr, 'Failed to delete the configuration ' + name + '.');
-            uiUpdateTable('configurations');
-        }
-    });
+function apiDeleteConfiguration(name, confirm) {
+    if (confirm) {
+        $.ajax({
+            url: '/api/v1/configurations/' + name,
+            type: 'DELETE',
+            success: function (result) {
+                uiUpdateTable('configurations');
+            },
+            error: function (xhr) {
+                uiShowModalHttpRequestError(xhr, 'Failed to delete the configuration ' + name + '.');
+                uiUpdateTable('configurations');
+            }
+        });
+    }
+    else {
+        uiShowConfirmDelete(name, 'apiDeleteConfiguration(\'' + name + '\', true)');
+    }
 }
 
 
@@ -405,18 +422,23 @@ function apiHashModule(name, version) {
     });
 }
 
-function apiDeleteModule(name, version) {
-    $.ajax({
-        url: '/api/v1/modules/' + name + '/' + version,
-        type: 'DELETE',
-        success: function (result) {
-            uiUpdateTable('modules');
-        },
-        error: function (xhr) {
-            uiShowModalHttpRequestError(xhr, 'Failed to delete the module ' + name + ' with version ' + version + '.');
-            uiUpdateTable('modules');
-        }
-    });
+function apiDeleteModule(name, version, confirm) {
+    if (confirm) {
+        $.ajax({
+            url: '/api/v1/modules/' + name + '/' + version,
+            type: 'DELETE',
+            success: function (result) {
+                uiUpdateTable('modules');
+            },
+            error: function (xhr) {
+                uiShowModalHttpRequestError(xhr, 'Failed to delete the module ' + name + ' with version ' + version + '.');
+                uiUpdateTable('modules');
+            }
+        });
+    }
+    else {
+        uiShowConfirmDelete(name + ' ' + version, 'apiDeleteModule(\'' + name + '\', \'' + version + '\', true)');
+    }
 }
 
 

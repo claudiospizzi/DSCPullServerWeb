@@ -68,6 +68,23 @@
                 </div>
             </div>
         </div>
+        <div id="confirm" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="confirm-title">Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="confirm-text">Text</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a id="confirm-action" class="btn btn-danger btn-ok" data-dismiss="modal">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Body -->
         @RenderBody()
