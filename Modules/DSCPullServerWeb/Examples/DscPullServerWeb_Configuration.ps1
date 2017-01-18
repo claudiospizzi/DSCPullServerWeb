@@ -14,7 +14,7 @@ Configuration DSCPullServerWithWeb
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 1.1
     Import-DscResource -ModuleName xPSDesiredStateConfiguration -ModuleVersion 5.1.0.0
-    Import-DscResource -ModuleName DSCPullServerWeb -ModuleVersion 1.0.2
+    Import-DscResource -ModuleName DSCPullServerWeb -ModuleVersion 1.1.0
 
     Node 'localhost'
     {
