@@ -9,8 +9,6 @@ namespace DSCPullServerWeb.Models
         protected FileInfo _dscFile;
 
         protected FileInfo _sumFile;
-        private String v;
-        private Stream stream;
 
         public FileBase(FileInfo dscFile)
         {
