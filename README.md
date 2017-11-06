@@ -104,30 +104,8 @@ Refer to the following example to install the website on your DSC pull server:
 
 ## Versions
 
-### 1.1.0
-
-* Add Windows Firewall rule for the DSC Pull Server Web port
-* Change target .NET Framework from v4.5.2 to v4.5. to match the pre-installed
-  version on Windows Server 2012 and later
-* Implement IIS Windows Authentication configuration
-* Add a confirm dialog before deleting configurations and modules
-
-### 1.0.2
-
-* Update the DSC resource removal action
-
-### 1.0.1
-
-* Fix empty path in DSC resoruce
-* Change GET /hash to PATCH /checksum
-
-### 1.0.0
-
-* Initial release
-* HTML5-based website with a user-friendly UI
-* REST API to interact with the DSC Pull Server
-* Cmdlets to interact with the REST API
-* DSC resource to setup the DSC Pull Server Web endpoint
+Please find all versions in the [GitHub Releases] section and the release notes
+in the [CHANGELOG.md] file.
 
 
 ## Contribute
