@@ -8,15 +8,14 @@ environment:
     secure: g7atusVu/SvLWa4397EhDExCquI2srCWwO2JetLpnQ57V8Pzm27Eq9kj/v8X6wkd
   PSGalleryKey:
     secure: +o4/iom8ZO0TkCMSM0gInMHq/ioFlK7LRh2jJULTBejba3nCjp2EOv94DcTS2r20
-  DeployOnBuild: True
-  PublishProfile: Default
 
 # Install required Pester and PSScriptAnalyzer modules
 install:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
+  - ps: Install-Module psake -Force
   - ps: Install-Module Pester -Force
   - ps: Install-Module PSScriptAnalyzer -Force
-  - ps: Install-Module xPSDesiredStateConfiguration -RequiredVersion 5.1.0.0 -Force
+  - ps: Install-Module xPSDesiredStateConfiguration -RequiredVersion 7.0.0.0 -Force
 
 # Set version to build number
 version: '{build}'
@@ -25,18 +24,20 @@ version: '{build}'
 configuration: Release
 platform: Any CPU
 
-# Execute compile and buildbefore_build:
-before_build:
-  - nuget restore "Sources"
-build:
-  verbosity: minimal
-after_build:
-  - ps: .\Scripts\build.ps1 -AppVeyor
+# Execute psake build task
+build_script:
+  - ps: >-
+      Invoke-psake build.psake.ps1 -taskList Build -notr
 
-# Execute test script
+# Execute psake test and analyze task
 test_script:
-  - ps: .\Scripts\test.ps1 -AppVeyor
+  - ps: >-
+      Invoke-psake build.psake.ps1 -taskList Pester, ScriptAnalyzer -notr
 
-# Execute deploy script
+# Execute psake deploy task
 deploy_script:
-  - ps: .\Scripts\release.ps1 -AppVeyor
+  - ps: >-
+      if ($env:APPVEYOR_REPO_TAG -eq 'true')
+      {
+        Invoke-psake build.psake.ps1 -taskList Gallery, GitHub -notr
+      }
