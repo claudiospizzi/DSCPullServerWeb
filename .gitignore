@@ -255,3 +255,6 @@ paket-files/
 # Ignore project files
 /bin/
 /tst/
+
+# Ignore published website files
+Modules/*/Binaries/Website/
