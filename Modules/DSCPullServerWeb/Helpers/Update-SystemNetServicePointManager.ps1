@@ -2,9 +2,7 @@
 function Update-SystemNetServicePointManager
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    param
-    (
-    )
+    param ()
 
     if ($PSCmdlet.ShouldProcess("System.Net.ServicePointManager", "Update SecurityProtocol to support Ssl3, Tls, Tls11, Tls12"))
     {
