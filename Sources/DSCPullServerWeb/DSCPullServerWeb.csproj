@@ -371,6 +371,10 @@
   </Target>
   <!-- Custom extension to transform the web.config for debugging -->
   <!--<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll" />-->
+  <!--<Target Name="TransformWebConfig">-->
+    <!--<TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
+  </Target>-->
+  <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" />-->
   <Target Name="TransformWebConfig">
     <TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
   </Target>
@@ -381,7 +385,7 @@
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>45011</DevelopmentServerPort>
-          <DevelopmentServerVPath>C:\Temp\</DevelopmentServerVPath>
+          <!--<DevelopmentServerVPath>C:\Temp\</DevelopmentServerVPath>-->
           <IISUrl>http://localhost:8090/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
@@ -397,7 +401,15 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="BeforeBuild">
+  <Target Name="BeforeBuild" Condition="'$(PublishProfileName)' == '' And '$(WebPublishProfileFile)' == ''">
     <CallTarget Targets="TransformWebConfig" />
   </Target>
+
+  <!--<ItemGroup>
+    <PubFiles Include="pub\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="CustomPostPublishActions" AfterTargets="MSDeployPublish" >
+    <Copy SourceFiles="@(PubFiles)" DestinationFiles="..\PubZip" />
+  </Target>-->
 </Project>
