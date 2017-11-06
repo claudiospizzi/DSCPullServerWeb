@@ -1,12 +1,12 @@
 
-$ModulePath = Resolve-Path -Path "$PSScriptRoot\..\..\Modules" | ForEach-Object Path
-$ModuleName = Get-ChildItem -Path $ModulePath | Select-Object -First 1 -ExpandProperty BaseName
+$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
 
-$ResourcePath = Resolve-Path -Path "$ModulePath\$ModuleName\DSCResources" | ForEach-Object Path
-$ResourceName = 'DscPullServerWeb'
+$resourcePath = Resolve-Path -Path "$modulePath\$moduleName\DSCResources" | Select-Object -ExpandProperty Path
+$resourceName = Get-ChildItem -Path $resourcePath | Select-Object -ExpandProperty BaseName
 
-Remove-Module -Name $ResourceName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$ResourcePath\$ResourceName" -Force
+Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+Import-Module -Name "$modulePath\$moduleName" -Force
 
 Describe 'DscPullServerWeb' {
 

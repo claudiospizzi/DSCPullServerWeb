@@ -1,9 +1,9 @@
 
-$ModulePath = Resolve-Path -Path "$PSScriptRoot\..\..\Modules" | ForEach-Object Path
-$ModuleName = Get-ChildItem -Path $ModulePath | Select-Object -First 1 -ExpandProperty BaseName
+$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
 
-Remove-Module -Name $ModuleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$ModulePath\$ModuleName" -Force
+Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+Import-Module -Name "$modulePath\$moduleName" -Force
 
 Describe 'Get-DSCPullServerConfiguration' {
 
@@ -11,7 +11,7 @@ Describe 'Get-DSCPullServerConfiguration' {
 
     Context 'Web Request' {
 
-        Mock 'Invoke-RestMethod' -ModuleName $ModuleName {
+        Mock 'Invoke-RestMethod' -ModuleName $moduleName {
             ConvertFrom-Json -InputObject '{"Name":"FeatureDemo","Size":1846,"Created":"2016-11-17T17:45:38.1428987+01:00","Checksum":"1AB2C0140C2B523156BE8142CD458FA20C5C2826879C7C37D97049E7DC25D66B","ChecksumStatus":"Valid"}'
         }
 
@@ -31,7 +31,7 @@ Describe 'Get-DSCPullServerConfiguration' {
             Get-DSCPullServerConfiguration -Uri $api -Name $expectedConfigurations[0].Name | Out-Null
 
             # Assert
-            Assert-MockCalled 'Invoke-RestMethod' -ModuleName $ModuleName -Times 1 -Exactly
+            Assert-MockCalled 'Invoke-RestMethod' -ModuleName $moduleName -Times 1 -Exactly
         }
 
         It 'should return a valid object type' {
