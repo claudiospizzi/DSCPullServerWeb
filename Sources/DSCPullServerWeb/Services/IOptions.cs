@@ -6,10 +6,19 @@
     /// </summary>
     public interface IOptions
     {
+        /// <summary>
+        /// Website short name.
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Website title, will be visiable on the landing page banner.
+        /// </summary>
         string Title { get; }
 
+        /// <summary>
+        /// Website description, will be visiable on the landing page banner.
+        /// </summary>
         string Description { get; }
 
         string Footer { get; }
@@ -17,6 +26,8 @@
         string ModulePath { get; }
 
         string ConfigurationPath { get; }
+
+        string DatabaseType { get; }
 
         string DatabasePath { get; }
 

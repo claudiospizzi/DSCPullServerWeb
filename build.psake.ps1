@@ -53,7 +53,18 @@
 #>
 
 
+## Configuration and Default task
 
+# Default build configuration
+Properties {
+
+    $ModulePath  = Join-Path -Path $PSScriptRoot -ChildPath 'Modules'
+    $ModuleNames = @()
+
+    $SourceEnabled = $false
+}
+
+# Load project configuration
 . $PSScriptRoot\build.settings.ps1
 
 # Default task
@@ -95,9 +106,10 @@ Task Clean -depends Init -requiredVariables ReleasePath, PesterPath, ScriptAnaly
 }
 
 # Compile C# solutions
-Task Compile -depends Clean -requiredVariables SourceEnabled, SourcePath, SourceNames {
+Task Compile -depends Clean -requiredVariables SourceEnabled, SourcePath, SourcePublish, SourceNames {
 
-    $msBuildPath = 'C:\Windows\Microsoft.NET\Framework\v4.0.30319'
+    #$msBuildPath = 'C:\Windows\Microsoft.NET\Framework\v4.0.30319'
+    $msBuildPath = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin'
 
     if (!$SourceEnabled)
     {
@@ -111,7 +123,16 @@ Task Compile -depends Clean -requiredVariables SourceEnabled, SourcePath, Source
 
     foreach ($sourceName in $SourceNames)
     {
-        $msBuildLog = (MSBuild.exe "$SourcePath\$sourceName.sln" /target:Build /p:Configuration=Release /verbosity:m)
+        nuget restore "Sources"
+
+        if ([String]::IsNullOrEmpty($SourcePublish))
+        {
+            $msBuildLog = (MSBuild.exe "$SourcePath\$sourceName.sln" /target:Build /p:Configuration=Release /verbosity:m)
+        }
+        else
+        {
+            $msBuildLog = (MSBuild.exe "$SourcePath\$sourceName.sln" /target:Build /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=$SourcePublish /verbosity:m)
+        }
 
         $msBuildLog | ForEach-Object { Write-Verbose $_ }
     }
